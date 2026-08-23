@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { ProductCategory, ProductImage as ProductImageData } from '@/types/product'
 import { CategoryIllustration } from '@/components/illustrations/CategoryIllustration'
 import { cn } from '@/utils/cn'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Imagen de producto con reserva ilustrada.
@@ -24,13 +25,15 @@ interface ProductImageProps {
 }
 
 export function ProductImage({ image, category, className }: ProductImageProps) {
+  const { t } = useTranslation()
+
   const [failed, setFailed] = useState(false)
 
   if (!image || failed) {
     return (
       <div
         role="img"
-        aria-label={image?.alt ?? 'Ilustración de la categoría del producto'}
+        aria-label={image?.alt ?? t('product.illustrationAlt')}
         className={cn('overflow-hidden bg-brand-soft', className)}
       >
         <CategoryIllustration

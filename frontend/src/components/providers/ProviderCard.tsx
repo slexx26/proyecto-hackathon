@@ -4,6 +4,7 @@ import { providerKindLabels, type Provider } from '@/types/provider'
 import { Icon } from '@/components/ui/Icon'
 import { cn } from '@/utils/cn'
 import { ProviderMark } from './ProviderMark'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Insignia de verificación. Dice lo que significa, no más: que ADAPTA
@@ -11,11 +12,11 @@ import { ProviderMark } from './ProviderMark'
  * una valoración de calidad, y no debe leerse como tal.
  */
 export function VerifiedBadge() {
+  const { t } = useTranslation()
+
   return (
     <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-fit-high-soft px-2.5 py-1 text-xs font-semibold text-fit-high-ink ring-1 ring-inset ring-fit-high/25">
-      <Icon name="verified" className="h-3.5 w-3.5" />
-      Verificado por ADAPTA
-    </span>
+      <Icon name="verified" className="h-3.5 w-3.5" />{t('provider.verified')}</span>
   )
 }
 
@@ -31,6 +32,8 @@ export function ProviderCard({
   productCount,
   index = 0,
 }: ProviderCardProps) {
+  const { t } = useTranslation()
+
   const featured = provider.plan === 'featured'
 
   return (
@@ -43,9 +46,7 @@ export function ProviderCard({
       )}
     >
       {featured ? (
-        <span className="absolute right-0 top-0 rounded-bl-card bg-accent-soft px-3 py-1 text-xs font-semibold text-accent-ink">
-          Destacado
-        </span>
+        <span className="absolute right-0 top-0 rounded-bl-card bg-accent-soft px-3 py-1 text-xs font-semibold text-accent-ink">{t('providerPlan.featured')}</span>
       ) : null}
 
       <div className="flex items-start gap-3.5">
@@ -81,8 +82,8 @@ export function ProviderCard({
         <li className="flex items-center gap-2">
           <Icon name="ship" className="h-4 w-4 text-ink-muted/70" />
           {provider.shipsNationwide
-            ? 'Envía a todo el país'
-            : 'Solo atención presencial'}
+            ? t('provider.shipsNationwide')
+            : t('provider.inPersonOnly')}
         </li>
         {productCount !== undefined ? (
           <li className="flex items-center gap-2">

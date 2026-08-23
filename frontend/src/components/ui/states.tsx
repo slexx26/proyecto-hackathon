@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { SpotIllustration, type SpotName } from '@/components/illustrations/SpotIllustration'
 import { cn } from '@/utils/cn'
 import { Button } from './Button'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Los tres estados no-felices que toda pantalla con datos debe cubrir.
@@ -94,21 +95,19 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({ message, onRetry }: ErrorStateProps) {
+  const { t } = useTranslation()
+
   return (
     <div
       role="alert"
       className="animate-fade rounded-panel bg-fit-low-soft px-6 py-12 text-center ring-1 ring-fit-low/30"
     >
       <SpotIllustration name="broken" className="mx-auto h-32 w-auto" />
-      <h2 className="mt-5 font-display text-xl font-bold text-ink">
-        No pudimos cargar esto
-      </h2>
+      <h2 className="mt-5 font-display text-xl font-bold text-ink">{t('states.loadErrorTitle')}</h2>
       <p className="mx-auto mt-2 max-w-prose text-ink-muted">{message}</p>
       {onRetry ? (
         <div className="mt-6 flex justify-center">
-          <Button variant="secondary" onClick={onRetry}>
-            Reintentar
-          </Button>
+          <Button variant="secondary" onClick={onRetry}>{t('common.retry')}</Button>
         </div>
       ) : null}
     </div>

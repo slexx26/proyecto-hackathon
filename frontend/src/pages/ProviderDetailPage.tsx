@@ -11,9 +11,12 @@ import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states'
 import { ProductCard } from '@/components/products/ProductCard'
 import { VerifiedBadge } from '@/components/providers/ProviderCard'
 import { ProviderMark } from '@/components/providers/ProviderMark'
+import { useTranslation } from '@/i18n/languageContext'
 
 /** Ficha del negocio y todo lo que tiene listado. */
 export function ProviderDetailPage() {
+  const { t } = useTranslation()
+
   const { providerId } = useParams<{ providerId: string }>()
 
   const providerRun = useCallback(
@@ -33,12 +36,12 @@ export function ProviderDetailPage() {
 
   const products = useAsync(productsRun, `productos-de-${providerId ?? '-'}`)
 
-  useDocumentTitle(provider.data?.name ?? 'Negocio')
+  useDocumentTitle(provider.data?.name ?? t('provider.docTitleFallback'))
 
   if (provider.status === 'loading') {
     return (
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <LoadingState label="Cargando el negocio…" count={2} variant="row" />
+        <LoadingState label={t('provider.loading')} count={2} variant="row" />
       </div>
     )
   }
@@ -46,11 +49,9 @@ export function ProviderDetailPage() {
   if (provider.status === 'error' || !provider.data) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-        <ErrorState message={provider.error ?? 'No encontramos este negocio.'} />
+        <ErrorState message={provider.error ?? t('provider.notFound')} />
         <div className="mt-6 text-center">
-          <ButtonLink to="/providers" variant="secondary">
-            Volver al directorio
-          </ButtonLink>
+          <ButtonLink to="/providers" variant="secondary">{t('provider.backToDirectory')}</ButtonLink>
         </div>
       </div>
     )
@@ -60,7 +61,7 @@ export function ProviderDetailPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <nav aria-label="Migas de pan" className="text-sm text-ink-muted">
+      <nav aria-label={t('common.breadcrumb')} className="text-sm text-ink-muted">
         <Link
           to="/providers"
           className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-ink"
@@ -101,21 +102,17 @@ export function ProviderDetailPage() {
         <dl className="mt-8 grid gap-4 sm:grid-cols-3">
           <div className="rounded-card bg-surface-muted p-4">
             <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.06em] text-ink-muted">
-              <Icon name="ship" className="h-4 w-4" />
-              Cobertura
-            </dt>
+              <Icon name="ship" className="h-4 w-4" />{t('provider.coverage')}</dt>
             <dd className="mt-1.5 font-semibold text-ink">
               {item.shipsNationwide
-                ? 'Envía a todo el país'
-                : 'Solo atención presencial'}
+                ? t('provider.shipsNationwide')
+                : t('provider.inPersonOnly')}
             </dd>
           </div>
 
           <div className="rounded-card bg-surface-muted p-4">
             <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.06em] text-ink-muted">
-              <Icon name="verified" className="h-4 w-4" />
-              Inscripción
-            </dt>
+              <Icon name="verified" className="h-4 w-4" />{t('provider.registration')}</dt>
             <dd className="mt-1.5 font-semibold text-ink">
               {providerPlanLabels[item.plan]}
             </dd>
@@ -123,9 +120,7 @@ export function ProviderDetailPage() {
 
           <div className="rounded-card bg-surface-muted p-4">
             <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.06em] text-ink-muted">
-              <Icon name="chat" className="h-4 w-4" />
-              Contacto
-            </dt>
+              <Icon name="chat" className="h-4 w-4" />{t('provider.contact')}</dt>
             <dd className="mt-1.5 space-y-1">
               {item.contact.website ? (
                 <a
@@ -134,9 +129,7 @@ export function ProviderDetailPage() {
                   rel="noopener noreferrer"
                   className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-brand-ink underline underline-offset-4"
                 >
-                  <Icon name="globe" className="h-4 w-4" />
-                  Sitio web
-                  <span className="sr-only">
+                  <Icon name="globe" className="h-4 w-4" />{t('common.website')}<span className="sr-only">
                     {' '}
                     de {item.name}, se abre en una pestaña nueva
                   </span>
@@ -167,23 +160,21 @@ export function ProviderDetailPage() {
       </header>
 
       <section className="mt-14">
-        <h2 className="text-section font-display font-extrabold text-ink">
-          Lo que tiene listado
-        </h2>
+        <h2 className="text-section font-display font-extrabold text-ink">{t('provider.listedTitle')}</h2>
 
         <div className="mt-6">
           {products.status === 'loading' ? (
-            <LoadingState label="Cargando sus productos…" count={3} />
+            <LoadingState label={t('provider.productsLoading')} count={3} />
           ) : null}
 
           {products.status === 'error' ? (
-            <ErrorState message={products.error ?? 'Error desconocido.'} />
+            <ErrorState message={products.error ?? t('error.unknown')} />
           ) : null}
 
           {products.status === 'success' && products.data?.length === 0 ? (
             <EmptyState
-              title="Todavía no tiene productos listados"
-              description="El negocio está inscrito pero aún no cargó su catálogo. Podés contactarlo directamente con los datos de arriba."
+              title={t('provider.emptyTitle')}
+              description={t('provider.emptyBody')}
             />
           ) : null}
 
@@ -211,12 +202,7 @@ export function ProviderDetailPage() {
 
       <p className="mt-14 flex items-start gap-2.5 rounded-panel bg-surface-muted px-5 py-4 text-sm text-ink-muted ring-1 ring-line">
         <Icon name="info" className="mt-0.5 h-4 w-4 shrink-0" />
-        <span>
-          ADAPTA no vende estos productos ni cobra comisión por la venta. El
-          negocio paga su inscripción en el directorio; a vos no te cobramos
-          nada. La verificación confirma que el negocio existe y ofrece lo que
-          dice: no es una valoración de su calidad.
-        </span>
+        <span>{t('provider.disclaimer')}</span>
       </p>
     </div>
   )

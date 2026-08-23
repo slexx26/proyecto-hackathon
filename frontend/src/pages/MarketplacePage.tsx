@@ -14,13 +14,16 @@ import { Icon } from '@/components/ui/Icon'
 import { SelectField, TextField } from '@/components/forms/fields'
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states'
 import { ProductCard } from '@/components/products/ProductCard'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Sección 14 (P1). Exploración secundaria: existe para dar contexto, no para
  * competir con el flujo de recomendación. Sin carrito y sin pagos.
  */
 export function MarketplacePage() {
-  useDocumentTitle('Catálogo')
+  const { t } = useTranslation()
+
+  useDocumentTitle(t('catalog.docTitle'))
 
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState<ProductCategory | ''>('')
@@ -66,9 +69,7 @@ export function MarketplacePage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <header className="animate-rise">
-        <h1 className="text-hero font-display font-extrabold text-ink">
-          Catálogo
-        </h1>
+        <h1 className="text-hero font-display font-extrabold text-ink">{t('catalog.docTitle')}</h1>
         <p className="mt-5 max-w-2xl text-lg text-ink-muted">
           Todo lo que ofrecen los negocios inscritos: ropa, calzado, prótesis,
           órtesis, movilidad y productos de apoyo, con sus características de
@@ -77,9 +78,7 @@ export function MarketplacePage() {
           <Link
             to="/find-my-fit"
             className="font-semibold text-brand-ink underline decoration-brand-line decoration-2 underline-offset-4 hover:decoration-action"
-          >
-            completá Find My Fit
-          </Link>
+          >{t('catalog.leadLink')}</Link>
           .
         </p>
       </header>
@@ -92,27 +91,27 @@ export function MarketplacePage() {
       >
         <div className="grid gap-4 sm:grid-cols-3">
           <TextField
-            label="Buscar"
+            label={t('catalog.search')}
             type="search"
             icon="search"
             value={search}
             onChange={setSearch}
-            placeholder="Camisa, silla, cierre…"
+            placeholder={t('catalog.searchPlaceholder')}
           />
           <SelectField
-            label="Categoría"
+            label={t('catalog.category')}
             value={category}
             onChange={setCategory}
-            anyLabel="Todas"
+            anyLabel={t('catalog.categoryAny')}
             options={(Object.keys(categoryLabels) as ProductCategory[]).map(
               (value) => ({ value, label: categoryLabels[value] }),
             )}
           />
           <SelectField
-            label="Necesidad que cubre"
+            label={t('catalog.need')}
             value={need}
             onChange={setNeed}
-            anyLabel="Cualquiera"
+            anyLabel={t('catalog.needAny')}
             options={(Object.keys(needLabels) as AdaptationNeed[]).map(
               (value) => ({ value, label: needLabels[value] }),
             )}
@@ -121,9 +120,7 @@ export function MarketplacePage() {
 
         {activeChips.length > 0 ? (
           <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-line pt-4">
-            <span className="text-sm font-semibold text-ink-muted">
-              Filtros activos:
-            </span>
+            <span className="text-sm font-semibold text-ink-muted">{t('catalog.activeFilters')}</span>
             {activeChips.map((chip) => (
               <button
                 key={chip.key}
@@ -133,7 +130,7 @@ export function MarketplacePage() {
               >
                 {chip.label}
                 <Icon name="close" className="h-3.5 w-3.5" />
-                <span className="sr-only">Quitar este filtro</span>
+                <span className="sr-only">{t('catalog.removeFilter')}</span>
               </button>
             ))}
             <button
@@ -144,31 +141,29 @@ export function MarketplacePage() {
                 setNeed('')
               }}
               className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-brand-ink underline underline-offset-4"
-            >
-              Limpiar todo
-            </button>
+            >{t('catalog.clearAll')}</button>
           </div>
         ) : null}
       </div>
 
       <div className="mt-10">
         {status === 'loading' ? (
-          <LoadingState label="Cargando el catálogo…" count={6} />
+          <LoadingState label={t('catalog.loading')} count={6} />
         ) : null}
 
         {status === 'error' ? (
-          <ErrorState message={error ?? 'Error desconocido.'} />
+          <ErrorState message={error ?? t('error.unknown')} />
         ) : null}
 
         {status === 'success' && data && data.length === 0 ? (
           <EmptyState
-            title="Sin resultados"
+            title={t('catalog.emptyTitle')}
             description={
               hasFilters
-                ? 'Ningún producto coincide con esos filtros. Probá quitando alguno.'
-                : 'El catálogo está vacío por ahora.'
+                ? t('catalog.emptyFiltered')
+                : t('catalog.emptyAll')
             }
-            action={<ButtonLink to="/find-my-fit">Ir a Find My Fit</ButtonLink>}
+            action={<ButtonLink to="/find-my-fit">{t('catalog.emptyCta')}</ButtonLink>}
           />
         ) : null}
 
@@ -180,7 +175,7 @@ export function MarketplacePage() {
             </p>
             {/* Encabezado solo para lector de pantalla: nombra la región de
                 resultados y evita saltar de h1 a los h3 de las tarjetas. */}
-            <h2 className="sr-only">Productos encontrados</h2>
+            <h2 className="sr-only">{t('catalog.resultsHeading')}</h2>
             <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.map((product, index) => (
                 <li key={product.id}>

@@ -11,6 +11,8 @@ import { Icon } from '@/components/ui/Icon'
 import { SelectField, TextAreaField, TextField } from '@/components/forms/fields'
 import { SpotIllustration } from '@/components/illustrations/SpotIllustration'
 import { cn } from '@/utils/cn'
+import { useTranslation } from '@/i18n/languageContext'
+import type { TranslationKey } from '@/i18n/dictionaries'
 
 /**
  * Cara del negocio: aquí se inscribe el proveedor.
@@ -21,59 +23,50 @@ import { cn } from '@/utils/cn'
  * dice donde se ve, no en letra chica al final.
  */
 
-const plans = [
+/** Planes de inscripción. Los textos son claves: se resuelven al renderizar. */
+const plans: ReadonlyArray<{
+  name: TranslationKey
+  price: string
+  period?: TranslationKey
+  pitch: TranslationKey
+  features: ReadonlyArray<TranslationKey>
+  highlighted: boolean
+}> = [
   {
-    name: 'Listado básico',
-    price: 'Gratis',
-    pitch: 'Para empezar a aparecer.',
-    features: [
-      'Ficha en el directorio',
-      'Hasta 3 productos listados',
-      'Contacto visible',
-    ],
+    name: 'providerPlan.free',
+    price: 'business.free',
+    pitch: 'business.plan1Pitch',
+    features: ['business.plan1f1', 'business.plan1f2', 'business.plan1f3'],
     highlighted: false,
   },
   {
-    name: 'Verificado',
+    name: 'providerPlan.verified',
     price: '₡15 000',
-    period: '/ mes',
-    pitch: 'Para que te encuentren y confíen.',
+    period: 'business.perMonth',
+    pitch: 'business.plan2Pitch',
     features: [
-      'Todo lo del listado básico',
-      'Insignia de verificación',
-      'Productos ilimitados',
-      'Aparece en las recomendaciones',
+      'business.plan2f1',
+      'business.plan2f2',
+      'business.plan2f3',
+      'business.plan2f4',
     ],
     highlighted: true,
   },
   {
-    name: 'Destacado',
+    name: 'providerPlan.featured',
     price: '₡35 000',
-    period: '/ mes',
-    pitch: 'Para liderar tu rubro.',
-    features: [
-      'Todo lo del plan verificado',
-      'Posición prioritaria en el directorio',
-      'Ficha ampliada con galería',
-    ],
+    period: 'business.perMonth',
+    pitch: 'business.plan3Pitch',
+    features: ['business.plan3f1', 'business.plan3f2', 'business.plan3f3'],
     highlighted: false,
   },
 ]
 
 const comoFunciona = [
-  {
-    title: 'Enviás la solicitud',
-    body: 'Cinco campos. No pedimos documentos ni datos bancarios en este paso.',
-  },
-  {
-    title: 'Verificamos que existís',
-    body: 'Comprobamos que el negocio está activo y ofrece lo que dice. No evaluamos su calidad.',
-  },
-  {
-    title: 'Aparecés en el directorio',
-    body: 'Y en las recomendaciones de las personas cuyo perfil encaja con lo que vendés.',
-  },
-]
+  { title: 'business.step1Title', body: 'business.step1Body' },
+  { title: 'business.step2Title', body: 'business.step2Body' },
+  { title: 'business.step3Title', body: 'business.step3Body' },
+] as const satisfies ReadonlyArray<{ title: TranslationKey; body: TranslationKey }>
 
 const emptyApplication: ProviderApplication = {
   businessName: '',
@@ -83,25 +76,29 @@ const emptyApplication: ProviderApplication = {
   description: '',
 }
 
-type FieldErrors = Partial<Record<keyof ProviderApplication, string>>
+/** Guarda CLAVES, no textos: `validate` es de módulo y no tiene `t`. El
+ *  mensaje se resuelve al renderizar, así cambia solo al cambiar de idioma. */
+type FieldErrors = Partial<Record<keyof ProviderApplication, TranslationKey>>
 
 function validate(form: ProviderApplication): FieldErrors {
   const errors: FieldErrors = {}
-  if (!form.businessName.trim()) errors.businessName = 'Poné el nombre del negocio.'
-  if (!form.location.trim()) errors.location = 'Decinos dónde atendés.'
+  if (!form.businessName.trim()) errors.businessName = 'business.errName'
+  if (!form.location.trim()) errors.location = 'business.errLocation'
   if (!form.email.trim()) {
-    errors.email = 'Necesitamos un correo para responderte.'
+    errors.email = 'business.errEmail'
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-    errors.email = 'Ese correo no parece válido. Revisalo.'
+    errors.email = 'business.errEmailFormat'
   }
   if (form.description.trim().length < 20) {
-    errors.description = 'Contanos un poco más: al menos 20 caracteres.'
+    errors.description = 'business.errDescription'
   }
   return errors
 }
 
 export function ForBusinessPage() {
-  useDocumentTitle('Inscribí tu negocio')
+  const { t } = useTranslation()
+
+  useDocumentTitle(t('business.docTitle'))
 
   const [form, setForm] = useState<ProviderApplication>(emptyApplication)
   const [errors, setErrors] = useState<FieldErrors>({})
@@ -147,7 +144,7 @@ export function ForBusinessPage() {
       setError(
         cause instanceof ApiError
           ? cause.userMessage
-          : 'No pudimos enviar tu solicitud.',
+          : t('business.sendError'),
       )
     }
   }
@@ -166,24 +163,14 @@ export function ForBusinessPage() {
 
         <div className="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
           <p className="animate-fade inline-flex items-center gap-2 rounded-full bg-accent-soft px-3.5 py-1.5 text-sm font-semibold text-accent-ink ring-1 ring-accent-line">
-            <Icon name="store" className="h-4 w-4" />
-            Para negocios
-          </p>
+            <Icon name="store" className="h-4 w-4" />{t('business.eyebrow')}</p>
 
-          <h1 className="text-hero animate-rise mt-6 font-display font-extrabold text-ink">
-            Tus clientes te están buscando. Hoy no te encuentran.
-          </h1>
+          <h1 className="text-hero animate-rise mt-6 font-display font-extrabold text-ink">{t('business.h1')}</h1>
 
           <p
             style={{ '--i': 1 } as CSSProperties}
             className="animate-rise stagger mt-6 max-w-2xl text-lg text-ink-muted"
-          >
-            Quien necesita ropa adaptada, una prótesis o una silla de ruedas no
-            sabe que existís: la información está dispersa entre grupos de
-            Facebook, recomendaciones de pasillo y buscadores que devuelven
-            catálogos de otro país. ADAPTA la centraliza y te pone delante de
-            la persona justo cuando describe el problema que vos resolvés.
-          </p>
+          >{t('business.lead')}</p>
 
           <div
             style={{ '--i': 2 } as CSSProperties}
@@ -192,13 +179,9 @@ export function ForBusinessPage() {
             <a
               href="#solicitud"
               className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-action px-7 font-semibold text-on-action shadow-card transition-[transform,background-color] duration-200 ease-(--ease-out-strong) hover:bg-action-hover active:scale-[0.97]"
-            >
-              Solicitar la inscripción
-              <Icon name="arrow-right" className="h-5 w-5" />
+            >{t('business.ctaApply')}<Icon name="arrow-right" className="h-5 w-5" />
             </a>
-            <ButtonLink to="/providers" size="lg" variant="secondary">
-              Ver el directorio
-            </ButtonLink>
+            <ButtonLink to="/providers" size="lg" variant="secondary">{t('business.ctaDirectory')}</ButtonLink>
           </div>
         </div>
       </section>
@@ -213,9 +196,7 @@ export function ForBusinessPage() {
         <h2
           id="proceso"
           className="text-section font-display font-extrabold text-ink"
-        >
-          Cómo funciona
-        </h2>
+        >{t('business.howTitle')}</h2>
         <ol className="mt-8 grid gap-6 md:grid-cols-3">
           {comoFunciona.map((paso, index) => (
             <li
@@ -227,9 +208,9 @@ export function ForBusinessPage() {
                 {index + 1}
               </span>
               <h3 className="mt-3 font-display text-lg font-bold text-ink">
-                {paso.title}
+                {t(paso.title)}
               </h3>
-              <p className="mt-2 text-ink-muted">{paso.body}</p>
+              <p className="mt-2 text-ink-muted">{t(paso.body)}</p>
             </li>
           ))}
         </ol>
@@ -246,20 +227,14 @@ export function ForBusinessPage() {
           <h2
             id="planes"
             className="text-section font-display font-extrabold text-ink"
-          >
-            Planes de inscripción
-          </h2>
+          >{t('business.plansTitle')}</h2>
 
           {/* El aviso de que no hay pasarela de pago va ARRIBA de los
               precios, no al final: quien lee un precio asume que puede
               pagarlo, y en este proyecto no puede (sección 36). */}
           <p className="mt-4 flex max-w-2xl items-start gap-2.5 rounded-card bg-surface px-4 py-3 text-sm text-ink-muted ring-1 ring-line">
             <Icon name="info" className="mt-0.5 h-4 w-4 shrink-0" />
-            <span>
-              Los precios son la propuesta comercial del proyecto. Durante el
-              hackathon no se procesa ningún pago: la inscripción se coordina
-              por correo después de recibir la solicitud.
-            </span>
+            <span>{t('business.plansNotice')}</span>
           </p>
 
           <ul className="mt-8 grid items-start gap-6 md:grid-cols-3">
@@ -275,25 +250,23 @@ export function ForBusinessPage() {
                 )}
               >
                 {plan.highlighted ? (
-                  <span className="absolute -top-3 left-6 rounded-full bg-action px-3 py-1 text-xs font-bold uppercase tracking-[0.06em] text-on-action">
-                    El más elegido
-                  </span>
+                  <span className="absolute -top-3 left-6 rounded-full bg-action px-3 py-1 text-xs font-bold uppercase tracking-[0.06em] text-on-action">{t('business.mostChosen')}</span>
                 ) : null}
 
                 <h3 className="font-display text-xl font-bold text-ink">
-                  {plan.name}
+                  {t(plan.name)}
                 </h3>
-                <p className="mt-1 text-sm text-ink-muted">{plan.pitch}</p>
+                <p className="mt-1 text-sm text-ink-muted">{t(plan.pitch)}</p>
 
                 <p className="mt-4 flex items-baseline gap-1">
                   <span
                     data-numeric
                     className="font-display text-3xl font-extrabold text-ink"
                   >
-                    {plan.price}
+                    {plan.price === 'business.free' ? t('business.free') : plan.price}
                   </span>
                   {plan.period ? (
-                    <span className="text-sm text-ink-muted">{plan.period}</span>
+                    <span className="text-sm text-ink-muted">{t(plan.period)}</span>
                   ) : null}
                 </p>
 
@@ -303,7 +276,7 @@ export function ForBusinessPage() {
                       <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-fit-high-soft text-fit-high-ink">
                         <Icon name="check" className="h-3 w-3" />
                       </span>
-                      <span className="text-ink">{feature}</span>
+                      <span className="text-ink">{t(feature)}</span>
                     </li>
                   ))}
                 </ul>
@@ -317,9 +290,7 @@ export function ForBusinessPage() {
                         ? 'bg-action text-on-action hover:bg-action-hover'
                         : 'bg-surface text-ink ring-1 ring-line-strong hover:bg-surface-muted',
                     )}
-                  >
-                    Solicitar
-                    <span className="sr-only"> el plan {plan.name}</span>
+                  >{t('business.planCta')}<span className="sr-only"> el plan {plan.name}</span>
                   </a>
                 </p>
               </li>
@@ -339,9 +310,7 @@ export function ForBusinessPage() {
         <h2
           id="solicitud-titulo"
           className="text-section font-display font-extrabold text-ink"
-        >
-          Solicitar la inscripción
-        </h2>
+        >{t('business.ctaApply')}</h2>
 
         {status === 'sent' ? (
           <div
@@ -349,17 +318,13 @@ export function ForBusinessPage() {
             className="animate-pop mt-8 rounded-panel bg-surface p-6 text-center shadow-card ring-1 ring-fit-high/30 sm:p-8"
           >
             <SpotIllustration name="sent" className="mx-auto h-32 w-auto" />
-            <h3 className="mt-5 font-display text-xl font-bold text-ink">
-              Recibimos tu solicitud
-            </h3>
+            <h3 className="mt-5 font-display text-xl font-bold text-ink">{t('business.sentTitle')}</h3>
             <p className="mx-auto mt-2 max-w-prose text-ink-muted">
               Te escribimos a <strong className="text-ink">{form.email}</strong>{' '}
               para verificar el negocio y coordinar la inscripción.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <ButtonLink to="/providers" variant="secondary">
-                Ver el directorio
-              </ButtonLink>
+              <ButtonLink to="/providers" variant="secondary">{t('business.ctaDirectory')}</ButtonLink>
               <Button
                 variant="ghost"
                 onClick={() => {
@@ -367,9 +332,7 @@ export function ForBusinessPage() {
                   setErrors({})
                   setStatus('idle')
                 }}
-              >
-                Inscribir otro negocio
-              </Button>
+              >{t('business.sentAnother')}</Button>
             </div>
           </div>
         ) : (
@@ -380,16 +343,16 @@ export function ForBusinessPage() {
             className="mt-8 space-y-5 rounded-panel bg-surface p-6 shadow-card ring-1 ring-line sm:p-8"
           >
             <TextField
-              label="Nombre del negocio"
+              label={t('business.fieldName')}
               required
               value={form.businessName}
-              error={errors.businessName}
+              error={errors.businessName ? t(errors.businessName) : undefined}
               autoComplete="organization"
               onChange={(value) => update('businessName', value)}
             />
 
             <SelectField
-              label="Tipo de negocio"
+              label={t('business.fieldKind')}
               value={form.kind}
               onChange={(value) =>
                 update('kind', (value || 'adaptive-apparel') as ProviderKind)
@@ -400,31 +363,31 @@ export function ForBusinessPage() {
             />
 
             <TextField
-              label="Ubicación"
+              label={t('business.fieldLocation')}
               required
-              placeholder="Ciudad, provincia"
+              placeholder={t('business.fieldLocationPlaceholder')}
               value={form.location}
-              error={errors.location}
+              error={errors.location ? t(errors.location) : undefined}
               autoComplete="address-level2"
               onChange={(value) => update('location', value)}
             />
 
             <TextField
-              label="Correo de contacto"
+              label={t('business.fieldEmail')}
               type="email"
               required
               value={form.email}
-              error={errors.email}
+              error={errors.email ? t(errors.email) : undefined}
               autoComplete="email"
-              hint="Solo lo usamos para responderte sobre la inscripción."
+              hint={t('business.fieldEmailHint')}
               onChange={(value) => update('email', value)}
             />
 
             <div>
               <TextAreaField
-                label="Qué ofrecés"
-                hint="Contá qué productos o servicios tenés y qué problema resuelven."
-                placeholder="Adaptamos prendas convencionales: cambio de cierres por imanes, aperturas laterales y ajustes para vestirse sentado."
+                label={t('business.fieldDescription')}
+                hint={t('business.fieldDescriptionHint')}
+                placeholder={t('business.fieldDescriptionPlaceholder')}
                 value={form.description}
                 onChange={(value) => update('description', value)}
               />
@@ -434,7 +397,7 @@ export function ForBusinessPage() {
                   className="mt-1.5 flex items-center gap-1.5 text-sm font-semibold text-fit-low-ink"
                 >
                   <Icon name="alert" className="h-4 w-4" />
-                  {errors.description}
+                  {t(errors.description)}
                 </p>
               ) : null}
             </div>
@@ -451,11 +414,9 @@ export function ForBusinessPage() {
 
             <div className="flex flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:items-center">
               <Button type="submit" size="lg" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Enviando…' : 'Enviar solicitud'}
+                {status === 'sending' ? t('business.submitting') : t('business.submit')}
               </Button>
-              <p className="text-sm text-ink-muted">
-                No se cobra nada en este paso.
-              </p>
+              <p className="text-sm text-ink-muted">{t('business.noCharge')}</p>
             </div>
           </form>
         )}

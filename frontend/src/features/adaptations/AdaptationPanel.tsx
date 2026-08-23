@@ -4,6 +4,7 @@ import { effortLabels } from '@/utils/labels'
 import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { cn } from '@/utils/cn'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Sección 13. Convierte "esta prenda no te sirve" en "esta prenda te sirve
@@ -29,15 +30,15 @@ export function AdaptationPanel({
   suggestions,
   productName,
 }: AdaptationPanelProps) {
+  const { t } = useTranslation()
+
   // Solicitudes marcadas en esta sesión. Persistirlas es trabajo de José
   // (endpoint de adaptation requests); hasta entonces vive en memoria.
   const [requested, setRequested] = useState<string[]>([])
 
   if (suggestions.length === 0) {
     return (
-      <p className="rounded-card bg-fit-high-soft px-5 py-4 text-ink">
-        Esta prenda ya cubre lo que necesitás: no hace falta modificarla.
-      </p>
+      <p className="rounded-card bg-fit-high-soft px-5 py-4 text-ink">{t('adaptation.none')}</p>
     )
   }
 
@@ -70,16 +71,12 @@ export function AdaptationPanel({
             <dl className="mt-4 grid gap-3 sm:grid-cols-2">
               <div className="rounded-field bg-fit-high-soft p-3.5">
                 <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.06em] text-fit-high-ink">
-                  <Icon name="check" className="h-4 w-4" />
-                  Qué ganás
-                </dt>
+                  <Icon name="check" className="h-4 w-4" />{t('adaptation.benefit')}</dt>
                 <dd className="mt-1.5 text-sm text-ink">{suggestion.benefit}</dd>
               </div>
               <div className="rounded-field bg-fit-low-soft p-3.5">
                 <dt className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.06em] text-fit-low-ink">
-                  <Icon name="alert" className="h-4 w-4" />
-                  Qué sigue sin resolverse
-                </dt>
+                  <Icon name="alert" className="h-4 w-4" />{t('adaptation.limitation')}</dt>
                 <dd className="mt-1.5 text-sm text-ink">
                   {suggestion.limitation}
                 </dd>
@@ -92,10 +89,7 @@ export function AdaptationPanel({
                   role="status"
                   className="flex items-center gap-2 rounded-field bg-fit-high-soft px-3.5 py-3 text-sm font-semibold text-fit-high-ink"
                 >
-                  <Icon name="check" className="h-5 w-5" />
-                  Anotado. Te avisaremos cuando haya un taller disponible para
-                  esta adaptación.
-                </p>
+                  <Icon name="check" className="h-5 w-5" />{t('adaptation.requested')}</p>
               ) : (
                 <Button
                   variant="secondary"
@@ -103,9 +97,7 @@ export function AdaptationPanel({
                     setRequested((current) => [...current, suggestion.id])
                   }
                 >
-                  <Icon name="scissors" className="h-4 w-4" />
-                  Me interesa esta adaptación
-                  <span className="sr-only"> de {productName}</span>
+                  <Icon name="scissors" className="h-4 w-4" />{t('adaptation.request')}<span className="sr-only"> de {productName}</span>
                 </Button>
               )}
             </div>

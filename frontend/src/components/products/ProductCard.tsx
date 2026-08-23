@@ -9,6 +9,7 @@ import {
 } from '@/utils/labels'
 import { ScoreBadge } from '@/components/recommendations/ScoreBadge'
 import { ProductImage } from './ProductImage'
+import { useTranslation } from '@/i18n/languageContext'
 
 interface ProductCardProps {
   product: Product
@@ -19,6 +20,8 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, score, index = 0 }: ProductCardProps) {
+  const { t } = useTranslation()
+
   const extraNeeds = product.adaptationNeeds.length - 3
 
   return (
@@ -36,9 +39,7 @@ export function ProductCard({ product, score, index = 0 }: ProductCardProps) {
           {categoryLabels[product.category]}
         </span>
         {!product.inStock ? (
-          <span className="absolute right-3 top-3 rounded-full bg-ink px-2.5 py-1 text-xs font-semibold text-canvas">
-            Sin existencias
-          </span>
+          <span className="absolute right-3 top-3 rounded-full bg-ink px-2.5 py-1 text-xs font-semibold text-canvas">{t('product.outOfStock')}</span>
         ) : null}
       </div>
 
@@ -75,9 +76,7 @@ export function ProductCard({ product, score, index = 0 }: ProductCardProps) {
             </li>
           ) : null}
           {product.adaptationNeeds.length === 0 ? (
-            <li className="rounded-full bg-surface-sunken px-2.5 py-1 text-xs font-medium text-ink-muted">
-              Prenda convencional
-            </li>
+            <li className="rounded-full bg-surface-sunken px-2.5 py-1 text-xs font-medium text-ink-muted">{t('product.conventional')}</li>
           ) : null}
         </ul>
 

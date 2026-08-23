@@ -20,12 +20,15 @@ import { ReasonList } from '@/components/recommendations/ReasonList'
 import { ScoreBadge } from '@/components/recommendations/ScoreBadge'
 import { AdaptationPanel } from '@/features/adaptations/AdaptationPanel'
 import { WhereToGetIt } from '@/components/providers/WhereToGetIt'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Sección 15. Junta tres fuentes con el mismo `productId`: el producto, su
  * recomendación (si hay perfil) y las adaptaciones propuestas.
  */
 export function ProductDetailPage() {
+  const { t } = useTranslation()
+
   const { productId } = useParams<{ productId: string }>()
   const { profile } = useFitProfile()
 
@@ -75,12 +78,12 @@ export function ProductDetailPage() {
     [recommendations.data, productId],
   )
 
-  useDocumentTitle(product.data?.name ?? 'Producto')
+  useDocumentTitle(product.data?.name ?? t('product.docTitleFallback'))
 
   if (product.status === 'loading') {
     return (
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <LoadingState label="Cargando el producto…" count={2} />
+        <LoadingState label={t('product.loading')} count={2} />
       </div>
     )
   }
@@ -88,11 +91,9 @@ export function ProductDetailPage() {
   if (product.status === 'error' || !product.data) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-        <ErrorState message={product.error ?? 'No encontramos este producto.'} />
+        <ErrorState message={product.error ?? t('product.notFound')} />
         <div className="mt-6 text-center">
-          <ButtonLink to="/marketplace" variant="secondary">
-            Volver al catálogo
-          </ButtonLink>
+          <ButtonLink to="/marketplace" variant="secondary">{t('product.backToCatalog')}</ButtonLink>
         </div>
       </div>
     )
@@ -101,15 +102,15 @@ export function ProductDetailPage() {
   const item = product.data
 
   const specs = [
-    { term: 'Categoría', value: categoryLabels[item.category] },
-    { term: 'Cierre', value: closureLabels[item.closureType] },
-    { term: 'Materiales', value: item.materials.join(', ') },
-    { term: 'Tallas', value: item.sizes.join(' · ') },
+    { term: t('product.specCategory'), value: categoryLabels[item.category] },
+    { term: t('product.specClosure'), value: closureLabels[item.closureType] },
+    { term: t('product.specMaterials'), value: item.materials.join(', ') },
+    { term: t('product.specSizes'), value: item.sizes.join(' · ') },
   ]
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <nav aria-label="Migas de pan" className="text-sm text-ink-muted">
+      <nav aria-label={t('common.breadcrumb')} className="text-sm text-ink-muted">
         <Link
           to="/marketplace"
           className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-ink"
@@ -150,9 +151,7 @@ export function ProductDetailPage() {
             </span>
             {match ? <ScoreBadge score={match.score} size="lg" /> : null}
             {!item.inStock ? (
-              <span className="rounded-full bg-surface-sunken px-3 py-1.5 text-sm font-semibold text-ink-muted">
-                Sin existencias
-              </span>
+              <span className="rounded-full bg-surface-sunken px-3 py-1.5 text-sm font-semibold text-ink-muted">{t('product.outOfStock')}</span>
             ) : null}
           </div>
 
@@ -179,9 +178,7 @@ export function ProductDetailPage() {
 
       {/* Características accesibles */}
       <section className="mt-16">
-        <h2 className="text-section font-display font-extrabold text-ink">
-          Qué resuelve
-        </h2>
+        <h2 className="text-section font-display font-extrabold text-ink">{t('product.solvesTitle')}</h2>
         {item.adaptationNeeds.length > 0 ? (
           <ul className="mt-5 flex flex-wrap gap-2.5">
             {item.adaptationNeeds.map((need) => (
@@ -195,19 +192,14 @@ export function ProductDetailPage() {
             ))}
           </ul>
         ) : (
-          <p className="mt-4 max-w-prose text-ink-muted">
-            Es un producto convencional: no trae adaptaciones de fábrica. Mirá
-            más abajo qué se le puede modificar.
-          </p>
+          <p className="mt-4 max-w-prose text-ink-muted">{t('product.noBuiltIn')}</p>
         )}
       </section>
 
       {/* Limitaciones. Nunca se ocultan ni se escriben más pequeñas. */}
       {item.limitations.length > 0 ? (
         <section className="mt-12">
-          <h2 className="text-section font-display font-extrabold text-ink">
-            Lo que no resuelve
-          </h2>
+          <h2 className="text-section font-display font-extrabold text-ink">{t('product.limitationsTitle')}</h2>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2">
             {item.limitations.map((limitation) => (
               <li
@@ -227,36 +219,24 @@ export function ProductDetailPage() {
 
       {/* Compatibilidad con el perfil */}
       <section className="mt-12">
-        <h2 className="text-section font-display font-extrabold text-ink">
-          Tu compatibilidad
-        </h2>
+        <h2 className="text-section font-display font-extrabold text-ink">{t('product.compatibilityTitle')}</h2>
 
         {/* Zona de resultado: cambia cuando llega el cálculo, así que se
             anuncia. */}
         <div aria-live="polite">
           {!profile ? (
             <div className="mt-5 flex flex-col gap-4 rounded-panel bg-surface-muted px-5 py-6 sm:flex-row sm:items-center sm:justify-between">
-              <p className="max-w-prose text-ink-muted">
-                Completá Find My Fit y te decimos qué tan bien encaja este
-                producto con tu forma de vestirte, y qué se le podría adaptar.
-              </p>
-              <ButtonLink to="/find-my-fit" className="shrink-0">
-                Completar Find My Fit
-              </ButtonLink>
+              <p className="max-w-prose text-ink-muted">{t('product.noProfileBody')}</p>
+              <ButtonLink to="/find-my-fit" className="shrink-0">{t('product.noProfileCta')}</ButtonLink>
             </div>
           ) : null}
 
           {profile && recommendations.status === 'loading' ? (
-            <p className="mt-5 text-ink-muted" role="status">
-              Calculando compatibilidad…
-            </p>
+            <p className="mt-5 text-ink-muted" role="status">{t('product.calculating')}</p>
           ) : null}
 
           {profile && recommendations.status === 'error' ? (
-            <p className="mt-5 text-ink-muted" role="alert">
-              No pudimos calcular la compatibilidad ahora mismo. Los datos del
-              producto que ves arriba sí están completos.
-            </p>
+            <p className="mt-5 text-ink-muted" role="alert">{t('product.compatibilityError')}</p>
           ) : null}
 
           {match ? (
@@ -264,17 +244,17 @@ export function ProductDetailPage() {
               <div className="rounded-panel bg-accent-soft/70 p-5 ring-1 ring-accent-line/60">
                 <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-accent-ink">
                   <Icon name="spark" className="h-4 w-4" />
-                  Lo que dice la IA
+                  {t('reco.aiTitle')}
                 </h3>
                 <p className="mt-3 text-ink">
                   {match.explanation ??
-                    'La explicación en lenguaje natural no está disponible ahora mismo. La evidencia de al lado sostiene el puntaje por sí sola.'}
+                    t('product.aiUnavailable')}
                 </p>
               </div>
 
               <div className="rounded-panel bg-surface p-5 ring-1 ring-line">
                 <h3 className="text-xs font-bold uppercase tracking-[0.08em] text-ink-muted">
-                  Evidencia del motor
+                  {t('reco.evidenceTitle')}
                 </h3>
                 <div className="mt-3">
                   <ReasonList reasons={match.reasons} />
@@ -287,13 +267,8 @@ export function ProductDetailPage() {
 
       {/* Adaptaciones */}
       <section className="mt-12">
-        <h2 className="text-section font-display font-extrabold text-ink">
-          Adaptaciones posibles
-        </h2>
-        <p className="mt-3 max-w-prose text-ink-muted">
-          Modificaciones que un taller de costura puede hacerle a este
-          producto. Te mostramos siempre qué gana y qué no resuelve.
-        </p>
+        <h2 className="text-section font-display font-extrabold text-ink">{t('product.adaptationsTitle')}</h2>
+        <p className="mt-3 max-w-prose text-ink-muted">{t('product.adaptationsLead')}</p>
         <div className="mt-6">
           <AdaptationPanel
             suggestions={match?.adaptations ?? []}

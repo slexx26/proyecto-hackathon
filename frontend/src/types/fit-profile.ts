@@ -6,6 +6,7 @@
  * ni medidas corporales. Sección 16 y 23.
  */
 
+import type { TranslationKey } from '@/i18n/dictionaries'
 import type { AdaptationNeed, ProductCategory } from './product'
 
 /** Cuánta ayuda necesita la persona para vestirse hoy. */
@@ -43,5 +44,11 @@ export const emptyFitProfile: FitProfile = {
   preferredCategories: [],
 }
 
-/** Errores por campo que muestra el formulario. */
-export type FitProfileErrors = Partial<Record<keyof FitProfile, string>>
+/**
+ * Errores por campo que muestra el formulario.
+ *
+ * Guarda CLAVES de traducción, no textos ya resueltos: la validación corre
+ * fuera del componente y no tiene acceso a `t`. El mensaje se traduce al
+ * renderizar, así sigue al idioma si se cambia con el error en pantalla.
+ */
+export type FitProfileErrors = Partial<Record<keyof FitProfile, TranslationKey>>

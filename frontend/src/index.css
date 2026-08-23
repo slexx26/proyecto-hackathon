@@ -403,16 +403,31 @@
    */
   .hero-panel__photo {
     position: absolute;
-    /* La foto es más alta que el panel: sin ese margen, el paralaje la
-       desplazaría fuera de su caja y dejaría una franja vacía. El recorrido
-       máximo es 12% de 136% = 16.3% del panel, por debajo del 18% de holgura. */
-    inset: -18% 0;
+    /*
+     * La foto es más alta que el panel para que el paralaje no la saque de su
+     * caja. Ese margen va TODO abajo, no repartido: la foto solo se desplaza
+     * hacia arriba, así que el margen superior no servía para nada y lo único
+     * que hacía era recortar la cabeza de quien salga en la parte de arriba.
+     *
+     * Recorrido máximo 12% de 122% = 14.6% del panel, dentro del 22% de
+     * holgura inferior.
+     */
+    inset: 0 0 -22% 0;
     z-index: -2;
     width: 100%;
-    height: 136%;
+    height: 122%;
     object-fit: cover;
     object-position: center;
-    transform: translate3d(0, calc((1 - var(--enter, 1)) * -12% + var(--exit, 0) * -8%), 0)
+    /* `--photo-shift` afina el encuadre de cada foto sin tocar el archivo:
+       positivo baja la imagen, negativo la sube. Se define por foto en
+       LandingPage. */
+    transform: translate3d(
+        0,
+        calc(
+          (1 - var(--enter, 1)) * -12% + var(--exit, 0) * -8% + var(--photo-shift, 0%)
+        ),
+        0
+      )
       scale(calc(1 + var(--exit, 0) * 0.05));
     will-change: transform;
   }
@@ -440,6 +455,18 @@
         rgb(10 7 4 / 0) 100%
       ),
       linear-gradient(to top, rgb(10 7 4 / 0.7) 0%, rgb(10 7 4 / 0.34) 46%, rgb(10 7 4 / 0.2) 100%);
+  }
+
+  /*
+   * Los paneles sin texto no necesitan la mancha que protege al titular: con
+   * ella puesta la foto se apaga y las tres se ven iguales. Queda solo un
+   * degradado al pie —lo justo para que los puntos del índice se lean— y el
+   * oscurecido de profundidad cuando el panel siguiente lo cubre.
+   */
+  .hero-panel--plain .hero-panel__scrim {
+    background:
+      linear-gradient(rgb(10 7 4 / calc(var(--exit, 0) * 0.55)), rgb(10 7 4 / calc(var(--exit, 0) * 0.55))),
+      linear-gradient(to top, rgb(10 7 4 / 0.62) 0%, rgb(10 7 4 / 0.24) 22%, rgb(10 7 4 / 0) 48%);
   }
 
   /* El texto de la portada se retira cuando la segunda foto lo tapa. */

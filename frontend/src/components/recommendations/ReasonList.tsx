@@ -1,6 +1,8 @@
 import type { MatchReason } from '@/types/recommendation'
 import { Icon, type IconName } from '@/components/ui/Icon'
 import { cn } from '@/utils/cn'
+import type { TranslationKey } from '@/i18n/dictionaries'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Evidencia determinista detrás del puntaje (sección 9).
@@ -14,26 +16,28 @@ import { cn } from '@/utils/cn'
 
 const marks: Record<
   MatchReason['status'],
-  { icon: IconName; chip: string; text: string }
+  { icon: IconName; chip: string; text: TranslationKey }
 > = {
   match: {
     icon: 'check',
     chip: 'bg-fit-high-soft text-fit-high-ink',
-    text: 'Cubierto',
+    text: 'reason.match',
   },
   partial: {
     icon: 'partial',
     chip: 'bg-fit-mid-soft text-fit-mid-ink',
-    text: 'Cubierto en parte',
+    text: 'reason.partial',
   },
   gap: {
     icon: 'alert',
     chip: 'bg-fit-low-soft text-fit-low-ink',
-    text: 'No cubierto',
+    text: 'reason.gap',
   },
 }
 
 export function ReasonList({ reasons }: { reasons: MatchReason[] }) {
+  const { t } = useTranslation()
+
   if (reasons.length === 0) return null
 
   return (
@@ -58,7 +62,7 @@ export function ReasonList({ reasons }: { reasons: MatchReason[] }) {
               )}
             >
               {/* El icono no basta: el estado también va en texto. */}
-              <span className="sr-only">{mark.text}: </span>
+              <span className="sr-only">{t(mark.text)}: </span>
               {reason.label}
             </span>
           </li>

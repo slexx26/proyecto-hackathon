@@ -1,26 +1,29 @@
 import { Link } from 'react-router-dom'
 import { Icon } from '@/components/ui/Icon'
+import { useTranslation } from '@/i18n/languageContext'
 import { Wordmark } from './Wordmark'
 
 const columns = [
   {
-    title: 'Para vos',
+    title: 'footer.forYou',
     links: [
-      { to: '/find-my-fit', label: 'Find My Fit' },
-      { to: '/recommendations', label: 'Tus recomendaciones' },
-      { to: '/marketplace', label: 'Catálogo completo' },
+      { to: '/find-my-fit', key: 'nav.findMyFit' },
+      { to: '/recommendations', key: 'footer.yourRecommendations' },
+      { to: '/marketplace', key: 'footer.fullCatalog' },
     ],
   },
   {
-    title: 'Para tu negocio',
+    title: 'footer.forBusiness',
     links: [
-      { to: '/providers', label: 'Directorio de negocios' },
-      { to: '/for-business', label: 'Inscribí tu negocio' },
+      { to: '/providers', key: 'footer.directory' },
+      { to: '/for-business', key: 'footer.listBusiness' },
     ],
   },
-]
+] as const
 
 export function SiteFooter() {
+  const { t } = useTranslation()
+
   return (
     <footer className="mt-24 border-t border-line bg-surface-muted">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -30,19 +33,17 @@ export function SiteFooter() {
               <Wordmark className="h-6 w-auto text-ink" />
               <p className="sr-only">ADAPTA</p>
             </div>
-            <p className="mt-2 text-ink-muted">Fashion should adapt to you.</p>
+            <p className="mt-2 text-ink-muted">{t('footer.tagline')}</p>
 
             <p className="mt-5 max-w-prose text-sm text-ink-muted">
-              Reunimos en un solo lugar a los negocios de moda y vida
-              accesible, cruzamos tu forma real de vestirte con lo que ofrecen
-              y te decimos a quién acudir.
+              {t('footer.blurb')}
             </p>
           </div>
 
           {columns.map((column) => (
-            <nav key={column.title} aria-label={column.title}>
+            <nav key={column.title} aria-label={t(column.title)}>
               <h2 className="text-sm font-bold uppercase tracking-[0.08em] text-ink">
-                {column.title}
+                {t(column.title)}
               </h2>
               <ul className="mt-3 space-y-1">
                 {column.links.map((link) => (
@@ -51,7 +52,7 @@ export function SiteFooter() {
                       to={link.to}
                       className="inline-flex min-h-11 items-center text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
                     >
-                      {link.label}
+                      {t(link.key)}
                     </Link>
                   </li>
                 ))}
@@ -62,17 +63,10 @@ export function SiteFooter() {
 
         <p className="mt-8 flex items-start gap-2 rounded-card bg-surface px-4 py-3 text-sm text-ink-muted ring-1 ring-line">
           <Icon name="info" className="mt-0.5 h-4 w-4 shrink-0" />
-          <span>
-            Proyecto de hackathon. El catálogo, las marcas, los negocios y los
-            precios son ficticios y existen solo para la demostración. ADAPTA
-            no da consejo médico ni sustituye la valoración de un profesional
-            de la salud.
-          </span>
+          <span>{t('footer.disclaimer')}</span>
         </p>
 
-        <p className="mt-6 text-xs text-ink-muted">
-          Hecho por Slater, José e Isaac · 2026
-        </p>
+        <p className="mt-6 text-xs text-ink-muted">{t('footer.credits')}</p>
       </div>
     </footer>
   )

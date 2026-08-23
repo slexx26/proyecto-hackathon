@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { ButtonLink } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
+import { LanguageToggle } from '@/components/ui/LanguageToggle'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { useTranslation } from '@/i18n/languageContext'
 import { cn } from '@/utils/cn'
 import { Wordmark } from './Wordmark'
 
 const links = [
-  { to: '/find-my-fit', label: 'Find My Fit' },
-  { to: '/recommendations', label: 'Recomendaciones' },
-  { to: '/marketplace', label: 'Catálogo' },
-  { to: '/providers', label: 'Negocios' },
-]
+  { to: '/find-my-fit', key: 'nav.findMyFit' },
+  { to: '/recommendations', key: 'nav.recommendations' },
+  { to: '/marketplace', key: 'nav.catalog' },
+  { to: '/providers', key: 'nav.providers' },
+] as const
 
 function linkClass({ isActive }: { isActive: boolean }): string {
   return cn(
@@ -24,6 +26,7 @@ function linkClass({ isActive }: { isActive: boolean }): string {
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false)
+  const { t } = useTranslation()
 
   // Escape cierra, como cualquier panel superpuesto.
   useEffect(() => {
@@ -44,16 +47,16 @@ export function SiteHeader() {
           onClick={() => setOpen(false)}
         >
           <Wordmark className="h-5 w-auto text-ink sm:h-[1.4rem]" />
-          <span className="sr-only">ADAPTA — inicio</span>
+          <span className="sr-only">ADAPTA {t('common.homeSuffix')}</span>
         </Link>
 
         {/* Navegación de escritorio */}
-        <nav aria-label="Principal" className="hidden md:block">
+        <nav aria-label={t('nav.main')} className="hidden md:block">
           <ul className="flex items-center gap-0.5">
             {links.map((link) => (
               <li key={link.to}>
                 <NavLink to={link.to} className={linkClass}>
-                  {link.label}
+                  {t(link.key)}
                 </NavLink>
               </li>
             ))}
@@ -61,9 +64,10 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5">
+          <LanguageToggle />
           <ThemeToggle />
           <div className="hidden md:block">
-            <ButtonLink to="/find-my-fit">Empezar</ButtonLink>
+            <ButtonLink to="/find-my-fit">{t('common.start')}</ButtonLink>
           </div>
 
           {/* Disparador móvil */}
@@ -74,7 +78,9 @@ export function SiteHeader() {
             aria-controls="menu-movil"
             onClick={() => setOpen((value) => !value)}
           >
-            <span className="sr-only">{open ? 'Cerrar menú' : 'Abrir menú'}</span>
+            <span className="sr-only">
+              {open ? t('common.closeMenu') : t('common.openMenu')}
+            </span>
             <Icon name={open ? 'close' : 'menu'} className="h-6 w-6" />
           </button>
         </div>
@@ -84,7 +90,7 @@ export function SiteHeader() {
       {open ? (
         <nav
           id="menu-movil"
-          aria-label="Principal (móvil)"
+          aria-label={t('nav.mainMobile')}
           className="animate-rise border-t border-line bg-surface md:hidden"
         >
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3">
@@ -102,7 +108,7 @@ export function SiteHeader() {
                   }
                   onClick={() => setOpen(false)}
                 >
-                  {link.label}
+                  {t(link.key)}
                 </NavLink>
               </li>
             ))}
@@ -113,7 +119,7 @@ export function SiteHeader() {
                 size="lg"
                 onClick={() => setOpen(false)}
               >
-                Empezar
+                {t('common.start')}
               </ButtonLink>
             </li>
           </ul>

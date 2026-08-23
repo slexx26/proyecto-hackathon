@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { cn } from '@/utils/cn'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Campos del formulario. Reglas comunes (sección 23):
@@ -241,6 +242,8 @@ export function TextField({
   autoComplete,
   icon,
 }: TextFieldProps) {
+  const { t } = useTranslation()
+
   const id = useId()
   const hintId = `${id}-hint`
   const errorId = `${id}-error`
@@ -251,7 +254,7 @@ export function TextField({
         {label}
         {required ? (
           <span className="ml-1 text-fit-low-ink">
-            *<span className="sr-only"> (obligatorio)</span>
+            *<span className="sr-only">{t('common.required')}</span>
           </span>
         ) : null}
       </label>

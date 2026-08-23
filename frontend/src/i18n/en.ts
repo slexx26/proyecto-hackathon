@@ -501,4 +501,19 @@ export const en: Record<TranslationKey, string> = {
   'chat.send': 'Send',
   'chat.sendError': 'We could not send your message.',
   'chat.disclaimer': 'Guidance only. Not a substitute for medical advice.',
+
+  'product.illustrationAlt':
+    'Illustration of the product category',
+
+  // ------------------------------------------------------------------ hero
+  'hero.carousel': 'ADAPTA showcase',
+  'hero.slide': 'Image {index} of {total}',
+  'hero.goTo': 'Go to image {index} of {total}',
+  'hero.announce': 'Image {index} of {total}. {alt}',
+  'hero.photo1Alt':
+    'A woman moves down a fashion runway in a manual wheelchair. She wears a crown of red flowers, a sleeveless blue top, a long yellow coat and a purple and blue patterned skirt draped over her legs. The audience watches from the dark.',
+  'hero.photo2Alt':
+    'A man sitting on a wooden bench rests his arm on his knee and looks at the camera. He uses a carbon-fibre leg prosthesis with a running shoe. Dark studio background.',
+  'hero.photo3Alt':
+    'A woman sitting in a changing room adjusts one of her two carbon-fibre leg prostheses. Behind her, a shelf with footwear and a sports bag.',
 }

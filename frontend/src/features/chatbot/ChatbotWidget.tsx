@@ -5,6 +5,7 @@ import { ApiError } from '@/types/api'
 import { sendChatMessage } from '@/services/api/chatbot'
 import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Sección 17 (P1). Asistente de apoyo, deliberadamente pequeño: aclara dudas
@@ -21,6 +22,8 @@ const greeting: ChatMessage = {
 }
 
 export function ChatbotWidget() {
+  const { t } = useTranslation()
+
   const { productId } = useParams<{ productId: string }>()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([greeting])
@@ -75,7 +78,7 @@ export function ChatbotWidget() {
       setError(
         cause instanceof ApiError
           ? cause.userMessage
-          : 'No pudimos enviar tu mensaje.',
+          : t('chat.sendError'),
       )
     } finally {
       setSending(false)
@@ -92,14 +95,14 @@ export function ChatbotWidget() {
         className="fixed bottom-5 right-5 z-40 inline-flex min-h-13 items-center gap-2 rounded-full bg-inverse px-5 font-semibold text-on-inverse shadow-pop transition-[transform,background-color] duration-200 ease-(--ease-out-strong) hover:bg-inverse-soft active:scale-95"
       >
         <Icon name={open ? 'close' : 'chat'} className="h-5 w-5" />
-        {open ? 'Cerrar ayuda' : 'Preguntar'}
+        {open ? t('chat.close') : t('chat.open')}
       </button>
 
       {open ? (
         <div
           id="panel-chat"
           role="dialog"
-          aria-label="Asistente de ADAPTA"
+          aria-label={t('chat.dialogLabel')}
           className="animate-pop fixed bottom-24 right-5 z-40 flex max-h-[70dvh] w-[min(24rem,calc(100vw-2.5rem))] origin-bottom-right flex-col overflow-hidden rounded-panel bg-surface shadow-pop ring-1 ring-line"
         >
           <div className="flex items-center gap-2.5 border-b border-line bg-surface-muted px-4 py-3">
@@ -107,10 +110,8 @@ export function ChatbotWidget() {
               <Icon name="spark" className="h-4.5 w-4.5" />
             </span>
             <div>
-              <p className="font-display text-sm font-bold text-ink">
-                Asistente de ADAPTA
-              </p>
-              <p className="text-xs text-ink-muted">Cierres, posturas y adaptaciones</p>
+              <p className="font-display text-sm font-bold text-ink">{t('chat.dialogLabel')}</p>
+              <p className="text-xs text-ink-muted">{t('chat.headerSubtitle')}</p>
             </div>
           </div>
           <div
@@ -129,7 +130,7 @@ export function ChatbotWidget() {
                 }
               >
                 <span className="sr-only">
-                  {message.role === 'user' ? 'Vos: ' : 'Asistente: '}
+                  {message.role === 'user' ? t('chat.you') : t('chat.assistant')}
                 </span>
                 {message.content}
               </p>
@@ -140,9 +141,7 @@ export function ChatbotWidget() {
                 <span
                   aria-hidden="true"
                   className="animate-sheen h-2 w-2 rounded-full bg-ink-muted"
-                />
-                Escribiendo…
-              </p>
+                />{t('chat.typing')}</p>
             ) : null}
 
             {error ? (
@@ -156,26 +155,22 @@ export function ChatbotWidget() {
             onSubmit={handleSubmit}
             className="flex gap-2 border-t border-line p-3"
           >
-            <label htmlFor="chat-mensaje" className="sr-only">
-              Escribí tu pregunta
-            </label>
+            <label htmlFor="chat-mensaje" className="sr-only">{t('chat.inputLabel')}</label>
             <input
               id="chat-mensaje"
               ref={inputRef}
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
-              placeholder="¿Los imanes son seguros?"
+              placeholder={t('chat.placeholder')}
               className="h-11 min-w-0 flex-1 rounded-full bg-surface-muted px-4 text-sm text-ink ring-1 ring-line-strong transition-shadow hover:ring-ink-muted"
             />
             <Button type="submit" disabled={sending || draft.trim() === ''}>
-              <span className="sr-only sm:not-sr-only">Enviar</span>
+              <span className="sr-only sm:not-sr-only">{t('chat.send')}</span>
               <Icon name="arrow-right" className="h-5 w-5 sm:hidden" />
             </Button>
           </form>
 
-          <p className="px-4 pb-3 text-xs text-ink-muted">
-            Respuestas orientativas. No sustituyen consejo médico.
-          </p>
+          <p className="px-4 pb-3 text-xs text-ink-muted">{t('chat.disclaimer')}</p>
         </div>
       ) : null}
     </>

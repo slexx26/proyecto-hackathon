@@ -23,6 +23,8 @@ import {
   TextAreaField,
 } from '@/components/forms/fields'
 import { cn } from '@/utils/cn'
+import { useTranslation } from '@/i18n/languageContext'
+import type { TranslationKey } from '@/i18n/dictionaries'
 
 /**
  * Find My Fit, en cuatro pasos.
@@ -45,12 +47,13 @@ import { cn } from '@/utils/cn'
 const allNeeds = Object.keys(needLabels) as AdaptationNeed[]
 const allCategories = Object.keys(categoryLabels) as ProductCategory[]
 
+/** Claves, no textos: se resuelven al renderizar para seguir al idioma. */
 const steps = [
-  { title: 'Barreras al vestirte', short: 'Barreras' },
-  { title: 'Tu rutina al vestirte', short: 'Rutina' },
-  { title: 'Sensibilidad y prioridades', short: 'Prioridades' },
-  { title: 'Repaso antes de enviar', short: 'Repaso' },
-] as const
+  { title: 'fit.step1Title', short: 'fit.step1Short' },
+  { title: 'fit.step2Title', short: 'fit.step2Short' },
+  { title: 'fit.step3Title', short: 'fit.step3Short' },
+  { title: 'fit.step4Title', short: 'fit.step4Short' },
+] as const satisfies ReadonlyArray<{ title: TranslationKey; short: TranslationKey }>
 
 function toOptions<T extends string>(labels: Record<T, string>) {
   return (Object.keys(labels) as T[]).map((value) => ({
@@ -62,7 +65,7 @@ function toOptions<T extends string>(labels: Record<T, string>) {
 function validate(profile: FitProfile): FitProfileErrors {
   const errors: FitProfileErrors = {}
   if (profile.needs.length === 0) {
-    errors.needs = 'Marcá al menos una barrera para poder recomendarte algo.'
+    errors.needs = 'fit.needsError'
   }
   return errors
 }
@@ -87,8 +90,10 @@ interface StepperProps {
  * debajo va siempre "Paso N de 4" en texto.
  */
 function Stepper({ current, furthest, onJump }: StepperProps) {
+  const { t } = useTranslation()
+
   return (
-    <nav aria-label="Progreso del formulario">
+    <nav aria-label={t('fit.progressNav')}>
       <ol className="flex items-center gap-1.5 sm:gap-2">
         {steps.map((step, index) => {
           const done = index < current
@@ -129,10 +134,10 @@ function Stepper({ current, furthest, onJump }: StepperProps) {
                     active ? 'text-brand-ink' : 'text-ink-muted',
                   )}
                 >
-                  {step.short}
+                  {t(step.short)}
                 </span>
                 <span className="sr-only">
-                  Paso {index + 1}: {step.title}
+                  {t('fit.stepScreenReader', { index: index + 1, title: t(step.title) })}
                   {done ? ' (completado)' : ''}
                 </span>
               </button>
@@ -177,6 +182,8 @@ export function FitProfileForm({
   submitting,
   onSubmit,
 }: FitProfileFormProps) {
+  const { t } = useTranslation()
+
   const [profile, setProfile] = useState<FitProfile>(
     initialProfile ?? emptyFitProfile,
   )
@@ -217,7 +224,7 @@ export function FitProfileForm({
    *
    * Este botón y el de envío ocupan la misma posición del árbol, así que
    * React reutiliza el mismo nodo del DOM y solo le cambia el `type`. Al
-   * pulsar "Siguiente" en el paso 3, el manejador corría, React repintaba y
+   * pulsar t('common.next') en el paso 3, el manejador corría, React repintaba y
    * el nodo pasaba a `type="submit"` ANTES de que el navegador ejecutara la
    * acción por defecto del clic: el formulario se enviaba y la persona
    * aterrizaba en las recomendaciones sin llegar a ver el repaso. El `key`
@@ -264,7 +271,7 @@ export function FitProfileForm({
         <span className="block text-sm font-semibold uppercase tracking-[0.08em] text-brand-ink">
           Paso {step + 1} de {steps.length}
         </span>
-        {steps[step].title}
+        {t(steps[step].title)}
       </h2>
 
       {/* Cada paso se monta y desmonta: la animación de entrada vuelve a
@@ -273,9 +280,9 @@ export function FitProfileForm({
         {step === 0 ? (
           <Fieldset
             id="grupo-necesidades"
-            legend="¿Qué te cuesta al vestirte?"
-            hint="Marcá todo lo que aplique. Es la parte que más pesa en la recomendación."
-            error={visibleErrors.needs}
+            legend={t('fit.needsLegend')}
+            hint={t('fit.needsHint')}
+            error={visibleErrors.needs ? t(visibleErrors.needs) : undefined}
           >
             <div className="grid gap-3 md:grid-cols-2">
               {allNeeds.map((need) => (
@@ -300,7 +307,7 @@ export function FitProfileForm({
 
         {step === 1 ? (
           <>
-            <Fieldset legend="¿Cómo usás las manos?">
+            <Fieldset legend={t('fit.dexterityLegend')}>
               <RadioGroup
                 name="handDexterity"
                 options={toOptions(dexterityLabels)}
@@ -311,7 +318,7 @@ export function FitProfileForm({
               />
             </Fieldset>
 
-            <Fieldset legend="¿En qué posición te vestís normalmente?">
+            <Fieldset legend={t('fit.postureLegend')}>
               <RadioGroup
                 name="dressingPosture"
                 options={toOptions(postureLabels)}
@@ -322,7 +329,7 @@ export function FitProfileForm({
               />
             </Fieldset>
 
-            <Fieldset legend="¿Necesitás ayuda para vestirte?">
+            <Fieldset legend={t('fit.assistanceLegend')}>
               <RadioGroup
                 name="dressingAssistance"
                 options={toOptions(assistanceLabels)}
@@ -337,7 +344,7 @@ export function FitProfileForm({
 
         {step === 2 ? (
           <>
-            <Fieldset legend="¿Te molestan costuras, etiquetas o texturas?">
+            <Fieldset legend={t('fit.sensoryLegend')}>
               <RadioGroup
                 name="sensorySensitivity"
                 options={toOptions(sensoryLabels)}
@@ -349,8 +356,8 @@ export function FitProfileForm({
             </Fieldset>
 
             <Fieldset
-              legend="¿Qué buscás ahora?"
-              hint="Opcional. Si no marcás nada, te mostramos todo el catálogo."
+              legend={t('fit.categoriesLegend')}
+              hint={t('fit.categoriesHint')}
             >
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {allCategories.map((category) => (
@@ -378,11 +385,11 @@ export function FitProfileForm({
 
         {step === 3 ? (
           <>
-            <Fieldset legend="¿Algo más que debamos saber?">
+            <Fieldset legend={t('fit.notesLegend')}>
               <TextAreaField
-                label="Contalo con tus palabras"
-                hint="Opcional. Lo usamos para afinar la explicación, no para calcular el puntaje."
-                placeholder="Por ejemplo: uso una férula en la mano derecha y los puños ajustados no me pasan."
+                label={t('fit.notesLabel')}
+                hint={t('fit.notesHint')}
+                placeholder={t('fit.notesPlaceholder')}
                 value={profile.notes ?? ''}
                 onChange={(notes) =>
                   setProfile((current) => ({ ...current, notes }))
@@ -397,15 +404,11 @@ export function FitProfileForm({
               <h3
                 id="repaso-perfil"
                 className="font-display text-lg font-bold text-ink sm:text-xl"
-              >
-                Esto es lo que vamos a usar
-              </h3>
-              <p className="mt-1 text-sm text-ink-muted">
-                Si algo no encaja, volvé al paso correspondiente arriba.
-              </p>
+              >{t('fit.summaryTitle')}</h3>
+              <p className="mt-1 text-sm text-ink-muted">{t('fit.summaryHint')}</p>
 
               <dl className="mt-4">
-                <SummaryRow term="Barreras marcadas">
+                <SummaryRow term={t('fit.summaryNeeds')}>
                   {profile.needs.length > 0 ? (
                     <ul className="flex flex-wrap gap-1.5">
                       {profile.needs.map((need) => (
@@ -418,29 +421,27 @@ export function FitProfileForm({
                       ))}
                     </ul>
                   ) : (
-                    <span className="text-fit-low-ink">
-                      Ninguna. Volvé al paso 1: sin esto no podemos recomendar.
-                    </span>
+                    <span className="text-fit-low-ink">{t('fit.summaryNoNeeds')}</span>
                   )}
                 </SummaryRow>
-                <SummaryRow term="Manos">
+                <SummaryRow term={t('fit.summaryHands')}>
                   {dexterityLabels[profile.handDexterity]}
                 </SummaryRow>
-                <SummaryRow term="Postura">
+                <SummaryRow term={t('fit.summaryPosture')}>
                   {postureLabels[profile.dressingPosture]}
                 </SummaryRow>
-                <SummaryRow term="Ayuda">
+                <SummaryRow term={t('fit.summaryHelp')}>
                   {assistanceLabels[profile.dressingAssistance]}
                 </SummaryRow>
-                <SummaryRow term="Sensibilidad">
+                <SummaryRow term={t('fit.summarySensitivity')}>
                   {sensoryLabels[profile.sensorySensitivity]}
                 </SummaryRow>
-                <SummaryRow term="Categorías">
+                <SummaryRow term={t('fit.summaryCategories')}>
                   {profile.preferredCategories.length > 0
                     ? profile.preferredCategories
                         .map((category) => categoryLabels[category])
                         .join(' · ')
-                    : 'Todas'}
+                    : t('fit.summaryAllCategories')}
                 </SummaryRow>
               </dl>
             </section>
@@ -457,27 +458,21 @@ export function FitProfileForm({
               size="lg"
               onClick={() => goTo(step - 1)}
             >
-              <Icon name="arrow-left" className="h-5 w-5" />
-              Atrás
-            </Button>
+              <Icon name="arrow-left" className="h-5 w-5" />{t('common.back')}</Button>
           ) : null}
 
           {isLast ? (
             <Button key="enviar" type="submit" size="lg" disabled={submitting}>
-              {submitting ? 'Buscando prendas…' : 'Ver mis recomendaciones'}
+              {submitting ? t('fit.submitting') : t('fit.submit')}
               <Icon name="arrow-right" className="h-5 w-5" />
             </Button>
           ) : (
-            <Button key="siguiente" type="button" size="lg" onClick={handleNext}>
-              Siguiente
-              <Icon name="arrow-right" className="h-5 w-5" />
+            <Button key="siguiente" type="button" size="lg" onClick={handleNext}>{t('common.next')}<Icon name="arrow-right" className="h-5 w-5" />
             </Button>
           )}
         </div>
 
-        <p className="text-sm text-ink-muted">
-          Tu perfil se guarda solo en esta pestaña y se borra al cerrarla.
-        </p>
+        <p className="text-sm text-ink-muted">{t('fit.privacy')}</p>
       </div>
     </form>
   )

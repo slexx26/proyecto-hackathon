@@ -8,6 +8,7 @@ import { ButtonLink } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states'
 import { RecommendationCard } from '@/components/recommendations/RecommendationCard'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Sección 9. Renderiza lo que devuelve el backend, en el orden que llega.
@@ -15,7 +16,9 @@ import { RecommendationCard } from '@/components/recommendations/RecommendationC
  * de visualización que la persona controla.
  */
 export function RecommendationsPage() {
-  useDocumentTitle('Tus recomendaciones')
+  const { t } = useTranslation()
+
+  useDocumentTitle(t('reco.docTitle'))
   const { profile } = useFitProfile()
   const [onlyGoodFits, setOnlyGoodFits] = useState(false)
   const [reloadToken, setReloadToken] = useState(0)
@@ -49,12 +52,10 @@ export function RecommendationsPage() {
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
         <EmptyState
           spot="profile"
-          title="Todavía no tenemos tu perfil"
-          description="Necesitamos saber cómo te vestís para poder calcular la compatibilidad de cada producto. Son cuatro pasos y no pedimos datos médicos."
+          title={t('reco.noProfileTitle')}
+          description={t('reco.noProfileBody')}
           action={
-            <ButtonLink to="/find-my-fit" size="lg">
-              Completar Find My Fit
-              <Icon name="arrow-right" className="h-5 w-5" />
+            <ButtonLink to="/find-my-fit" size="lg">{t('reco.noProfileCta')}<Icon name="arrow-right" className="h-5 w-5" />
             </ButtonLink>
           }
         />
@@ -65,18 +66,11 @@ export function RecommendationsPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <header className="animate-rise">
-        <h1 className="text-hero font-display font-extrabold text-ink">
-          Tus recomendaciones
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg text-ink-muted">
-          Ordenadas por compatibilidad con tu perfil. El puntaje lo calcula
-          nuestro motor con reglas fijas; la IA solo lo explica.
-        </p>
+        <h1 className="text-hero font-display font-extrabold text-ink">{t('reco.docTitle')}</h1>
+        <p className="mt-5 max-w-2xl text-lg text-ink-muted">{t('reco.lead')}</p>
 
         <div className="mt-8 rounded-panel bg-surface-muted p-5 ring-1 ring-line">
-          <h2 className="text-sm font-bold uppercase tracking-[0.08em] text-ink-muted">
-            Perfil que estamos usando
-          </h2>
+          <h2 className="text-sm font-bold uppercase tracking-[0.08em] text-ink-muted">{t('reco.profileTitle')}</h2>
           <ul className="mt-3 flex flex-wrap gap-2">
             {profile.needs.map((need, index) => (
               <li
@@ -90,9 +84,7 @@ export function RecommendationsPage() {
           </ul>
 
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-line pt-4">
-            <ButtonLink to="/find-my-fit" variant="secondary">
-              Ajustar mi perfil
-            </ButtonLink>
+            <ButtonLink to="/find-my-fit" variant="secondary">{t('reco.adjust')}</ButtonLink>
 
             <label className="flex min-h-11 cursor-pointer items-center gap-2.5 text-sm font-semibold text-ink">
               <input
@@ -100,9 +92,7 @@ export function RecommendationsPage() {
                 checked={onlyGoodFits}
                 onChange={(event) => setOnlyGoodFits(event.target.checked)}
                 className="h-5 w-5 cursor-pointer"
-              />
-              Mostrar solo las que encajan bien
-              <span className="text-ink-muted">(60 o más)</span>
+              />{t('reco.onlyGood')}<span className="text-ink-muted">{t('reco.onlyGoodHint')}</span>
             </label>
           </div>
         </div>
@@ -110,25 +100,25 @@ export function RecommendationsPage() {
 
       <div className="mt-10">
         {status === 'loading' ? (
-          <LoadingState label="Calculando compatibilidad…" count={6} />
+          <LoadingState label={t('reco.loading')} count={6} />
         ) : null}
 
         {status === 'error' ? (
           <ErrorState
-            message={error ?? 'Error desconocido.'}
+            message={error ?? t('error.unknown')}
             onRetry={() => setReloadToken((value) => value + 1)}
           />
         ) : null}
 
         {status === 'success' && visible.length === 0 ? (
           <EmptyState
-            title="Ninguna prenda supera el umbral"
+            title={t('reco.emptyTitle')}
             description={
               onlyGoodFits
-                ? 'Probá quitando el filtro: hay productos con compatibilidad parcial que se pueden adaptar en un taller.'
-                : 'No encontramos productos para este perfil. Probá marcando menos categorías preferidas.'
+                ? t('reco.emptyFiltered')
+                : t('reco.emptyAll')
             }
-            action={<ButtonLink to="/find-my-fit">Ajustar mi perfil</ButtonLink>}
+            action={<ButtonLink to="/find-my-fit">{t('reco.adjust')}</ButtonLink>}
           />
         ) : null}
 

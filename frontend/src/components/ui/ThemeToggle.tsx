@@ -1,19 +1,22 @@
 import { useTheme } from '@/hooks/useTheme'
 import { Icon } from '@/components/ui/Icon'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * Control de tema. Un botón en la cabecera que hace una sola cosa: cambiar al
  * tema contrario.
  *
- * Su nombre accesible dice lo que VA A HACER ("Activar modo oscuro"), no en
+ * Su nombre accesible dice lo que VA A HACER (t('theme.toDark')), no en
  * qué estado está, porque eso es lo que necesita saber quien no ve la
  * pantalla antes de pulsarlo.
  */
 
 export function ThemeToggle() {
+  const { t } = useTranslation()
+
   const { resolved, setPreference } = useTheme()
   const next = resolved === 'dark' ? 'light' : 'dark'
-  const label = next === 'dark' ? 'Activar modo oscuro' : 'Activar modo claro'
+  const label = next === 'dark' ? t('theme.toDark') : t('theme.toLight')
 
   return (
     <button

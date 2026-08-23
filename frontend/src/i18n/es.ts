@@ -522,6 +522,21 @@ export const es = {
   'chat.send': 'Enviar',
   'chat.sendError': 'No pudimos enviar tu mensaje.',
   'chat.disclaimer': 'Respuestas orientativas. No sustituyen consejo médico.',
+
+  'product.illustrationAlt':
+    'Ilustración de la categoría del producto',
+
+  // ------------------------------------------------------------------ hero
+  'hero.carousel': 'Presentación de ADAPTA',
+  'hero.slide': 'Imagen {index} de {total}',
+  'hero.goTo': 'Ir a la imagen {index} de {total}',
+  'hero.announce': 'Imagen {index} de {total}. {alt}',
+  'hero.photo1Alt':
+    'Una mujer avanza por una pasarela de moda en silla de ruedas manual. Lleva una corona de flores rojas, un top azul sin mangas, un abrigo largo amarillo y una falda estampada en violeta y azul apoyada sobre las piernas. El público la mira desde la penumbra.',
+  'hero.photo2Alt':
+    'Un hombre sentado en un banco de madera apoya el brazo sobre la rodilla y mira a la cámara. Usa una prótesis de pierna de fibra de carbono con zapatilla deportiva. Fondo de estudio oscuro.',
+  'hero.photo3Alt':
+    'Una mujer sentada en un vestuario ajusta una de sus dos prótesis de pierna de fibra de carbono. Detrás hay una estantería con calzado y un bolso de deporte.',
 } as const
 
 export type TranslationKey = keyof typeof es

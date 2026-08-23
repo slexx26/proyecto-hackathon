@@ -7,6 +7,7 @@ import { ProductImage } from '@/components/products/ProductImage'
 import { WhereToGetIt } from '@/components/providers/WhereToGetIt'
 import { ReasonList } from './ReasonList'
 import { ScoreBadge, ScoreBar } from './ScoreBadge'
+import { useTranslation } from '@/i18n/languageContext'
 
 /**
  * La tarjeta separa visualmente dos cosas que el proyecto no debe mezclar:
@@ -21,6 +22,8 @@ export function RecommendationCard({
   recommendation: Recommendation
   index?: number
 }) {
+  const { t } = useTranslation()
+
   const { product, provider, score, reasons, explanation, adaptations } =
     recommendation
 
@@ -52,25 +55,18 @@ export function RecommendationCard({
 
         <div className="rounded-card bg-accent-soft/70 p-4 ring-1 ring-accent-line/60">
           <h4 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-accent-ink">
-            <Icon name="spark" className="h-4 w-4" />
-            Lo que dice la IA
-          </h4>
+            <Icon name="spark" className="h-4 w-4" />{t('reco.aiTitle')}</h4>
           {explanation ? (
             <p className="mt-2 text-sm text-ink">{explanation}</p>
           ) : (
             // La IA falló o está desactivada: la evidencia de abajo sostiene
             // la pantalla por sí sola (sección 24).
-            <p className="mt-2 text-sm text-ink-muted">
-              La explicación en lenguaje natural no está disponible ahora
-              mismo. Abajo tenés la evidencia con la que se calculó el puntaje.
-            </p>
+            <p className="mt-2 text-sm text-ink-muted">{t('reco.aiUnavailable')}</p>
           )}
         </div>
 
         <div>
-          <h4 className="text-xs font-bold uppercase tracking-[0.08em] text-ink-muted">
-            Evidencia del motor
-          </h4>
+          <h4 className="text-xs font-bold uppercase tracking-[0.08em] text-ink-muted">{t('reco.evidenceTitle')}</h4>
           <div className="mt-2.5">
             <ReasonList reasons={reasons} />
           </div>
@@ -100,9 +96,7 @@ export function RecommendationCard({
           <Link
             to={`/products/${product.id}`}
             className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand-ink underline underline-offset-4 hover:text-action-hover"
-          >
-            Ver detalle
-            <span className="sr-only"> de {product.name}</span>
+          >{t('reco.viewDetail')}<span className="sr-only"> de {product.name}</span>
             <Icon name="arrow-right" className="h-4 w-4 transition-transform duration-200 ease-(--ease-out-strong) group-hover:translate-x-0.5" />
           </Link>
         </div>
