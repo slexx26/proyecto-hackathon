@@ -18,4 +18,6 @@ Usa OPENAI_API_KEY solo en backend y entrega datos validados a los demás módul
 
 ## Estado
 
-Pendiente · PR/commit: —
+**Completo.**
+
+`backend/recommendations/explanation.py`. Con `OPENAI_API_KEY` intenta OpenAI y le pasa la evidencia ya calculada, sin poder tocar el score; sin clave, o si la llamada falla, cae a una plantilla determinista que nunca rompe. **Falta** probarlo con una clave real.

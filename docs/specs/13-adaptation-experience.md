@@ -18,6 +18,6 @@ Une la IA, el producto, el perfil del usuario y el módulo de solicitudes de ada
 
 ## Estado
 
-**Completo** (Slater).
+**Completo.**
 
-Parte de interfaz: `frontend/src/features/adaptations/AdaptationPanel.tsx`. Beneficio y limitación con el mismo peso visual, más CTA de interés. **Falta** la persistencia de la solicitud (José) y la generación real de sugerencias (Isaac).
+`backend/recommendations/adaptations.py` genera las sugerencias por cada necesidad en `gap`, con `limitation` siempre presente. El frontend ya lo consume vía `AdaptationPanel.tsx`. **Falta** el guardado de solicitudes ("me interesa esta adaptación"), que hoy vive solo en memoria del navegador.

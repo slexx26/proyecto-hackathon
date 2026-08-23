@@ -18,4 +18,6 @@ Recibe perfiles y productos; devuelve scores y evidencia que luego la IA puede e
 
 ## Estado
 
-Pendiente · PR/commit: —
+**Completo.**
+
+`backend/recommendations/engine.py`. Función pura, sin red ni aleatoriedad: base fija + reparto por necesidad + contexto (cierre/destreza, postura, sensibilidad, categoría preferida) sin duplicar razones. Las categorías sin ropa (`prosthetics`, `orthotics`, `mobility`, `daily-living`) ignoran el cierre a propósito. 15 pruebas, 4 de ellas fijadas como contrato desde el principio.

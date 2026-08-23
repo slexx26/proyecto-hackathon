@@ -18,4 +18,6 @@ Consume el desglose determinista y devuelve texto estructurado para Recommendati
 
 ## Estado
 
-Pendiente · PR/commit: —
+**Completo.**
+
+Misma función que la 11. Recibe `reasons` y `score` ya calculados, menciona lo que no cubre, sin afirmaciones médicas.
