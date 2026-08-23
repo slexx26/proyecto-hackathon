@@ -1,0 +1,32 @@
+# Dependencias
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Builds y cachés
+dist/
+build/
+.vite/
+*.tsbuildinfo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Entorno. NUNCA versionar secretos: solo los .env.example
+.env
+.env.*
+!.env.example
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Registros
+*.log
+npm-debug.log*

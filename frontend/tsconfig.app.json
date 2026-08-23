@@ -16,7 +16,13 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Alias: sin baseUrl, los paths se resuelven relativos a este tsconfig */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
     /* Linting */
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
