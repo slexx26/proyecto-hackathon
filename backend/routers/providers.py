@@ -6,10 +6,11 @@ que el negocio compra al pagar la inscripción, así que no puede depender de
 un `sort()` que cualquiera reescribe desde la consola del navegador.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from postgrest.exceptions import APIError
 from supabase import Client
 
+from rate_limit import enforce_rate_limit
 from schemas.common import ProviderKind
 from schemas.provider import (
     Provider,
@@ -101,10 +102,17 @@ def get_provider(
 )
 def submit_application(
     application: ProviderApplication,
+    request: Request,
     client: Client = Depends(get_supabase),
 ) -> ProviderApplicationReceipt:
     """Recibe la solicitud de inscripción. NO procesa ningún pago:
-    el cobro se coordina fuera de la plataforma (sección 36)."""
+    el cobro se coordina fuera de la plataforma (sección 36).
+
+    Endpoint público sin autenticación: limitado a 5 solicitudes por
+    minuto por IP (sección 25), para que no se use como buzón de spam."""
+    client_ip = request.client.host if request.client else "desconocido"
+    enforce_rate_limit(client_ip)
+
     try:
         client.table("provider_applications").insert(
             {

@@ -15,6 +15,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import get_settings
+from errors import register_error_handlers
 from routers import chat, health, products, providers, recommendations
 
 settings = get_settings()
@@ -38,6 +39,8 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
+
+register_error_handlers(app)
 
 API_PREFIX = "/api/v1"
 

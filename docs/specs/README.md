@@ -11,7 +11,7 @@ esta carpeta sirve para asignar y controlar el avance.
 | 1 | Project — Producto | Equipo · coordinación: Slater | [01-project.md](01-project.md) |
 | 2 | Hackathon Goals — Metas | Equipo | [02-hackathon-goals.md](02-hackathon-goals.md) |
 | 3 | Architecture — Arquitectura | José | [03-architecture.md](03-architecture.md) |
-| 4 | Architectural Principles — Principios | Equipo | [04-architectural-principles.md](04-architectural-principles.md) |
+| 4 | Architectural Principles — Principios | José | [04-architectural-principles.md](04-architectural-principles.md) |
 | 5 | Project Structure — Estructura | Equipo · coordinación: Slater | [05-project-structure.md](05-project-structure.md) |
 | 6 | Frontend Routes — Rutas | Slater | [06-frontend-routes.md](06-frontend-routes.md) |
 | 7 | Landing Page — Inicio | Slater | [07-landing-page.md](07-landing-page.md) |
@@ -31,7 +31,7 @@ esta carpeta sirve para asignar y controlar el avance.
 | 21 | UI Design System — Sistema visual | Slater | [21-ui-design-system.md](21-ui-design-system.md) |
 | 22 | Responsive Design — Adaptabilidad | Slater | [22-responsive-design.md](22-responsive-design.md) |
 | 23 | Accessibility — Accesibilidad | Slater | [23-accessibility.md](23-accessibility.md) |
-| 24 | Error Handling — Manejo de errores | Equipo | [24-error-handling.md](24-error-handling.md) |
+| 24 | Error Handling — Manejo de errores | José | [24-error-handling.md](24-error-handling.md) |
 | 25 | Security — Seguridad | José | [25-security.md](25-security.md) |
 | 26 | Seed Data — Datos de demo | José | [26-seed-data.md](26-seed-data.md) |
 | 27 | Demo Flow — Flujo de demostración | Equipo · coordinación: Slater | [27-demo-flow.md](27-demo-flow.md) |

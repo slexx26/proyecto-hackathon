@@ -1,7 +1,7 @@
 # 24. Error Handling — Manejo de errores
 
-**Responsable:** Equipo  
-**Apoya: José backend · Slater frontend · Isaac IA**  
+**Responsable:** José  
+**Apoya: Slater e Isaac**  
 **Prioridad: P0**
 
 ## Qué hace

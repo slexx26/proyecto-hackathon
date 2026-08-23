@@ -1,7 +1,7 @@
 # 4. Architectural Principles — Principios
 
-**Responsable:** Equipo  
-**Apoya: Todos**  
+**Responsable:** José  
+**Apoya: Slater e Isaac**  
 **Prioridad: P0**
 
 ## Qué hace

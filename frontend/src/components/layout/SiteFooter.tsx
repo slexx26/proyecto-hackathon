@@ -81,9 +81,7 @@ export function SiteFooter() {
           </span>
         </p>
 
-        <p className="mt-6 text-xs text-ink-muted">
-          Hecho por Slater, José e Isaac · 2026
-        </p>
+        <p className="mt-6 text-xs text-ink-muted">2026</p>
       </div>
     </footer>
   )
