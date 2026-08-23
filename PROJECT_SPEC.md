@@ -7,23 +7,51 @@
 
 **ADAPTA · Fashion should adapt to you.**
 
-Plataforma de descubrimiento y adaptación de moda accesible impulsada por IA.
-No es una tienda genérica con filtro de accesibilidad: el centro del producto
-es decidir si una prenda le sirve a una persona concreta, y explicar por qué.
+Directorio centralizado, con IA, de productos y negocios de moda y vida
+accesible. No es una tienda: ADAPTA no vende ni cobra comisión. Reúne en un
+solo lugar a los negocios que hoy están dispersos —talleres de adaptación,
+ortopedias, emprendimientos de ropa adaptada, proveedores de ayudas técnicas—
+decide si lo que ofrecen le sirve a una persona concreta, explica por qué, y
+la conecta con quien puede resolvérselo.
 
-**Problema.** Las tiendas describen talla, color y material. Ninguna dice si la
-prenda se puede poner con una mano, si se abrocha estando sentada, o si la
-costura interna va a molestar. Esa información existe en la prenda, pero nadie
-la estructura. Sin ella, la persona compra, prueba y devuelve.
+**Modelo de negocio.** El negocio paga por inscribirse en el directorio,
+porque le lleva clientes que hoy no lo encuentran. La persona que busca no
+paga nada ni entrega datos médicos. Es un mercado de dos lados donde el lado
+que paga es el que tiene el problema comercial.
 
-**Usuario objetivo.** Personas con movilidad reducida, destreza manual
-limitada, sensibilidad sensorial o dispositivos médicos, y quienes las cuidan.
+**Problema.** Doble, y por eso hay negocio.
+
+*Del lado de la persona:* las tiendas describen talla, color y material.
+Ninguna dice si la prenda se puede poner con una mano, si se abrocha estando
+sentada, o si la costura interna va a molestar. Y los negocios que sí lo
+resuelven están dispersos entre grupos de Facebook, recomendaciones de pasillo
+y buscadores que devuelven catálogos de otro país.
+
+*Del lado del negocio:* el taller, la ortopedia o el emprendimiento tienen el
+producto que alguien necesita hoy, y no tienen cómo llegar a esa persona. Su
+cliente los está buscando y no los encuentra.
+
+**Usuarios.** Dos.
+
+1. **Persona con discapacidad** —movilidad reducida, destreza manual limitada,
+   amputación, sensibilidad sensorial, dispositivos médicos— y quienes la
+   cuidan. Usa ADAPTA gratis.
+2. **Negocio proveedor** —ropa y calzado adaptado, talleres de adaptación,
+   prótesis y órtesis, ayudas a la movilidad, productos de apoyo diario—. Paga
+   la inscripción.
+
+**Alcance del catálogo.** No es solo ropa: incluye calzado, prótesis, órtesis,
+sillas de ruedas y utensilios de apoyo diario.
 
 **Recorrido principal.**
 
 ```
-necesidades → perfil accesible → compatibilidad → recomendación → explicación → adaptación
+necesidades → perfil accesible → compatibilidad → recomendación → explicación → adaptación → dónde conseguirlo
 ```
+
+El recorrido no termina en "esta prenda te sirve", sino en "esta prenda te
+sirve y la conseguís en este negocio". Una recomendación que no dice a quién
+acudir deja a la persona igual que al principio.
 
 **Regla de posicionamiento (sección 40):** la landing, la demo y la
 presentación cuentan la misma historia. El diferenciador no es el catálogo, es
@@ -49,6 +77,7 @@ Prioridad, en este orden:
      ├── products        ──▶ Supabase PostgreSQL
      ├── recommendations ──▶ Compatibility Engine (Python, determinista)
      │                        └──▶ AI Service ──▶ OpenAI (explica, no puntúa)
+     ├── providers       ──▶ Supabase PostgreSQL  (directorio de negocios)
      ├── chat            ──▶ AI Service
      └── health
 ```
@@ -85,10 +114,13 @@ proyecto-hackathon/
 | Método | Ruta | Cuerpo | Respuesta |
 |--------|------|--------|-----------|
 | GET | `/api/v1/health` | — | `{ status, version? }` |
-| GET | `/api/v1/products` | query: `search`, `category`, `adaptation_need` | `Product[]` |
+| GET | `/api/v1/products` | query: `search`, `category`, `adaptation_need`, `provider_id` | `Product[]` |
 | GET | `/api/v1/products/{id}` | — | `Product` · 404 si no existe |
 | POST | `/api/v1/recommendations` | `{ profile: FitProfile }` | `{ recommendations, generatedAt }` |
 | POST | `/api/v1/chat` | `{ message, history, productId? }` | `{ reply }` |
+| GET | `/api/v1/providers` | query: `search`, `kind`, `verified_only` | `Provider[]` |
+| GET | `/api/v1/providers/{id}` | — | `Provider` · 404 si no existe |
+| POST | `/api/v1/providers/applications` | `ProviderApplication` | `{ received: true }` |
 | POST | `/api/v1/image-analysis` | multipart `file` | `ImageAnalysisResult` (P2) |
 
 Los tipos de `frontend/src/types/` son el espejo de los schemas Pydantic.
@@ -102,17 +134,23 @@ backend fije el formato, el único punto a tocar es `unwrap()` en
 
 | Nivel | Alcance |
 |-------|---------|
-| **P0** | Landing · Find My Fit · Recommendations · Product Detail · Adaptations · motor determinista · products/recommendations API · seed · accesibilidad · despliegue |
-| **P1** | Marketplace con filtros · Chatbot |
+| **P0** | Landing · Find My Fit · Recommendations · Product Detail · Adaptations · **directorio de negocios y "dónde conseguirlo"** · motor determinista · products/recommendations/providers API · seed · accesibilidad · despliegue |
+| **P1** | Marketplace con filtros · Chatbot · inscripción de negocios |
 | **P2** | Análisis de imagen |
 
 Regla: no se abre nada de P1 mientras haya P0 sin integrar.
 
 ## 7. Fuera de alcance (sección 36)
 
-Microservicios · Kubernetes · pagos · logística de envíos · autenticación
-compleja · red social · modelos propios entrenados · carrito de compras ·
-panel de administración · internacionalización.
+Microservicios · Kubernetes · **cobro real de la inscripción** · logística de
+envíos · autenticación compleja · red social · modelos propios entrenados ·
+carrito de compras · panel de administración del negocio ·
+internacionalización.
+
+Sobre el cobro: el modelo de negocio se **muestra** (planes, precios, insignia
+de verificación, orden preferente en el directorio) porque es parte de la
+propuesta. Lo que no se implementa es la pasarela de pago: la solicitud de
+inscripción se recoge y el cobro se coordina fuera de la plataforma.
 
 ## 8. Criterios de éxito (sección 37)
 
@@ -120,6 +158,9 @@ panel de administración · internacionalización.
 - [ ] El mismo perfil produce siempre el mismo score.
 - [ ] La explicación de IA es coherente con la evidencia y no la contradice.
 - [ ] Hay al menos una adaptación visible y solicitable.
+- [ ] Toda recomendación dice dónde conseguir el producto.
+- [ ] El directorio de negocios se puede consultar y filtrar.
+- [ ] Un negocio puede enviar su solicitud de inscripción.
 - [ ] Navegación completa por teclado, con foco visible.
 - [ ] Ningún secreto en el repositorio ni en el bundle.
 - [ ] Desplegado y probado desde un dispositivo externo.

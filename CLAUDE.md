@@ -4,8 +4,17 @@ Lee esto entero antes de tocar nada. Este archivo se carga solo en cada sesión.
 
 ## Qué es
 
-**ADAPTA · Fashion should adapt to you.** Plataforma de descubrimiento y
-adaptación de moda accesible con IA. Proyecto de hackathon de 48 horas.
+**ADAPTA · Fashion should adapt to you.** Directorio centralizado, con IA, de
+productos y negocios de moda y vida accesible. Proyecto de hackathon de 48
+horas.
+
+Mercado de dos lados: la **persona** con discapacidad busca gratis y recibe
+recomendaciones explicadas; el **negocio** (taller, ortopedia, emprendimiento,
+proveedor de ayudas técnicas) paga por inscribirse en el directorio, porque le
+lleva clientes que hoy no lo encuentran.
+
+El catálogo no es solo ropa: incluye calzado, prótesis, órtesis, movilidad y
+productos de apoyo diario.
 
 La definición completa está en `PROJECT_SPEC.md`. El contrato de la API, en
 `docs/api-contract.md`. La división del trabajo en 41 secciones, en
@@ -38,8 +47,14 @@ resumen. Si un cambio tuyo obliga a cambiar un contrato compartido, dilo antes.
 5. No crees archivos `.env` con secretos reales. Solo `.env.example` vacíos.
 6. Sin afirmaciones médicas. Sin analizar el cuerpo de la persona.
 7. Los datos ficticios se etiquetan como tales, nunca como empresas reales.
-8. Fuera de alcance: microservicios, Kubernetes, pagos, envíos, autenticación
-   compleja, carrito, panel de administración.
+8. Toda recomendación termina diciendo **dónde conseguir el producto**. Una
+   recomendación sin proveedor no sirve: deja a la persona igual que al empezar.
+9. La insignia "verificado" significa que el negocio existe y ofrece lo que
+   dice. **No** es una valoración de calidad y no debe redactarse como tal.
+10. Fuera de alcance: microservicios, Kubernetes, **cobro real de la
+    inscripción**, envíos, autenticación compleja, carrito, panel de
+    administración. Los planes y precios se muestran; la pasarela de pago no
+    se implementa.
 
 ## Frontend — invariantes
 

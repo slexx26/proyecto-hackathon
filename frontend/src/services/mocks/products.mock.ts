@@ -13,8 +13,9 @@ import type { Product } from '@/types/product'
 export const mockProducts: Product[] = [
   {
     id: 'adp-001',
+    providerId: 'prv-001',
     name: 'Camisa Vera de cierre magnético',
-    brand: 'Vera Studio (ficticia)',
+    brand: 'Vera Studio',
     category: 'tops',
     price: 42000,
     currency: 'CRC',
@@ -42,8 +43,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'adp-002',
+    providerId: 'prv-002',
     name: 'Pantalón Ronda de apertura lateral',
-    brand: 'Ronda (ficticia)',
+    brand: 'Ronda',
     category: 'bottoms',
     price: 51000,
     currency: 'CRC',
@@ -66,8 +68,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'adp-003',
+    providerId: 'prv-002',
     name: 'Tenis Paso sin cordones',
-    brand: 'Paso (ficticia)',
+    brand: 'Paso',
     category: 'footwear',
     price: 68000,
     currency: 'CRC',
@@ -95,8 +98,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'adp-004',
+    providerId: 'prv-007',
     name: 'Buzo Calma sin costuras',
-    brand: 'Calma (ficticia)',
+    brand: 'Calma',
     category: 'tops',
     price: 39000,
     currency: 'CRC',
@@ -124,8 +128,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'adp-005',
+    providerId: 'prv-002',
     name: 'Chaqueta Norte con acceso de brazo',
-    brand: 'Norte (ficticia)',
+    brand: 'Norte',
     category: 'outerwear',
     price: 87000,
     currency: 'CRC',
@@ -153,8 +158,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'adp-006',
+    providerId: 'prv-008',
     name: 'Camisa Clásica de botón',
-    brand: 'Lienzo (ficticia)',
+    brand: 'Lienzo',
     category: 'tops',
     price: 28000,
     currency: 'CRC',
@@ -177,8 +183,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'adp-007',
+    providerId: 'prv-002',
     name: 'Falda Vuelta con velcro',
-    brand: 'Vuelta (ficticia)',
+    brand: 'Vuelta',
     category: 'bottoms',
     price: 34000,
     currency: 'CRC',
@@ -206,8 +213,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'adp-008',
+    providerId: 'prv-007',
     name: 'Camiseta Puerto con puerto de acceso',
-    brand: 'Puerto (ficticia)',
+    brand: 'Puerto',
     category: 'tops',
     price: 31000,
     currency: 'CRC',
@@ -231,6 +239,165 @@ export const mockProducts: Product[] = [
       'Las solapas son visibles bajo tejidos muy finos o de color claro.',
     ],
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    inStock: true,
+  },
+  {
+    id: 'adp-009',
+    providerId: 'prv-004',
+    name: 'Prótesis mioeléctrica de mano',
+    brand: 'Ortopedia Meseta',
+    category: 'prosthetics',
+    price: 4200000,
+    currency: 'CRC',
+    description:
+      'Prótesis de mano accionada por señales musculares del antebrazo. Incluye valoración, molde, ajuste y tres sesiones de entrenamiento.',
+    images: [
+      {
+        url: '/products/protesis-mano.svg',
+        alt: 'Prótesis de mano de color gris con articulaciones en los dedos',
+      },
+    ],
+    adaptationNeeds: ['prosthesis-friendly', 'one-handed-dressing', 'adjustable-fit'],
+    closureType: 'none',
+    materials: ['Fibra de carbono', 'Silicona médica'],
+    limitations: [
+      'Requiere valoración presencial: no se puede encargar en línea.',
+      'El precio varía según el nivel de amputación y la cobertura del seguro.',
+    ],
+    sizes: ['A medida'],
+    inStock: true,
+  },
+  {
+    id: 'adp-010',
+    providerId: 'prv-004',
+    name: 'Órtesis de tobillo y pie',
+    brand: 'Ortopedia Meseta',
+    category: 'orthotics',
+    price: 310000,
+    currency: 'CRC',
+    description:
+      'Órtesis termoconformada que estabiliza el tobillo y corrige el pie caído al caminar. Se usa dentro del calzado.',
+    images: [
+      {
+        url: '/products/ortesis-tobillo.svg',
+        alt: 'Órtesis blanca en forma de L que cubre la pantorrilla y la planta del pie',
+      },
+    ],
+    adaptationNeeds: ['prosthesis-friendly', 'adjustable-fit'],
+    closureType: 'velcro',
+    materials: ['Polipropileno', 'Forro de espuma'],
+    limitations: [
+      'Necesita calzado de horma ancha y profundidad extra: no entra en un tenis estándar.',
+    ],
+    sizes: ['A medida'],
+    inStock: true,
+  },
+  {
+    id: 'adp-011',
+    providerId: 'prv-005',
+    name: 'Silla de ruedas manual ultraligera',
+    brand: 'Movilidad Norte',
+    category: 'mobility',
+    price: 890000,
+    currency: 'CRC',
+    description:
+      'Chasis rígido de aluminio de 9 kg, respaldo regulable y ejes de liberación rápida para meterla al carro.',
+    images: [
+      {
+        url: '/products/silla-ultraligera.svg',
+        alt: 'Silla de ruedas de chasis azul con ruedas traseras grandes inclinadas',
+      },
+    ],
+    adaptationNeeds: ['seated-wearing', 'adjustable-fit'],
+    closureType: 'none',
+    materials: ['Aluminio aeronáutico', 'Tapicería de nylon'],
+    limitations: [
+      'El chasis rígido no se pliega: se desarma en piezas para transportarla.',
+      'Requiere fuerza de brazos para autopropulsarse en cuesta.',
+    ],
+    sizes: ['38 cm', '40 cm', '45 cm'],
+    inStock: true,
+  },
+  {
+    id: 'adp-012',
+    providerId: 'prv-006',
+    name: 'Abotonador de mango grueso',
+    brand: 'Cotidiano',
+    category: 'daily-living',
+    price: 9500,
+    currency: 'CRC',
+    description:
+      'Gancho de alambre con mango de 3 cm de diámetro. Pasa el botón por el ojal con una sola mano y sin pinza fina.',
+    images: [
+      {
+        url: '/products/abotonador.svg',
+        alt: 'Utensilio con mango grueso de color naranja y gancho de alambre en la punta',
+      },
+    ],
+    adaptationNeeds: ['one-handed-dressing', 'no-fine-motor'],
+    closureType: 'none',
+    materials: ['Acero inoxidable', 'Mango de espuma'],
+    limitations: [
+      'Sirve para botones medianos y grandes. Con botones muy pequeños sigue siendo difícil.',
+    ],
+    sizes: ['Talla única'],
+    inStock: true,
+  },
+  {
+    id: 'adp-013',
+    providerId: 'prv-006',
+    name: 'Calzador de mango largo',
+    brand: 'Cotidiano',
+    category: 'daily-living',
+    price: 7800,
+    currency: 'CRC',
+    description:
+      'Calzador de 60 cm con mango curvo. Permite ponerse el zapato sentado, sin agacharse ni doblar la cadera.',
+    images: [
+      {
+        url: '/products/calzador.svg',
+        alt: 'Calzador metálico largo con mango curvo en un extremo',
+      },
+    ],
+    adaptationNeeds: ['seated-wearing', 'one-handed-dressing', 'no-fine-motor'],
+    closureType: 'none',
+    materials: ['Aluminio anodizado'],
+    limitations: [
+      'No sustituye un calzado sin cordones: solo ayuda a meter el pie.',
+    ],
+    sizes: ['60 cm'],
+    inStock: true,
+  },
+  {
+    id: 'adp-014',
+    providerId: 'prv-003',
+    name: 'Servicio de adaptación de prenda propia',
+    brand: 'Taller Puntada Abierta',
+    category: 'accessories',
+    price: 15000,
+    currency: 'CRC',
+    description:
+      'Llevás una prenda que ya tenés y la modifican: cambio de botones por imanes, apertura de costura lateral, retiro de etiquetas o argolla de tiro. Precio desde, según el trabajo.',
+    images: [
+      {
+        url: '/products/servicio-adaptacion.svg',
+        alt: 'Máquina de coser con una prenda en proceso de modificación',
+      },
+    ],
+    adaptationNeeds: [
+      'magnetic-closure',
+      'no-fine-motor',
+      'sensory-friendly',
+      'seated-wearing',
+      'easy-access-medical',
+    ],
+    closureType: 'none',
+    materials: ['Depende de la prenda'],
+    limitations: [
+      'Atención solo presencial en Cartago: hay que llevar la prenda al taller.',
+      'Algunas modificaciones no se pueden revertir sin dejar marca.',
+    ],
+    sizes: ['La de tu prenda'],
     inStock: true,
   },
 ]

@@ -19,8 +19,8 @@ const steps = [
   },
   {
     number: '03',
-    title: 'Te explicamos por qué',
-    body: 'La IA traduce esa evidencia a lenguaje claro: qué encaja, qué no, y qué modificación lo resolvería.',
+    title: 'Te decimos dónde conseguirlo',
+    body: 'La IA explica por qué encaja y qué modificación haría falta, y te conecta con el negocio que lo vende o lo adapta.',
   },
 ]
 
@@ -36,6 +36,14 @@ const values = [
   {
     title: 'La ropa que ya existe también sirve',
     body: 'Si una prenda convencional casi encaja, te proponemos cómo adaptarla, con el beneficio y el costo reales de hacerlo.',
+  },
+  {
+    title: 'No es solo ropa',
+    body: 'Calzado, prótesis, órtesis, sillas de ruedas y productos de apoyo diario. Lo que hoy está disperso entre grupos de Facebook y recomendaciones de pasillo, en un solo lugar.',
+  },
+  {
+    title: 'Vos no pagás nada',
+    body: 'Quien paga es el negocio que se inscribe en el directorio, porque le llevamos clientes. La persona que busca no paga ni entrega datos médicos.',
   },
 ]
 
@@ -57,10 +65,11 @@ export function LandingPage() {
             </h1>
 
             <p className="mt-5 max-w-prose text-lg text-ink-muted">
-              Vestirse no debería depender de si podés abrochar un botón. ADAPTA
-              cruza tu forma real de vestirte con las características de cada
-              prenda, te dice qué tan bien encaja y por qué, y cuando no encaja,
-              te propone cómo adaptarla.
+              Vestirse no debería depender de si podés abrochar un botón.
+              ADAPTA reúne en un solo lugar a los negocios que hacen ropa,
+              calzado, prótesis y ayudas técnicas adaptadas, cruza tu forma real
+              de vestirte con lo que ofrecen, y te dice qué te sirve, por qué, y
+              a quién acudir.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -73,7 +82,7 @@ export function LandingPage() {
             </div>
 
             <p className="mt-4 text-sm text-ink-muted">
-              Toma dos minutos. No pedimos registro ni datos médicos.
+              Toma dos minutos. Es gratis, no pedimos registro ni datos médicos.
             </p>
           </div>
 
@@ -123,8 +132,11 @@ export function LandingPage() {
           <p className="mt-4 max-w-2xl text-brand-100">
             Las tiendas describen talla, color y material. Ninguna dice si la
             prenda se puede poner con una mano, si se abrocha sentada, o si la
-            costura interna va a molestar. Esa información existe, pero nadie la
-            organiza. Sin ella, la persona compra, prueba y devuelve.
+            costura interna va a molestar. Y los negocios que sí resuelven esto
+            —talleres, ortopedias, emprendimientos— existen, pero están
+            dispersos y nadie los encuentra. La información está, sin organizar.
+            Sin ella, la persona compra, prueba y devuelve; y el negocio que
+            podía ayudarla nunca se entera de que lo buscaban.
           </p>
         </div>
       </section>
@@ -180,9 +192,12 @@ export function LandingPage() {
           Nueve preguntas, ningún registro. Al final vas a ver el catálogo
           ordenado por lo que de verdad te sirve.
         </p>
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <ButtonLink to="/find-my-fit" size="lg">
             Encontrá tu fit
+          </ButtonLink>
+          <ButtonLink to="/for-business" size="lg" variant="secondary">
+            Tengo un negocio
           </ButtonLink>
         </div>
       </section>

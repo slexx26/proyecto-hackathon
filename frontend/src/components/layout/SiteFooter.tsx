@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-line bg-surface-muted">
@@ -11,6 +13,15 @@ export function SiteFooter() {
           Proyecto de hackathon. El catálogo, las marcas y los precios son
           ficticios y existen solo para la demostración. ADAPTA no da consejo
           médico ni sustituye la valoración de un profesional de la salud.
+        </p>
+
+        <p className="mt-6 text-sm">
+          <Link
+            to="/for-business"
+            className="font-semibold text-brand-700 underline underline-offset-4"
+          >
+            ¿Tenés un negocio? Inscribilo en ADAPTA
+          </Link>
         </p>
 
         <p className="mt-6 text-xs text-ink-muted">

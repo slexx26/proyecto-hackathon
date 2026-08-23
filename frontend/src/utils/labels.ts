@@ -57,7 +57,11 @@ export const categoryLabels: Record<ProductCategory, string> = {
   outerwear: 'Abrigos',
   footwear: 'Calzado',
   underwear: 'Ropa interior',
-  accessories: 'Accesorios',
+  accessories: 'Accesorios y servicios',
+  prosthetics: 'Prótesis',
+  orthotics: 'Órtesis',
+  mobility: 'Movilidad',
+  'daily-living': 'Apoyo diario',
 }
 
 export const closureLabels: Record<ClosureType, string> = {

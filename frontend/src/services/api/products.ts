@@ -9,6 +9,9 @@ function applyFilters(products: Product[], filters: ProductFilters): Product[] {
 
   return products.filter((product) => {
     if (filters.category && product.category !== filters.category) return false
+    if (filters.providerId && product.providerId !== filters.providerId) {
+      return false
+    }
     if (
       filters.adaptationNeed &&
       !product.adaptationNeeds.includes(filters.adaptationNeed)
@@ -37,6 +40,7 @@ export function fetchProducts(
       search: filters.search,
       category: filters.category,
       adaptation_need: filters.adaptationNeed,
+      provider_id: filters.providerId,
     },
     signal,
   })

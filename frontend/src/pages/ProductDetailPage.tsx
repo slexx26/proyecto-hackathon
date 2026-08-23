@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchProductById } from '@/services/api/products'
+import { fetchProviderById } from '@/services/api/providers'
 import { fetchRecommendations } from '@/services/api/recommendations'
 import { useAsync } from '@/hooks/useAsync'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
@@ -17,6 +18,7 @@ import { ProductImage } from '@/components/products/ProductImage'
 import { ReasonList } from '@/components/recommendations/ReasonList'
 import { ScoreBadge } from '@/components/recommendations/ScoreBadge'
 import { AdaptationPanel } from '@/features/adaptations/AdaptationPanel'
+import { WhereToGetIt } from '@/components/providers/WhereToGetIt'
 
 /**
  * Sección 15. Junta tres fuentes con el mismo `productId`: el producto, su
@@ -48,6 +50,20 @@ export function ProductDetailPage() {
     recommendationsRun,
     `detalle#${JSON.stringify(profile ?? null)}`,
     profile !== undefined,
+  )
+
+  const providerId = product.data?.providerId
+  const providerRun = useCallback(
+    (signal: AbortSignal) =>
+      providerId
+        ? fetchProviderById(providerId, signal)
+        : Promise.reject(new Error('Sin proveedor.')),
+    [providerId],
+  )
+  const provider = useAsync(
+    providerRun,
+    providerId ?? 'sin-proveedor',
+    providerId !== undefined,
   )
 
   const match = useMemo(
@@ -118,6 +134,12 @@ export function ProductDetailPage() {
           </div>
 
           <p className="mt-5 text-lg text-ink-muted">{item.description}</p>
+
+          {provider.data ? (
+            <div className="mt-6">
+              <WhereToGetIt provider={provider.data} />
+            </div>
+          ) : null}
 
           <dl className="mt-6 space-y-3 text-sm">
             <div className="flex gap-2">

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import type { Recommendation } from '@/types/recommendation'
 import { formatPrice } from '@/utils/labels'
 import { ProductImage } from '@/components/products/ProductImage'
+import { WhereToGetIt } from '@/components/providers/WhereToGetIt'
 import { ReasonList } from './ReasonList'
 import { ScoreBadge, ScoreBar } from './ScoreBadge'
 
@@ -10,7 +11,8 @@ export function RecommendationCard({
 }: {
   recommendation: Recommendation
 }) {
-  const { product, score, reasons, explanation, adaptations } = recommendation
+  const { product, provider, score, reasons, explanation, adaptations } =
+    recommendation
 
   return (
     <article className="flex flex-col overflow-hidden rounded-card bg-surface shadow-card ring-1 ring-line">
@@ -39,6 +41,8 @@ export function RecommendationCard({
         )}
 
         <ReasonList reasons={reasons} />
+
+        <WhereToGetIt provider={provider} />
 
         {adaptations.length > 0 ? (
           <p className="rounded-xl bg-accent-300/15 px-3 py-2 text-sm text-ink">

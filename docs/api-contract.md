@@ -53,7 +53,7 @@ determinista.
 
 ## `GET /products`
 
-Query, todos opcionales: `search`, `category`, `adaptation_need`.
+Query, todos opcionales: `search`, `category`, `adaptation_need`, `provider_id`.
 
 Devuelve `Product[]`.
 
@@ -62,7 +62,8 @@ Devuelve `Product[]`.
   {
     "id": "adp-001",
     "name": "Camisa Vera de cierre magnético",
-    "brand": "Vera Studio (ficticia)",
+    "brand": "Vera Studio",
+    "providerId": "prv-001",
     "category": "tops",
     "price": 42000,
     "currency": "CRC",
@@ -106,6 +107,7 @@ no reordena.
   "recommendations": [
     {
       "product": { "...Product..." },
+      "provider": { "...Provider..." },
       "score": 92,
       "reasons": [
         {
@@ -186,6 +188,63 @@ discapacidad, no diagnostica, no estima medidas corporales.
 
 ---
 
+## `GET /providers`
+
+Query, todos opcionales: `search`, `kind`, `verified_only`.
+
+Devuelve `Provider[]`, **ya ordenado por el servidor**: primero `featured`,
+luego `verified`, luego `free`; dentro de cada grupo, alfabético. Ese orden es
+lo que el negocio compra al inscribirse, así que se decide en el backend, no
+en el navegador.
+
+```json
+[
+  {
+    "id": "prv-001",
+    "name": "Vera Studio",
+    "kind": "adaptive-apparel",
+    "description": "Taller de confección especializado en camisería con cierre magnético.",
+    "location": "San José, Costa Rica",
+    "shipsNationwide": true,
+    "contact": {
+      "website": "https://ejemplo.test/vera",
+      "phone": "+506 0000 0001",
+      "email": null
+    },
+    "plan": "featured",
+    "verified": true
+  }
+]
+```
+
+## `GET /providers/{id}`
+
+Devuelve un `Provider`. **404** si no existe.
+
+## `POST /providers/applications`
+
+Solicitud de inscripción de un negocio. **No procesa ningún pago** (sección 36):
+recoge la solicitud y el cobro se coordina fuera de la plataforma.
+
+```json
+{
+  "businessName": "Taller Puntada Abierta",
+  "kind": "adaptation-workshop",
+  "location": "Cartago, Costa Rica",
+  "email": "contacto@ejemplo.test",
+  "description": "Modificamos ropa que ya tenés."
+}
+```
+
+```json
+{ "received": true }
+```
+
+Validar el correo y limitar la longitud de `description`. Este endpoint es
+público: conviene un límite de peticiones por IP.
+
+---
+
 ## Vocabularios cerrados
 
 Estos valores viajan como códigos estables. La interfaz los traduce al español
@@ -197,7 +256,15 @@ en `frontend/src/utils/labels.ts`; cambiar la redacción no cambia el contrato.
 `prosthesis-friendly` · `adjustable-fit` · `thermoregulation`
 
 **`ProductCategory`**
-`tops` · `bottoms` · `outerwear` · `footwear` · `underwear` · `accessories`
+`tops` · `bottoms` · `outerwear` · `footwear` · `underwear` · `accessories` ·
+`prosthetics` · `orthotics` · `mobility` · `daily-living`
+
+**`ProviderKind`**
+`adaptive-apparel` · `adaptation-workshop` · `prosthetics` · `mobility-aids` ·
+`daily-living-aids`
+
+**`ProviderPlan`**
+`free` · `verified` · `featured`
 
 **`ClosureType`**
 `magnetic` · `velcro` · `zipper-loop` · `zipper` · `buttons` · `elastic` · `none`

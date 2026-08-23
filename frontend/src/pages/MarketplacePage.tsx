@@ -51,8 +51,9 @@ export function MarketplacePage() {
           Catálogo
         </h1>
         <p className="mt-3 max-w-prose text-lg text-ink-muted">
-          Todas las prendas, con sus características de accesibilidad a la
-          vista. Si querés verlas ordenadas por lo que te sirve a vos,{' '}
+          Todo lo que ofrecen los negocios inscritos: ropa, calzado, prótesis,
+          órtesis, movilidad y productos de apoyo, con sus características de
+          accesibilidad a la vista. Si querés verlas ordenadas por lo que te sirve a vos,{' '}
           <Link
             to="/find-my-fit"
             className="font-semibold text-brand-700 underline underline-offset-4"

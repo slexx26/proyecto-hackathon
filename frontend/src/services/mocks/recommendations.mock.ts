@@ -6,6 +6,7 @@ import type {
   Recommendation,
 } from '@/types/recommendation'
 import { mockProducts } from './products.mock'
+import { findProvider } from './providers.mock'
 
 /**
  * SUPLENTE DEL BACKEND, no lógica de frontend.
@@ -200,6 +201,7 @@ export function buildMockRecommendations(profile: FitProfile): Recommendation[] 
       const score = computeScore(product, profile)
       return {
         product,
+        provider: findProvider(product.providerId),
         score,
         reasons,
         explanation: buildExplanation(product, reasons, score),

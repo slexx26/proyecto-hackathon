@@ -6,6 +6,7 @@
  */
 
 import type { AdaptationNeed, Product } from './product'
+import type { Provider } from './provider'
 
 /** Cada razón es una pieza de evidencia del motor, no texto de la IA. */
 export interface MatchReason {
@@ -34,6 +35,12 @@ export interface AdaptationSuggestion {
 
 export interface Recommendation {
   product: Product
+  /**
+   * Dónde conseguirlo. Va incrustado en la recomendación, no como una
+   * segunda petición: el punto del producto es que la persona termine el
+   * recorrido sabiendo a quién acudir.
+   */
+  provider: Provider
   /** 0–100, determinista y reproducible. Lo calcula el backend. */
   score: number
   reasons: MatchReason[]

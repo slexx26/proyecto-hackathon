@@ -5,6 +5,9 @@ import { FindMyFitPage } from '@/pages/FindMyFitPage'
 import { RecommendationsPage } from '@/pages/RecommendationsPage'
 import { MarketplacePage } from '@/pages/MarketplacePage'
 import { ProductDetailPage } from '@/pages/ProductDetailPage'
+import { ProvidersPage } from '@/pages/ProvidersPage'
+import { ProviderDetailPage } from '@/pages/ProviderDetailPage'
+import { ForBusinessPage } from '@/pages/ForBusinessPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 
 /**
@@ -21,6 +24,9 @@ export const router = createBrowserRouter([
       { path: 'recommendations', element: <RecommendationsPage /> },
       { path: 'marketplace', element: <MarketplacePage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
+      { path: 'providers', element: <ProvidersPage /> },
+      { path: 'providers/:providerId', element: <ProviderDetailPage /> },
+      { path: 'for-business', element: <ForBusinessPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

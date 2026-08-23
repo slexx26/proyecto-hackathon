@@ -7,6 +7,7 @@ const links = [
   { to: '/find-my-fit', label: 'Find My Fit' },
   { to: '/recommendations', label: 'Recomendaciones' },
   { to: '/marketplace', label: 'Catálogo' },
+  { to: '/providers', label: 'Negocios' },
 ]
 
 function linkClass({ isActive }: { isActive: boolean }): string {

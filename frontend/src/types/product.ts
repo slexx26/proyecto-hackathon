@@ -12,6 +12,12 @@ export type ProductCategory =
   | 'footwear'
   | 'underwear'
   | 'accessories'
+  /* El catálogo no es solo ropa: el problema que ADAPTA centraliza incluye
+     prótesis, ayudas a la movilidad y productos de apoyo diario. */
+  | 'prosthetics'
+  | 'orthotics'
+  | 'mobility'
+  | 'daily-living'
 
 /**
  * Necesidades funcionales que una prenda puede cubrir. Describen la PRENDA,
@@ -47,7 +53,10 @@ export interface ProductImage {
 export interface Product {
   id: string
   name: string
+  /** Marca del producto. Puede diferir del proveedor que lo vende. */
   brand: string
+  /** Quién lo ofrece. Referencia a `Provider.id` (ver `provider.ts`). */
+  providerId: string
   category: ProductCategory
   price: number
   currency: string
@@ -68,4 +77,6 @@ export interface ProductFilters {
   search?: string
   category?: ProductCategory
   adaptationNeed?: AdaptationNeed
+  /** Filtra por proveedor concreto. */
+  providerId?: string
 }
