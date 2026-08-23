@@ -1,14 +1,3 @@
--- ADAPTA — esquema de base de datos
---
--- Punto de partida escrito por Slater a partir del contrato de
--- `docs/api-contract.md`. José es el dueño de este archivo: cambialo si algo
--- no encaja, pero avisá si cambiás un nombre de columna que el frontend usa.
---
--- Cómo aplicarlo en Supabase:
---   Dashboard → SQL Editor → pegar este archivo → Run
---   Después, lo mismo con `seed.sql`.
---
--- Se puede volver a ejecutar: empieza borrando las tablas.
 
 drop table if exists adaptation_requests cascade;
 drop table if exists provider_applications cascade;
@@ -204,3 +193,42 @@ create table adaptation_requests (
 );
 
 create index adaptation_requests_product_idx on adaptation_requests (product_id);
+
+-- ---------------------------------------------------------------------------
+-- Row Level Security
+--
+-- Supabase activa RLS por defecto. Una tabla con RLS y sin políticas le
+-- niega TODO a la clave anon, incluida la lectura, sin devolver error: la
+-- API responde 0 filas como si el catálogo estuviera vacío. Por eso esto
+-- va en el mismo archivo que crea las tablas: sin esto, el directorio
+-- nunca funciona, aunque el seed haya cargado los datos bien.
+--
+-- El detalle completo de cada política está en `policies.sql`; acá va lo
+-- mínimo para que la API responda apenas se corre este archivo.
+-- ---------------------------------------------------------------------------
+
+alter table providers enable row level security;
+alter table products enable row level security;
+alter table product_adaptation_needs enable row level security;
+alter table provider_applications enable row level security;
+alter table adaptation_requests enable row level security;
+
+create policy "Lectura pública de negocios"
+  on providers for select
+  using (true);
+
+create policy "Lectura pública de productos"
+  on products for select
+  using (true);
+
+create policy "Lectura pública de necesidades cubiertas"
+  on product_adaptation_needs for select
+  using (true);
+
+create policy "Cualquiera puede enviar una solicitud de negocio"
+  on provider_applications for insert
+  with check (true);
+
+create policy "Cualquiera puede pedir una adaptación"
+  on adaptation_requests for insert
+  with check (true);
