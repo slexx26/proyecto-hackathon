@@ -18,6 +18,6 @@ Es la fuente compartida para alinear frontend, motor e IA sin adivinar formatos.
 
 ## Estado
 
-**En revisión.**
+**Completo.**
 
-`docs/api-contract.md` cubre payloads, errores y vocabularios cerrados. **Falta** el OpenAPI que genera FastAPI.
+`docs/api-contract.md` mas los routers reales generan `/docs` y `/redoc` automaticos con FastAPI. Confirmado en vivo: los dos responden 200.

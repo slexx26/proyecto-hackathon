@@ -18,4 +18,6 @@ OpenAI y Supabase se configuran en backend/despliegue; nunca se pegan claves en 
 
 ## Estado
 
-Pendiente · PR/commit: —
+**En revisión.**
+
+CORS restringido a `FRONTEND_ORIGIN`. `.env` fuera del repositorio. Row Level Security activo en Supabase: verificado que la clave anon puede leer pero no puede insertar (`42501 row-level security policy`). **Falta** revisar las políticas de RLS para cada tabla una por una, y confirmar qué puede escribir el backend con qué clave.

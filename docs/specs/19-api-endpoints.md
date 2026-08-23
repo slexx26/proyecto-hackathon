@@ -18,6 +18,6 @@ Es el acuerdo compartido: si cambia un esquema, frontend e IA deben actualizarse
 
 ## Estado
 
-**En revisión.**
+**Completo.**
 
-Contrato **propuesto** en `docs/api-contract.md`, ya consumido por el frontend. **Pendiente de validación por José** antes de fijar los schemas Pydantic.
+`docs/api-contract.md` más los tres routers reales: `backend/routers/products.py`, `providers.py`, `recommendations.py`, conectados en `main.py`. Probados con `TestClient` y un Supabase simulado (21 pruebas), y en vivo contra el proyecto real de Supabase (base vacía: `[]`, `404` en producto inexistente, `200` en recomendaciones con perfil vacío).
