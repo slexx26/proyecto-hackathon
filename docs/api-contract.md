@@ -162,10 +162,19 @@ limitaciones no se esconden.
     "id": "srv-42",
     "role": "assistant",
     "content": "Los cierres magnéticos se abrochan con una mano…",
-    "createdAt": "2026-08-22T19:05:00Z"
+    "createdAt": "2026-08-22T19:05:00Z",
+    "productId": "adp-003",
+    "productName": "Tenis Paso sin cordones"
   }
 }
 ```
+
+`productId` y `productName` son **opcionales**, siempre van juntos. Cuando
+el asistente identifica una prenda concreta en la pregunta ("quiero unos
+tenis Paso sin cordones"), la interfaz muestra un botón que lleva directo al
+detalle del producto y a "dónde conseguirlo" — el mismo bloque que ya usan
+Recommendations y Product Detail. Si el backend no los rellena, el mensaje
+se ve igual, solo sin el botón: no rompe nada dejarlos vacíos.
 
 Límites de seguridad: el asistente **no da consejo médico** y **no inventa
 puntajes**. Si le preguntan por compatibilidad, remite al motor.

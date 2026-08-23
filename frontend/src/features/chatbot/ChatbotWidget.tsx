@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import type { ChatMessage } from '@/types/chat'
 import { ApiError } from '@/types/api'
 import { sendChatMessage } from '@/services/api/chatbot'
@@ -16,8 +16,46 @@ const greeting: ChatMessage = {
   id: 'greeting',
   role: 'assistant',
   content:
-    '¡Hola! Puedo aclararte dudas sobre cierres, formas de vestirse y adaptaciones. ¿En qué te ayudo?',
+    '¡Hola! Puedo aclararte dudas sobre cierres, formas de vestirse y adaptaciones, o buscarte una prenda concreta si me decís el nombre. ¿En qué te ayudo?',
   createdAt: new Date().toISOString(),
+}
+
+function ChatBubble({
+  message,
+  onNavigate,
+}: {
+  message: ChatMessage
+  onNavigate: () => void
+}) {
+  const isUser = message.role === 'user'
+
+  return (
+    <div className={isUser ? 'ml-auto max-w-[85%]' : 'max-w-[85%]'}>
+      <p
+        className={
+          isUser
+            ? 'rounded-2xl rounded-br-md bg-action px-4 py-2.5 text-sm text-on-action'
+            : 'rounded-2xl rounded-bl-md bg-surface-muted px-4 py-2.5 text-sm text-ink ring-1 ring-line'
+        }
+      >
+        <span className="sr-only">{isUser ? 'Vos: ' : 'Asistente: '}</span>
+        {message.content}
+      </p>
+
+      {/* Redirección real a la prenda que el asistente identificó,
+          no solo mencionada en el texto. */}
+      {!isUser && message.productId ? (
+        <Link
+          to={`/products/${message.productId}`}
+          onClick={onNavigate}
+          className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-3 py-1.5 text-xs font-semibold text-brand-ink ring-1 ring-inset ring-brand-line hover:bg-brand-soft-strong"
+        >
+          Ver {message.productName ?? 'la prenda'} y dónde conseguirla
+          <Icon name="arrow-right" className="h-3.5 w-3.5" />
+        </Link>
+      ) : null}
+    </div>
+  )
 }
 
 export function ChatbotWidget() {
@@ -120,19 +158,7 @@ export function ChatbotWidget() {
             className="flex-1 space-y-3 overflow-y-auto p-4"
           >
             {messages.map((message) => (
-              <p
-                key={message.id}
-                className={
-                  message.role === 'user'
-                    ? 'ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-action px-4 py-2.5 text-sm text-on-action'
-                    : 'max-w-[85%] rounded-2xl rounded-bl-md bg-surface-muted px-4 py-2.5 text-sm text-ink ring-1 ring-line'
-                }
-              >
-                <span className="sr-only">
-                  {message.role === 'user' ? 'Vos: ' : 'Asistente: '}
-                </span>
-                {message.content}
-              </p>
+              <ChatBubble key={message.id} message={message} onNavigate={() => setOpen(false)} />
             ))}
 
             {sending ? (
