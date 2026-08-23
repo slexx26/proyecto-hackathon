@@ -75,6 +75,8 @@ acaba en el bundle público. Aquí **no va ninguna clave**.
 | [docs/api-contract.md](docs/api-contract.md) | Contrato REST y vocabularios cerrados |
 | [docs/specs/](docs/specs/) | Las 41 secciones con responsables |
 | [CLAUDE.md](CLAUDE.md) | Contexto e invariantes para Claude Code |
+| [docs/encargo-jose.md](docs/encargo-jose.md) | Qué construye José: backend, Supabase y endpoints |
+| [docs/encargo-isaac.md](docs/encargo-isaac.md) | Qué construye Isaac: motor determinista e IA |
 
 ## Ramas
 
