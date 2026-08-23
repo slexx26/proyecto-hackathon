@@ -18,6 +18,6 @@ Una vez aprobado este paquete, cada persona trabaja en su rama con el mismo cont
 
 ## Estado
 
-**En revisión.**
+**Completo.**
 
-Hecho: `PROJECT_SPEC.md`, `docs/api-contract.md`, `docs/specs/`, `README.md`, `CLAUDE.md`, estructura inicial. **Falta**: `supabase/schema.sql`, `supabase/seed.sql` y `docs/architecture.md`.
+`PROJECT_SPEC.md`, `docs/api-contract.md`, `docs/specs/`, `README.md`, `CLAUDE.md`, `supabase/schema.sql`, `supabase/seed.sql` y esqueleto de backend ejecutable.

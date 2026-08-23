@@ -18,4 +18,6 @@ Cada capa transforma errores técnicos sin ocultarlos ni mostrar información se
 
 ## Estado
 
-Pendiente · PR/commit: —
+**En revisión.**
+
+Formato de error fijado en `docs/api-contract.md`; el frontend cubre los cuatro estados en toda pantalla con datos y degrada sin `explanation`. **Falta** el lado del backend.

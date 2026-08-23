@@ -18,4 +18,6 @@ La API es la única capa que traduce entre la base de datos y el frontend.
 
 ## Estado
 
-Pendiente · PR/commit: —
+**En revisión.**
+
+`supabase/schema.sql` escrito: 5 tablas, 5 tipos enum, índices y restricciones. **Falta** aplicarlo en un proyecto real de Supabase y conectar la API.

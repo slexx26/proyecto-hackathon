@@ -18,4 +18,6 @@ Las ramas de área se reúnen primero en feature/integration; después se abre u
 
 ## Estado
 
-Pendiente · PR/commit: —
+**Completo.**
+
+Cuatro ramas en uso, `feature/frontend` con seis commits subidos. Flujo documentado en `PROJECT_SPEC.md` §10 y en los encargos.

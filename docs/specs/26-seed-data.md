@@ -18,4 +18,6 @@ Debe producir resultados previsibles para las pruebas del motor y el guion de de
 
 ## Estado
 
-Pendiente · PR/commit: —
+**Completo.**
+
+`supabase/seed.sql` generado desde los mocks del frontend para que ambos digan lo mismo: 8 negocios, 14 productos, 44 relaciones. Diseñado para producir diferencias visibles de compatibilidad.

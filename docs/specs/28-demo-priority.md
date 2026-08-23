@@ -18,4 +18,6 @@ Cualquier cambio de prioridad se comunica a las tres áreas antes de comenzar a 
 
 ## Estado
 
-Pendiente · PR/commit: —
+**Completo.**
+
+`PROJECT_SPEC.md` §6. P0/P1/P2 con la regla de no abrir P1 mientras haya P0 sin integrar.

@@ -18,4 +18,6 @@ Ante dos opciones, elegir la que reduzca riesgo y permita probar el flujo comple
 
 ## Estado
 
-Pendiente · PR/commit: —
+**Completo.**
+
+`CLAUDE.md`. Reglas de arquitectura que no se rompen, más las trampas del entorno ya pagadas.

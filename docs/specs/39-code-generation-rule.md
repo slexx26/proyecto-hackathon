@@ -18,4 +18,6 @@ Claude Code no debe reescribir áreas ajenas ni cambiar contratos sin dejarlo ex
 
 ## Estado
 
-Pendiente · PR/commit: —
+**Completo.**
+
+`CLAUDE.md`, sección "Cómo trabajar". Aplica igual aunque José e Isaac no usen Claude Code.
