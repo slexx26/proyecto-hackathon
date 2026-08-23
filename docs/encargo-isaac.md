@@ -14,7 +14,7 @@ git checkout -b feature/ai
 
 cd backend
 python -m venv .venv
-.venv\Scriptsctivate       # en Windows
+.venv\Scripts\activate       # en Windows
 pip install -r requirements.txt
 pytest                        # 6 pruebas, tienen que pasar
 ```
