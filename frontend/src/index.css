@@ -19,45 +19,56 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-canvas: oklch(0.196 0.014 214);
-    --color-surface: oklch(0.244 0.016 212);
-    --color-surface-muted: oklch(0.286 0.018 210);
-    --color-surface-sunken: oklch(0.334 0.018 210);
-    --color-line: oklch(0.372 0.020 210);
-    --color-line-strong: oklch(0.606 0.022 208);
-    --color-ink: oklch(0.962 0.008 200);
-    --color-ink-muted: oklch(0.772 0.014 202);
+    --color-canvas: #1a1512;
+    /*
+     * Textura del modo oscuro. La imagen de origen es un tono MEDIO
+     * (luminancia media 0.42, con crestas de 0.88): usada tal cual dejaría el
+     * texto claro por debajo de 2:1 en la zona iluminada. Se compone con un
+     * velo negro cálido al 78 %, que baja la cresta a ~0.05 y deja la onda
+     * perfectamente visible. Quien enciende el modo oscuro suele hacerlo por
+     * fotofobia o migraña: tiene que seguir siendo oscuro.
+     */
+    --texture-canvas: linear-gradient(rgb(20 14 9 / 0.78), rgb(20 14 9 / 0.78)),
+      url('/catalog-bg-dark.png');
+    --color-surface: #241e19;
+    /* Velo claro en vez de un beige opaco: deja pasar la onda. */
+    --color-surface-muted: rgb(255 255 255 / 0.06);
+    --color-surface-sunken: #352c24;
+    --color-line: #40372e;
+    --color-line-strong: #8a7a67;
+    --color-ink: #f6efe4;
+    --color-ink-muted: #c6bbab;
 
-    --color-brand-soft: oklch(0.312 0.046 198);
-    --color-brand-soft-strong: oklch(0.372 0.058 196);
-    --color-brand-line: oklch(0.438 0.062 195);
-    --color-brand-ink: oklch(0.828 0.082 190);
+    --color-brand-soft: #35291a;
+    --color-brand-soft-strong: #43341f;
+    --color-brand-line: #56422a;
+    --color-brand-ink: #e3c98f;
 
-    --color-action: oklch(0.752 0.104 190);
-    --color-action-hover: oklch(0.842 0.084 190);
-    --color-on-action: oklch(0.186 0.032 202);
+    --color-action: #ecdcb4;
+    --color-action-hover: #f6ebd0;
+    --color-on-action: #1a1512;
 
-    --color-accent: oklch(0.798 0.138 55);
-    --color-accent-soft: oklch(0.322 0.052 52);
-    --color-accent-line: oklch(0.418 0.070 50);
-    --color-accent-ink: oklch(0.858 0.096 62);
+    --color-accent: #d9b978;
+    --color-accent-soft: #362a1b;
+    --color-accent-line: #4d3c25;
+    --color-accent-ink: #e9d2a4;
 
-    --color-inverse: oklch(0.312 0.038 200);
-    --color-inverse-soft: oklch(0.372 0.044 199);
-    --color-on-inverse: oklch(0.968 0.010 190);
-    --color-on-inverse-muted: oklch(0.828 0.030 191);
+    --color-inverse: #2b241e;
+    --color-inverse-soft: #352c24;
+    --color-on-inverse: #f6efe4;
+    --color-on-inverse-muted: #c6bbab;
 
-    --color-fit-high: oklch(0.742 0.126 158);
-    --color-fit-high-soft: oklch(0.318 0.052 158);
-    --color-fit-high-ink: oklch(0.842 0.108 158);
+    --color-fit-high: #6fbf90;
+    --color-fit-high-soft: #1f3227;
+    --color-fit-high-ink: #9bd8b3;
 
-    --color-fit-mid: oklch(0.812 0.130 84);
-    --color-fit-mid-soft: oklch(0.336 0.050 78);
-    --color-fit-mid-ink: oklch(0.872 0.106 86);
+    --color-fit-mid: #dcaf52;
+    --color-fit-mid-soft: #362a17;
+    --color-fit-mid-ink: #eccb84;
 
-    --color-fit-low: oklch(0.708 0.158 28);
-    --color-fit-low-soft: oklch(0.330 0.062 28);
-    --color-fit-low-ink: oklch(0.828 0.104 32);
+    --color-fit-low: #e08a6c;
+    --color-fit-low-soft: #38211a;
+    --color-fit-low-ink: #efab92;
 
     --shadow-card: 0 1px 2px oklch(0 0 0 / 0.32), 0 6px 18px oklch(0 0 0 / 0.28);
     --shadow-lift: 0 2px 4px oklch(0 0 0 / 0.34), 0 14px 34px oklch(0 0 0 / 0.38);
@@ -66,45 +77,56 @@
 }
 
 :root[data-theme='dark'] {
-  --color-canvas: oklch(0.196 0.014 214);
-  --color-surface: oklch(0.244 0.016 212);
-  --color-surface-muted: oklch(0.286 0.018 210);
-  --color-surface-sunken: oklch(0.334 0.018 210);
-  --color-line: oklch(0.372 0.020 210);
-  --color-line-strong: oklch(0.606 0.022 208);
-  --color-ink: oklch(0.962 0.008 200);
-  --color-ink-muted: oklch(0.772 0.014 202);
+  --color-canvas: #1a1512;
+  /*
+   * Textura del modo oscuro. La imagen de origen es un tono MEDIO
+   * (luminancia media 0.42, con crestas de 0.88): usada tal cual dejaría el
+   * texto claro por debajo de 2:1 en la zona iluminada. Se compone con un
+   * velo negro cálido al 78 %, que baja la cresta a ~0.05 y deja la onda
+   * perfectamente visible. Quien enciende el modo oscuro suele hacerlo por
+   * fotofobia o migraña: tiene que seguir siendo oscuro.
+   */
+  --texture-canvas: linear-gradient(rgb(20 14 9 / 0.78), rgb(20 14 9 / 0.78)),
+    url('/catalog-bg-dark.png');
+  --color-surface: #241e19;
+  /* Velo claro en vez de un beige opaco: deja pasar la onda. */
+  --color-surface-muted: rgb(255 255 255 / 0.06);
+  --color-surface-sunken: #352c24;
+  --color-line: #40372e;
+  --color-line-strong: #8a7a67;
+  --color-ink: #f6efe4;
+  --color-ink-muted: #c6bbab;
 
-  --color-brand-soft: oklch(0.312 0.046 198);
-  --color-brand-soft-strong: oklch(0.372 0.058 196);
-  --color-brand-line: oklch(0.438 0.062 195);
-  --color-brand-ink: oklch(0.828 0.082 190);
+  --color-brand-soft: #35291a;
+  --color-brand-soft-strong: #43341f;
+  --color-brand-line: #56422a;
+  --color-brand-ink: #e3c98f;
 
-  --color-action: oklch(0.752 0.104 190);
-  --color-action-hover: oklch(0.842 0.084 190);
-  --color-on-action: oklch(0.186 0.032 202);
+  --color-action: #ecdcb4;
+  --color-action-hover: #f6ebd0;
+  --color-on-action: #1a1512;
 
-  --color-accent: oklch(0.798 0.138 55);
-  --color-accent-soft: oklch(0.322 0.052 52);
-  --color-accent-line: oklch(0.418 0.070 50);
-  --color-accent-ink: oklch(0.858 0.096 62);
+  --color-accent: #d9b978;
+  --color-accent-soft: #362a1b;
+  --color-accent-line: #4d3c25;
+  --color-accent-ink: #e9d2a4;
 
-  --color-inverse: oklch(0.312 0.038 200);
-  --color-inverse-soft: oklch(0.372 0.044 199);
-  --color-on-inverse: oklch(0.968 0.010 190);
-  --color-on-inverse-muted: oklch(0.828 0.030 191);
+  --color-inverse: #2b241e;
+  --color-inverse-soft: #352c24;
+  --color-on-inverse: #f6efe4;
+  --color-on-inverse-muted: #c6bbab;
 
-  --color-fit-high: oklch(0.742 0.126 158);
-  --color-fit-high-soft: oklch(0.318 0.052 158);
-  --color-fit-high-ink: oklch(0.842 0.108 158);
+  --color-fit-high: #6fbf90;
+  --color-fit-high-soft: #1f3227;
+  --color-fit-high-ink: #9bd8b3;
 
-  --color-fit-mid: oklch(0.812 0.130 84);
-  --color-fit-mid-soft: oklch(0.336 0.050 78);
-  --color-fit-mid-ink: oklch(0.872 0.106 86);
+  --color-fit-mid: #dcaf52;
+  --color-fit-mid-soft: #362a17;
+  --color-fit-mid-ink: #eccb84;
 
-  --color-fit-low: oklch(0.708 0.158 28);
-  --color-fit-low-soft: oklch(0.330 0.062 28);
-  --color-fit-low-ink: oklch(0.828 0.104 32);
+  --color-fit-low: #e08a6c;
+  --color-fit-low-soft: #38211a;
+  --color-fit-low-ink: #efab92;
 
   --shadow-card: 0 1px 2px oklch(0 0 0 / 0.32), 0 6px 18px oklch(0 0 0 / 0.28);
   --shadow-lift: 0 2px 4px oklch(0 0 0 / 0.34), 0 14px 34px oklch(0 0 0 / 0.38);
@@ -138,7 +160,14 @@
   }
 
   body {
+    /* El lienzo deja de ser blanco: beige dorado con la textura de marca.
+       Va fija para que el degradado no se repita al hacer scroll; en
+       pantallas chicas se suelta, porque `fixed` es caro y falla en iOS. */
     background-color: var(--color-canvas);
+    background-image: var(--texture-canvas);
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
@@ -185,6 +214,13 @@
     background-color: var(--color-brand-soft-strong);
     color: var(--color-ink);
   }
+
+  @media (max-width: 60rem) {
+    body {
+      background-attachment: scroll;
+    }
+  }
+
 
   [hidden] {
     display: none !important;
@@ -262,4 +298,287 @@
     background-size: 44px 44px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
   }
+}
+
+/*
+ * HERO CON SCROLL
+ *
+ * Tres fotos a pantalla completa que se descubren al bajar. El riel mide una
+ * pantalla por foto; dentro, un escenario fijo con los paneles apilados. Lo
+ * que sobra del riel por encima del escenario es exactamente el recorrido de
+ * scroll que va destapando las imágenes.
+ *
+ * Toda la animación es `transform` y `opacity` —nada de `top` ni `height`—
+ * así que la resuelve el compositor y no dispara recálculo de layout.
+ *
+ * Los colores se resuelven redefiniendo los tokens dentro de `.hero-stage`:
+ * ni el botón ni el chip saben que están sobre una foto, siguen pidiendo
+ * `bg-action` y `text-ink` como en el resto del sitio.
+ */
+@layer components {
+  .hero-stage {
+    /* Alto real de la cabecera, medido: el panel lo descuenta para que una
+       foto entre justa en una pantalla. */
+    --hero-nav-h: 4.125rem;
+    --hero-panel-h: calc(100svh - var(--hero-nav-h));
+
+    position: relative;
+    border-bottom: 1px solid var(--color-line);
+
+    /* Capa semántica invertida solo acá dentro. */
+    --color-ink: #ffffff;
+    --color-ink-muted: rgb(255 255 255 / 0.94);
+    --color-line: rgb(255 255 255 / 0.45);
+    --color-line-strong: rgb(255 255 255 / 0.78);
+    --color-action: #fdf4e8;
+    --color-action-hover: #ecdcb4;
+    --color-on-action: #1a1512;
+    --color-surface: rgb(255 255 255 / 0.1);
+    --color-surface-muted: rgb(255 255 255 / 0.24);
+    --color-brand-soft: rgb(255 255 255 / 0.14);
+    --color-brand-line: rgb(255 255 255 / 0.5);
+    --color-brand-ink: #ecdcb4;
+    --color-fit-high: #9bd8b3;
+  }
+
+  /* La tarjeta de muestra es una superficie clara: recupera los tokens
+     normales para que su texto no herede el blanco del hero. */
+  .hero-stage__card {
+    --color-surface: #ffffff;
+    --color-surface-muted: #fbf6ee;
+    --color-ink: #1a1512;
+    --color-ink-muted: #5a5049;
+    --color-line: #e6d7bd;
+    --color-line-strong: #8f7855;
+    --color-fit-high: #2f6b48;
+  }
+
+  .hero-track {
+    position: relative;
+    height: calc(var(--panels) * var(--hero-panel-h));
+  }
+
+  .hero-pin {
+    position: sticky;
+    top: var(--hero-nav-h);
+    height: var(--hero-panel-h);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* --------------------------------- Paneles ---------------------------- */
+
+  .hero-panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Recorta la foto sobredimensionada: sin esto se desborda del panel y
+       pisa al anterior, dejando una franja sin scrim. */
+    overflow: hidden;
+    color: #ffffff;
+    /* Cada foto sube desde abajo y se detiene cubriendo a la anterior. */
+    transform: translate3d(0, calc((1 - var(--enter, 1)) * 100%), 0);
+    will-change: transform;
+  }
+
+  .hero-panel:nth-child(1) {
+    z-index: 1;
+  }
+  .hero-panel:nth-child(2) {
+    z-index: 2;
+  }
+  .hero-panel:nth-child(3) {
+    z-index: 3;
+  }
+  .hero-panel:nth-child(4) {
+    z-index: 4;
+  }
+
+  /*
+   * Paralaje: la foto entra corrida hacia arriba dentro de su panel y se
+   * asienta al llegar; la que sale sigue subiendo y se aleja un punto. Es lo
+   * que da profundidad en vez de un pase plano de diapositivas.
+   */
+  .hero-panel__photo {
+    position: absolute;
+    /* La foto es más alta que el panel: sin ese margen, el paralaje la
+       desplazaría fuera de su caja y dejaría una franja vacía. El recorrido
+       máximo es 12% de 136% = 16.3% del panel, por debajo del 18% de holgura. */
+    inset: -18% 0;
+    z-index: -2;
+    width: 100%;
+    height: 136%;
+    object-fit: cover;
+    object-position: center;
+    transform: translate3d(0, calc((1 - var(--enter, 1)) * -12% + var(--exit, 0) * -8%), 0)
+      scale(calc(1 + var(--exit, 0) * 0.05));
+    will-change: transform;
+  }
+
+  /*
+   * Scrim en dos capas: una mancha elíptica anclada donde está el texto y un
+   * degradado vertical que asienta el pie. Los valores están medidos contra
+   * las tres fotos reales; si las cambiás por otras más claras, hay que
+   * volver a verificar el contraste.
+   *
+   * El tercer plano se oscurece a medida que el panel siguiente lo cubre.
+   */
+  .hero-panel__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(rgb(10 7 4 / calc(var(--exit, 0) * 0.55)), rgb(10 7 4 / calc(var(--exit, 0) * 0.55))),
+      radial-gradient(
+        76% 108% at 26% 52%,
+        rgb(10 7 4 / 0.9) 0%,
+        rgb(10 7 4 / 0.86) 36%,
+        rgb(10 7 4 / 0.66) 58%,
+        rgb(10 7 4 / 0.26) 82%,
+        rgb(10 7 4 / 0) 100%
+      ),
+      linear-gradient(to top, rgb(10 7 4 / 0.7) 0%, rgb(10 7 4 / 0.34) 46%, rgb(10 7 4 / 0.2) 100%);
+  }
+
+  /* El texto de la portada se retira cuando la segunda foto lo tapa. */
+  .hero-panel__content {
+    position: relative;
+    opacity: clamp(0, calc(1 - var(--exit, 0) * 2.2), 1);
+    transform: translate3d(0, calc(var(--exit, 0) * -3rem), 0);
+    will-change: transform, opacity;
+  }
+
+  /* Anclas de scroll-snap, una por foto. */
+  .hero-snap {
+    position: absolute;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    top: calc(var(--i) * var(--hero-panel-h));
+    /* El ancla se alinea con el borde del scrollport, pero los paneles
+       arrancan debajo de la cabecera fija: sin este margen, cada snap
+       dejaría la foto corrida el alto de la cabecera. */
+    scroll-margin-top: var(--hero-nav-h);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  /* --------------------------------- Índice ----------------------------- */
+
+  .hero-index {
+    position: absolute;
+    z-index: 10;
+    inset-block-end: 1.75rem;
+    inset-inline-start: 0;
+    width: 100%;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .hero-index {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  /* Cada punto tiene 44×44 de área táctil aunque la marca visible sea chica. */
+  .hero-index__dot {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 0;
+  }
+
+  .hero-index__dot > span {
+    display: block;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 999px;
+    border: 1px solid #ffffff;
+    background: transparent;
+    transition:
+      background-color 0.24s var(--ease-out-strong),
+      transform 0.24s var(--ease-out-strong);
+  }
+
+  .hero-index__dot:hover > span {
+    background-color: rgb(255 255 255 / 0.6);
+  }
+
+  /* La foto actual no se distingue solo por color: el punto además crece y
+     se rellena, y lleva aria-current para quien no ve la diferencia. */
+  .hero-index__dot.is-current > span {
+    background-color: #ffffff;
+    transform: scale(1.45);
+  }
+}
+
+/*
+ * MOVIMIENTO REDUCIDO
+ *
+ * Sin fijado, sin paralaje y sin snap: las tres fotos quedan como tres
+ * secciones normales, una debajo de la otra. No se pierde ninguna imagen ni
+ * ningún texto; solo desaparece el movimiento.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .hero-track {
+    height: auto;
+  }
+
+  .hero-pin {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+
+  .hero-panel {
+    position: relative;
+    inset: auto;
+    min-height: var(--hero-panel-h);
+    transform: none;
+  }
+
+  .hero-panel__photo {
+    inset: 0;
+    height: 100%;
+    transform: none;
+  }
+
+  .hero-panel__content {
+    transform: none;
+    opacity: 1;
+  }
+
+  .hero-snap,
+  .hero-index {
+    display: none;
+  }
+}
+
+/*
+ * SCROLL-SNAP
+ *
+ * `proximity`, no `mandatory`: el gesto engancha una foto completa, pero el
+ * resto de la página conserva el scroll libre y la barra nativa. Nunca atrapa
+ * a nadie, y con `prefers-reduced-motion` no se aplica nada.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+}
+
+/*
+ * El contenedor raíz del layout pinta `bg-canvas` opaco y tapaba la textura
+ * del body. El color ya lo pone el body: acá solo hay que dejarlo pasar.
+ *
+ * Va FUERA de `@layer` a propósito: `bg-canvas` es una utilidad de Tailwind y
+ * vive en `@layer utilities`; el CSS sin capa es el único que le gana sin
+ * subir la especificidad a mano.
+ */
+#root > .bg-canvas {
+  background-color: transparent;
 }

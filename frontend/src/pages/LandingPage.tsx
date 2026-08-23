@@ -1,8 +1,23 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { ButtonLink } from '@/components/ui/Button'
 import { Icon, type IconName } from '@/components/ui/Icon'
 import { ScoreBadge } from '@/components/recommendations/ScoreBadge'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
+
+/**
+ * Las tres fotos del hero. Para cambiarlas alcanza con reemplazar los
+ * archivos en `public/` conservando el nombre, o editar este arreglo: los
+ * controles toman de acá cuántas hay.
+ *
+ * NOTA: son texturas provisorias. Al poner fotografías reales, actualizá el
+ * `alt` y verificá de nuevo el contraste del texto sobre el scrim.
+ */
+const heroImages = [
+  { src: '/hero-1.png', alt: 'Textura de seda dorada iluminada desde la izquierda.' },
+  { src: '/hero-2.png', alt: 'Pliegues de tela en tonos terracota y bronce.' },
+  { src: '/hero-3.png', alt: 'Ondas de tela color crema y oro viejo.' },
+]
 
 /**
  * Sección 7. La landing tiene un solo trabajo: explicar el problema y
@@ -111,115 +126,268 @@ function EngineDiagram() {
 export function LandingPage() {
   useDocumentTitle('Ropa que se adapta a vos')
 
+  const [heroIndex, setHeroIndex] = useState(0)
+  const reducedMotion = useReducedMotion()
+  const trackRef = useRef<HTMLDivElement>(null)
+  const pinRef = useRef<HTMLDivElement>(null)
+  const panelRefs = useRef<(HTMLElement | null)[]>([])
+
+  /**
+   * Motor del hero.
+   *
+   * El scroll es el del navegador: no se intercepta, no se fuerza y la barra
+   * nativa sigue funcionando. Lo único que hace este efecto es leer cuánto se
+   * scrolleó y escribir dos variables CSS por panel dentro de un
+   * requestAnimationFrame. Toda la animación es `transform` y `opacity`, que
+   * el compositor resuelve sin recalcular layout.
+   */
+  useEffect(() => {
+    const track = trackRef.current
+    const pin = pinRef.current
+    if (!track || !pin || reducedMotion) return
+
+    let frame = 0
+
+    const paint = () => {
+      frame = 0
+      const panelHeight = pin.offsetHeight
+      const scrollable = track.offsetHeight - panelHeight
+      if (scrollable <= 0 || panelHeight <= 0) return
+
+      const stickyTop = parseFloat(getComputedStyle(pin).top) || 0
+      const scrolled = Math.min(
+        Math.max(stickyTop - track.getBoundingClientRect().top, 0),
+        scrollable,
+      )
+      // 0 = primera foto entera · 1 = segunda entera · etc.
+      const progress = scrolled / panelHeight
+
+      panelRefs.current.forEach((panel, index) => {
+        if (!panel) return
+        const raw = index === 0 ? 1 : Math.min(Math.max(progress - (index - 1), 0), 1)
+        // Suavizado: el recorrido sigue atado al dedo, pero entra y sale con
+        // peso en vez de moverse a velocidad constante.
+        const enter = raw * raw * (3 - 2 * raw)
+        const exit = Math.min(Math.max(progress - index, 0), 1)
+
+        panel.style.setProperty('--enter', enter.toFixed(4))
+        panel.style.setProperty('--exit', exit.toFixed(4))
+      })
+
+      const next = Math.min(Math.max(Math.round(progress), 0), heroImages.length - 1)
+      setHeroIndex((current) => (current === next ? current : next))
+    }
+
+    const onScroll = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(paint)
+    }
+
+    paint()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    // El riel cambia de alto cuando cargan las fotos o las tipografías, y sin
+    // scroll de por medio no llegaría ningún evento: sin esto el primer
+    // pintado se queda con medidas viejas.
+    const observer = new ResizeObserver(onScroll)
+    observer.observe(track)
+    observer.observe(pin)
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame)
+      observer.disconnect()
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [reducedMotion])
+
+  /** Salto directo a una foto, para quien prefiere no scrollear hasta ella. */
+  const goToPanel = (index: number) => {
+    const track = trackRef.current
+    const pin = pinRef.current
+    if (!track || !pin) return
+
+    if (reducedMotion) {
+      panelRefs.current[index]?.scrollIntoView({ behavior: 'auto', block: 'start' })
+      return
+    }
+    window.scrollTo({ top: track.offsetTop + index * pin.offsetHeight, behavior: 'smooth' })
+  }
+
   return (
     <>
       {/* ---------------------------------------------------------------
        * Hero
        * ------------------------------------------------------------- */}
-      <section className="relative overflow-hidden border-b border-line bg-surface">
-        <div aria-hidden="true" className="bg-grid absolute inset-0 opacity-60" />
+      <section
+        className="hero-stage"
+        aria-roledescription="carrusel"
+        aria-label="Presentación de ADAPTA"
+      >
         <div
-          aria-hidden="true"
-          className="absolute -right-32 -top-40 h-[32rem] w-[32rem] rounded-full bg-brand-soft blur-3xl"
-        />
+          className="hero-track"
+          ref={trackRef}
+          style={{ '--panels': heroImages.length } as CSSProperties}
+        >
+          <div className="hero-pin" ref={pinRef}>
+            {heroImages.map((photo, index) => (
+              <article
+                key={photo.src}
+                ref={(node) => {
+                  panelRefs.current[index] = node
+                }}
+                className="hero-panel"
+                aria-roledescription="diapositiva"
+                aria-label={`Imagen ${index + 1} de ${heroImages.length}`}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="hero-panel__photo"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                {/* Scrim: garantiza el contraste del texto sobre la foto, y
+                    se refuerza cuando el panel siguiente pasa por encima. */}
+                <div aria-hidden="true" className="hero-panel__scrim" />
 
-        <div className="relative mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-          <div>
-            <p className="animate-fade inline-flex items-center gap-2 rounded-full bg-brand-soft px-3.5 py-1.5 text-sm font-semibold text-brand-ink ring-1 ring-brand-line">
-              <Icon name="spark" className="h-4 w-4" />
-              Moda y vida accesible, con IA
-            </p>
-
-            <h1 className="text-hero animate-rise mt-6 font-display font-extrabold text-ink">
-              La ropa debería adaptarse a vos.
-            </h1>
-
-            <p
-              style={{ '--i': 1 } as CSSProperties}
-              className="animate-rise stagger mt-6 max-w-xl text-lg text-ink-muted"
-            >
-              Vestirse no debería depender de si podés abrochar un botón.
-              ADAPTA reúne a los negocios que hacen ropa, calzado, prótesis y
-              ayudas técnicas adaptadas, cruza tu forma real de vestirte con lo
-              que ofrecen, y te dice qué te sirve, por qué, y a quién acudir.
-            </p>
-
-            <div
-              style={{ '--i': 2 } as CSSProperties}
-              className="animate-rise stagger mt-8 flex flex-col gap-3 sm:flex-row"
-            >
-              <ButtonLink to="/find-my-fit" size="lg">
-                Encontrá tu fit
-                <Icon name="arrow-right" className="h-5 w-5" />
-              </ButtonLink>
-              <ButtonLink to="/marketplace" size="lg" variant="secondary">
-                Ver el catálogo
-              </ButtonLink>
-            </div>
-
-            <p
-              style={{ '--i': 3 } as CSSProperties}
-              className="animate-rise stagger mt-4 flex items-center gap-2 text-sm text-ink-muted"
-            >
-              <Icon name="check" className="h-4 w-4 text-fit-high" />
-              Toma dos minutos. Gratis, sin registro y sin datos médicos.
-            </p>
-          </div>
-
-          {/* Muestra del resultado. Decorativa: todo lo que dice está
-              explicado en texto más abajo. */}
-          <div
-            aria-hidden="true"
-            style={{ '--i': 2 } as CSSProperties}
-            className="animate-rise stagger relative"
-          >
-            <div className="rounded-panel bg-surface p-5 shadow-pop ring-1 ring-line sm:p-6">
-              <p className="text-xs font-bold uppercase tracking-[0.08em] text-ink-muted">
-                Así se ve un resultado
-              </p>
-
-              <div className="mt-4 flex items-start justify-between gap-4">
+                {index === 0 ? (
+              <div className="hero-panel__content relative mx-auto grid w-full max-w-6xl gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
                 <div>
-                  <p className="font-display text-lg font-bold text-ink">
-                    Camisa Vera de cierre magnético
+                  <p className="animate-fade inline-flex items-center gap-2 rounded-full bg-brand-soft px-3.5 py-1.5 text-sm font-semibold text-brand-ink ring-1 ring-brand-line">
+                    <Icon name="spark" className="h-4 w-4" />
+                    Moda y vida accesible, con IA
                   </p>
-                  <p className="text-sm text-ink-muted">Vera Studio</p>
+
+                  <h1 className="text-hero animate-rise mt-6 font-display font-extrabold text-ink">
+                    La ropa debería adaptarse a vos.
+                  </h1>
+
+                  <p
+                    style={{ '--i': 1 } as CSSProperties}
+                    className="animate-rise stagger mt-6 max-w-xl text-lg text-ink-muted"
+                  >
+                    Vestirse no debería depender de si podés abrochar un botón.
+                    ADAPTA reúne a los negocios que hacen ropa, calzado, prótesis y
+                    ayudas técnicas adaptadas, cruza tu forma real de vestirte con lo
+                    que ofrecen, y te dice qué te sirve, por qué, y a quién acudir.
+                  </p>
+
+                  <div
+                    style={{ '--i': 2 } as CSSProperties}
+                    className="animate-rise stagger mt-8 flex flex-col gap-3 sm:flex-row"
+                  >
+                    <ButtonLink to="/find-my-fit" size="lg">
+                      Encontrá tu fit
+                      <Icon name="arrow-right" className="h-5 w-5" />
+                    </ButtonLink>
+                    <ButtonLink to="/marketplace" size="lg" variant="secondary">
+                      Ver el catálogo
+                    </ButtonLink>
+                  </div>
+
+                  <p
+                    style={{ '--i': 3 } as CSSProperties}
+                    className="animate-rise stagger mt-4 flex items-center gap-2 text-sm text-ink-muted"
+                  >
+                    <Icon name="check" className="h-4 w-4 text-fit-high" />
+                    Toma dos minutos. Gratis, sin registro y sin datos médicos.
+                  </p>
                 </div>
-                <ScoreBadge score={92} />
-              </div>
 
-              <ul className="mt-5 space-y-2.5 text-sm">
-                <li className="flex items-start gap-2.5">
-                  <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-fit-high-soft text-fit-high-ink">
-                    <Icon name="check" className="h-3.5 w-3.5" />
-                  </span>
-                  <span className="text-ink">Se abrocha con una sola mano</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-fit-high-soft text-fit-high-ink">
-                    <Icon name="check" className="h-3.5 w-3.5" />
-                  </span>
-                  <span className="text-ink">No exige pinza fina</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-fit-low-soft text-fit-low-ink">
-                    <Icon name="alert" className="h-3.5 w-3.5" />
-                  </span>
-                  <span className="text-ink-muted">
-                    Los imanes requieren consulta si usás marcapasos
-                  </span>
-                </li>
+                {/* Muestra del resultado. Decorativa: todo lo que dice está
+                    explicado en texto más abajo. */}
+                <div
+                  aria-hidden="true"
+                  style={{ '--i': 2 } as CSSProperties}
+                  className="animate-rise stagger relative"
+                >
+                  <div className="hero-stage__card rounded-panel bg-surface p-5 shadow-pop ring-1 ring-line sm:p-6">
+                    <p className="text-xs font-bold uppercase tracking-[0.08em] text-ink-muted">
+                      Así se ve un resultado
+                    </p>
+
+                    <div className="mt-4 flex items-start justify-between gap-4">
+                      <div>
+                        <p className="font-display text-lg font-bold text-ink">
+                          Camisa Vera de cierre magnético
+                        </p>
+                        <p className="text-sm text-ink-muted">Vera Studio</p>
+                      </div>
+                      <ScoreBadge score={92} />
+                    </div>
+
+                    <ul className="mt-5 space-y-2.5 text-sm">
+                      <li className="flex items-start gap-2.5">
+                        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-fit-high-soft text-fit-high-ink">
+                          <Icon name="check" className="h-3.5 w-3.5" />
+                        </span>
+                        <span className="text-ink">Se abrocha con una sola mano</span>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-fit-high-soft text-fit-high-ink">
+                          <Icon name="check" className="h-3.5 w-3.5" />
+                        </span>
+                        <span className="text-ink">No exige pinza fina</span>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-fit-low-soft text-fit-low-ink">
+                          <Icon name="alert" className="h-3.5 w-3.5" />
+                        </span>
+                        <span className="text-ink-muted">
+                          Los imanes requieren consulta si usás marcapasos
+                        </span>
+                      </li>
+                    </ul>
+
+                    <div className="mt-5 flex items-center gap-2.5 rounded-card bg-brand-soft px-4 py-3 ring-1 ring-brand-line">
+                      <Icon name="pin" className="h-4 w-4 text-brand-ink" />
+                      <p className="text-sm text-ink">
+                        <span className="font-semibold">Dónde conseguirlo:</span> Vera
+                        Studio · San José
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                ) : null}
+              </article>
+            ))}
+
+            {/* Índice. El scroll es el que mueve el hero; esto permite
+                saltar de foto sin scrollear y da la referencia de dónde
+                estás. */}
+            <div className="hero-index">
+              <ul className="flex items-center gap-1">
+                {heroImages.map((photo, index) => (
+                  <li key={photo.src}>
+                    <button
+                      type="button"
+                      className={`hero-index__dot${index === heroIndex ? ' is-current' : ''}`}
+                      onClick={() => goToPanel(index)}
+                      aria-label={`Ir a la imagen ${index + 1} de ${heroImages.length}`}
+                      aria-current={index === heroIndex ? 'true' : undefined}
+                    >
+                      <span aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
               </ul>
-
-              <div className="mt-5 flex items-center gap-2.5 rounded-card bg-brand-soft px-4 py-3 ring-1 ring-brand-line">
-                <Icon name="pin" className="h-4 w-4 text-brand-ink" />
-                <p className="text-sm text-ink">
-                  <span className="font-semibold">Dónde conseguirlo:</span> Vera
-                  Studio · San José
-                </p>
-              </div>
+              <p className="sr-only-focusable" aria-live="polite">
+                {`Imagen ${heroIndex + 1} de ${heroImages.length}. ${heroImages[heroIndex].alt}`}
+              </p>
             </div>
           </div>
+
+          {/* Anclas de scroll-snap: una por foto, para que cada gesto
+              aterrice en una imagen completa. */}
+          {heroImages.map((photo, index) => (
+            <span
+              key={`snap-${photo.src}`}
+              aria-hidden="true"
+              className="hero-snap"
+              style={{ '--i': index } as CSSProperties}
+            />
+          ))}
         </div>
       </section>
 
@@ -321,7 +489,7 @@ export function LandingPage() {
                   igual de bien y pesan mucho menos en la página. */}
               <span
                 aria-hidden="true"
-                className="font-display text-4xl font-extrabold text-brand-soft-strong"
+                className="font-display text-4xl font-extrabold text-accent"
               >
                 {step.number}
               </span>

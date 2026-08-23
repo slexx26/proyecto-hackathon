@@ -4,7 +4,7 @@ import { ButtonLink } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { cn } from '@/utils/cn'
-import { BrandMark } from './BrandMark'
+import { Wordmark } from './Wordmark'
 
 const links = [
   { to: '/find-my-fit', label: 'Find My Fit' },
@@ -43,11 +43,8 @@ export function SiteHeader() {
           className="inline-flex min-h-11 items-center gap-2.5 rounded-xl py-1 pr-2"
           onClick={() => setOpen(false)}
         >
-          <BrandMark />
-          <span className="font-display text-xl font-extrabold tracking-tight text-ink">
-            ADAPTA
-          </span>
-          <span className="sr-only">— inicio</span>
+          <Wordmark className="h-5 w-auto text-ink sm:h-[1.4rem]" />
+          <span className="sr-only">ADAPTA — inicio</span>
         </Link>
 
         {/* Navegación de escritorio */}

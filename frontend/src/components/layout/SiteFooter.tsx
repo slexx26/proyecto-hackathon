@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Icon } from '@/components/ui/Icon'
-import { ThemeChoice } from '@/components/ui/ThemeToggle'
-import { BrandMark } from './BrandMark'
+import { Wordmark } from './Wordmark'
 
 const columns = [
   {
@@ -28,10 +27,8 @@ export function SiteFooter() {
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-2.5">
-              <BrandMark />
-              <p className="font-display text-xl font-extrabold tracking-tight text-ink">
-                ADAPTA
-              </p>
+              <Wordmark className="h-6 w-auto text-ink" />
+              <p className="sr-only">ADAPTA</p>
             </div>
             <p className="mt-2 text-ink-muted">Fashion should adapt to you.</p>
 
@@ -61,14 +58,6 @@ export function SiteFooter() {
               </ul>
             </nav>
           ))}
-        </div>
-
-        {/* El control completo de tema vive aquí porque incluye "seguir al
-            sistema", que es la opción que un botón de dos estados no puede
-            ofrecer. */}
-        <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-line pt-6">
-          <p className="text-sm font-semibold text-ink">Apariencia</p>
-          <ThemeChoice />
         </div>
 
         <p className="mt-8 flex items-start gap-2 rounded-card bg-surface px-4 py-3 text-sm text-ink-muted ring-1 ring-line">

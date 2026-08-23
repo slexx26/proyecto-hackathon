@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500" role="presentation">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#FDF7EE"/>
+      <stop offset="100%" stop-color="#F4E4CA"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.42" cy="0.34" r="0.72">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#bg)"/>
+  <rect width="400" height="500" fill="url(#glow)"/>
+  <ellipse cx="200" cy="256" rx="132" ry="132" fill="#DCE0E4" opacity="0.75"/>
+  <ellipse cx="200" cy="430" rx="96" ry="15" fill="#C9A227" opacity="0.16"/>
+  <g fill="none" stroke="#1A1512" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+
+    <path d="M160 366 L160 292 Q160 264 182 258 L182 156 Q182 140 196 140 Q210 140 210 156 L210 250 L222 250 L222 144 Q222 128 236 128 Q250 128 250 144 L250 250 L262 250 L262 158 Q262 142 276 142 Q290 142 290 158 L290 262 L302 262 L302 190 Q302 176 315 176 Q328 176 328 190 L328 308 Q328 372 268 372 L160 372 Z" fill="#A7ACB2"/>
+    <path d="M182 196 L210 196 M222 196 L250 196 M262 200 L290 200 M302 218 L328 218" stroke-width="2.6" opacity="0.75"/>
+    <path d="M182 226 L210 226 M222 226 L250 226 M262 230 L290 230" stroke-width="2.6" opacity="0.75"/>
+    <path d="M160 292 Q124 292 116 320 Q108 350 140 358 L160 362" fill="#8E949B"/>
+    <path d="M160 292 Q124 292 116 320 Q108 350 140 358 L160 362"/>
+    <rect x="150" y="300" width="34" height="52" rx="10" fill="#5E6469"/>
+    <circle cx="167" cy="326" r="8" fill="#D8C7A2" stroke="#D8C7A2"/>
+
+  </g>
+</svg>

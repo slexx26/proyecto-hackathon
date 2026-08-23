@@ -23,105 +23,132 @@
    * Rampas crudas
    * ------------------------------------------------------------------- */
 
-  /* Turquesa profundo: confianza y cuidado sin caer en el azul clínico. */
-  --color-brand-50: oklch(0.972 0.018 192);
-  --color-brand-100: oklch(0.938 0.036 192);
-  --color-brand-200: oklch(0.885 0.062 191);
-  --color-brand-300: oklch(0.808 0.088 190);
-  --color-brand-400: oklch(0.712 0.104 190);
-  --color-brand-500: oklch(0.612 0.108 191);
-  --color-brand-600: oklch(0.512 0.098 193);
-  --color-brand-700: oklch(0.418 0.082 195);
-  --color-brand-800: oklch(0.328 0.064 197);
-  --color-brand-900: oklch(0.258 0.048 199);
-  --color-brand-950: oklch(0.192 0.036 201);
+  /* Bronce dorado: la rampa de marca. Cálida a propósito — el turquesa
+     clínico dejaba el catálogo con aire de ficha de hospital. */
+  --color-brand-50: #fdf9f1;
+  --color-brand-100: #fbf2e2;
+  --color-brand-200: #f4e4c6;
+  --color-brand-300: #e9d2a4;
+  --color-brand-400: #d9b978;
+  --color-brand-500: #c39d4f;
+  --color-brand-600: #b08432;
+  --color-brand-700: #8f6a22;
+  --color-brand-800: #6f521a;
+  --color-brand-900: #4e3a14;
+  --color-brand-950: #2e220d;
 
-  /* Barro cálido: el acento. Es ropa, no un equipo médico. */
-  --color-clay-100: oklch(0.955 0.036 66);
-  --color-clay-200: oklch(0.905 0.070 63);
-  --color-clay-300: oklch(0.850 0.106 60);
-  --color-clay-400: oklch(0.790 0.140 55);
-  --color-clay-500: oklch(0.712 0.152 47);
-  --color-clay-600: oklch(0.618 0.146 42);
-  --color-clay-700: oklch(0.502 0.122 40);
+  /* Arcilla cálida: el acento secundario, un punto más rojizo que el oro. */
+  --color-clay-100: #fbeee2;
+  --color-clay-200: #f4dcc2;
+  --color-clay-300: #e9c39b;
+  --color-clay-400: #d9a271;
+  --color-clay-500: #c4854f;
+  --color-clay-600: #a86a3a;
+  --color-clay-700: #85512b;
 
   /* ---------------------------------------------------------------------
    * Capa semántica — modo claro. El bloque de modo oscuro está en index.css.
    * ------------------------------------------------------------------- */
 
-  /* Superficies. Neutro CÁLIDO a propósito: el gris frío hace que un
-     producto de moda parezca una ficha de hospital. */
-  --color-canvas: oklch(0.986 0.007 84);
-  --color-surface: oklch(1 0 0);
-  --color-surface-muted: oklch(0.966 0.011 84);
-  --color-surface-sunken: oklch(0.936 0.015 82);
+  /* Superficies. El lienzo deja de ser blanco: beige dorado suave, con la
+     textura de `public/catalog-bg.png` encima (ver index.css). El blanco
+     queda reservado para tarjetas y superficies elevadas, que así resaltan. */
+  /* Los tonos salen muestreados de `public/catalog-bg.png`: #fdfaf5 es la
+     cresta de la onda, #fdf4e8 el tono dominante y #fdecd6 el valle. Así el
+     color plano y la textura son la misma superficie, no dos beiges que casi
+     coinciden. */
+  --color-canvas: #fdf4e8;
+  --texture-canvas: url('/catalog-bg.png');
+  /* Las tarjetas quedan en blanco opaco: es su contraste contra el campo
+     texturado lo que hace que la onda se lea. */
+  --color-surface: #ffffff;
+  /* Las bandas de sección van en velo blanco traslúcido, no en un beige
+     opaco: se distinguen del lienzo y aun así dejan pasar la onda. */
+  --color-surface-muted: rgb(255 255 255 / 0.55);
+  --color-surface-sunken: #fdecd6;
+
   /* DOS bordes, y no son intercambiables:
-     - `line` es la línea decorativa: separadores y cantos de tarjeta. La
-       tarjeta ya se distingue por fondo y sombra, así que puede ser tenue.
-     - `line-strong` es el borde de los controles. Un campo o un botón se
-       identifican POR su borde, así que WCAG 1.4.11 pide 3:1 contra lo que
-       tienen al lado. De ahí que sea bastante más oscuro de lo que pediría
-       el gusto: aquí manda la norma. */
-  --color-line: oklch(0.897 0.012 84);
-  --color-line-strong: oklch(0.606 0.016 82);
+     - `line` es la línea decorativa: separadores y cantos de tarjeta.
+     - `line-strong` es el borde de los controles, que WCAG 1.4.11 exige a
+       3:1. Da 3.95:1 sobre el lienzo: acá manda la norma, no el gusto. */
+  --color-line: #e6d7bd;
+  --color-line-strong: #8f7855;
 
-  /* Texto. `ink` sobre `surface` da 14:1; `ink-muted`, 6.4:1. */
-  --color-ink: oklch(0.238 0.024 208);
-  --color-ink-muted: oklch(0.492 0.020 208);
+  /* Texto. `ink` sobre el lienzo da 17:1; `ink-muted`, 7.4:1. */
+  --color-ink: #1a1512;
+  --color-ink-muted: #5a5049;
 
-  /* Marca aplicada a superficie: fondos de chip, bordes y texto de marca. */
-  --color-brand-soft: oklch(0.958 0.026 192);
-  --color-brand-soft-strong: oklch(0.912 0.048 191);
-  --color-brand-line: oklch(0.858 0.058 191);
-  --color-brand-ink: oklch(0.378 0.076 196);
+  /* Marca aplicada a superficie: fondos de chip, bordes y texto de marca.
+     `brand-ink` da 7.2:1 sobre el lienzo. */
+  --color-brand-soft: #fdf0dd;
+  --color-brand-soft-strong: #fde9cd;
+  --color-brand-line: #e6d5ae;
+  --color-brand-ink: #6b4f16;
 
-  /* Acción primaria. `on-action` siempre contrasta con `action`. */
-  --color-action: oklch(0.418 0.082 195);
-  --color-action-hover: oklch(0.328 0.064 197);
-  --color-on-action: oklch(0.995 0.004 190);
+  /* Acción primaria en tinta, no en oro: el dorado a 4.5:1 obligaría a
+     oscurecerlo tanto que dejaría de leerse dorado. El oro queda para
+     detalles —líneas, íconos, hover—, que es donde luce. */
+  --color-action: #1a1512;
+  --color-action-hover: #7a5714;
+  --color-on-action: #fdf7ee;
 
-  /* Acento cálido, para lo que invita sin ser la acción principal. */
-  --color-accent: oklch(0.712 0.152 47);
-  --color-accent-soft: oklch(0.958 0.032 66);
-  --color-accent-line: oklch(0.888 0.076 62);
-  --color-accent-ink: oklch(0.462 0.116 41);
+  /* Acento dorado. `accent` solo para elementos no textuales (3.2:1 cumple
+     el 3:1 de componentes); `accent-ink` es la versión apta para texto. */
+  --color-accent: #a37826;
+  --color-accent-soft: #fdf0dd;
+  --color-accent-line: #e6d5ae;
+  --color-accent-ink: #7a5714;
 
-  /* Superficie invertida: los bloques oscuros de la landing. */
-  --color-inverse: oklch(0.258 0.048 199);
-  --color-inverse-soft: oklch(0.322 0.056 198);
-  --color-on-inverse: oklch(0.972 0.012 190);
-  --color-on-inverse-muted: oklch(0.828 0.036 191);
+  /* Superficie invertida: los bloques oscuros de la landing y el pie. */
+  --color-inverse: #1a1512;
+  --color-inverse-soft: #2a231d;
+  --color-on-inverse: #fdf7ee;
+  --color-on-inverse-muted: #cbc5be;
 
-  /* Compatibilidad. Tres usos por tramo: relleno, fondo suave y texto.
-     El `-ink` existe para que el texto pase 4.5:1 sobre el `-soft`. */
-  --color-fit-high: oklch(0.598 0.132 158);
-  --color-fit-high-soft: oklch(0.952 0.036 158);
-  --color-fit-high-ink: oklch(0.438 0.098 158);
+  /* Compatibilidad. Se mantienen verde/ámbar/rojo: el tramo es información,
+     y teñirlos de dorado borraría la diferencia. Solo se calientan los
+     fondos para que asienten sobre el beige. Cada `-ink` pasa 4.5:1 sobre
+     su `-soft` (7.1, 5.9 y 7.4). */
+  --color-fit-high: #2f6b48;
+  --color-fit-high-soft: #eef5f0;
+  --color-fit-high-ink: #245c3c;
 
-  --color-fit-mid: oklch(0.742 0.142 78);
-  --color-fit-mid-soft: oklch(0.962 0.042 82);
-  --color-fit-mid-ink: oklch(0.478 0.098 68);
+  --color-fit-mid: #9a6b12;
+  --color-fit-mid-soft: #fbf3e2;
+  --color-fit-mid-ink: #7a5714;
 
-  --color-fit-low: oklch(0.612 0.176 27);
-  --color-fit-low-soft: oklch(0.958 0.028 30);
-  --color-fit-low-ink: oklch(0.492 0.162 28);
+  --color-fit-low: #a8442a;
+  --color-fit-low-soft: #fbeeec;
+  --color-fit-low-ink: #8a2f18;
+
+  /* Sombras teñidas de marrón cálido: el gris neutro sobre papel beige se
+     ve sucio. */
+  --shadow-card: 0 1px 2px oklch(0.30 0.03 60 / 0.06),
+    0 6px 18px oklch(0.30 0.03 60 / 0.07);
+  --shadow-lift: 0 2px 4px oklch(0.30 0.03 60 / 0.07),
+    0 14px 34px oklch(0.30 0.03 60 / 0.11);
+  --shadow-pop: 0 4px 8px oklch(0.30 0.03 60 / 0.09),
+    0 28px 60px oklch(0.30 0.03 60 / 0.17);
 
   /* ---------------------------------------------------------------------
    * Tipografía
    *
-   * Atkinson Hyperlegible Next la dibujó el Braille Institute para personas
-   * con baja visión: cada carácter es inconfundible (I/l/1, 0/O, b/d). En un
+   * CUERPO — Atkinson Hyperlegible Next. La dibujó el Braille Institute para
+   * lectura con baja visión: cada carácter es inconfundible (I/l/1, 0/O,
+   * b/d). Se mantiene a propósito por encima de una sans neutra: en un
    * producto sobre accesibilidad, la fuente del cuerpo es una decisión de
-   * producto, no de estilo.
+   * producto, y la accesibilidad manda sobre la estética.
    *
-   * Bricolage Grotesque pone la voz en los titulares. El nombre no es
-   * casualidad: bricolaje es exactamente lo que ADAPTA propone hacer con la
-   * ropa que ya existe.
+   * TÍTULOS — Recoleta primero, Fraunces como respaldo. Recoleta es de pago
+   * y no está en Google Fonts; si conseguís la licencia, dejá el .woff2 en
+   * `public/fonts/` y agregá su @font-face en index.css: el stack ya la
+   * pide primero y la tomará sola. Mientras tanto manda Fraunces, serif
+   * cálida de terminaciones suaves, cargada desde Google Fonts.
    * ------------------------------------------------------------------- */
   --font-sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible',
     ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Bricolage Grotesque', 'Atkinson Hyperlegible Next',
-    ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Recoleta', 'Fraunces', 'Iowan Old Style', Georgia,
+    'Times New Roman', serif;
 
   /* ---------------------------------------------------------------------
    * Forma, profundidad y movimiento
@@ -130,14 +157,6 @@
   --radius-card: 1.25rem;
   --radius-panel: 1.75rem;
 
-  /* Sombras teñidas del color del fondo: el gris neutro sobre papel cálido
-     se ve sucio. */
-  --shadow-card: 0 1px 2px oklch(0.30 0.03 200 / 0.05),
-    0 6px 18px oklch(0.30 0.03 200 / 0.06);
-  --shadow-lift: 0 2px 4px oklch(0.30 0.03 200 / 0.06),
-    0 14px 34px oklch(0.30 0.03 200 / 0.10);
-  --shadow-pop: 0 4px 8px oklch(0.30 0.03 200 / 0.08),
-    0 28px 60px oklch(0.30 0.03 200 / 0.16);
 
   /* Curvas propias: las de CSS son demasiado flojas y las transiciones
      quedan blandas. Nada de `ease-in` en la interfaz: arranca lento justo

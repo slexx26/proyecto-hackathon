@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500" role="presentation">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#FDF7EE"/>
+      <stop offset="100%" stop-color="#F4E4CA"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.42" cy="0.34" r="0.72">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#bg)"/>
+  <rect width="400" height="500" fill="url(#glow)"/>
+  <ellipse cx="200" cy="256" rx="132" ry="132" fill="#E6E1D6" opacity="0.75"/>
+  <ellipse cx="200" cy="430" rx="96" ry="15" fill="#C9A227" opacity="0.16"/>
+  <g fill="none" stroke="#1A1512" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+
+    <path d="M138 128 L262 128 L268 178 L252 388 L206 388 L200 240 L194 388 L148 388 L132 178 Z" fill="#B5B0AA"/>
+    <path d="M138 128 L262 128 L264 156 L136 156 Z" fill="#98938D"/>
+    <path d="M136 156 L264 156"/>
+    <path d="M200 240 L200 172"/>
+    <path d="M141 168 L154 384" stroke="#5E5952" stroke-dasharray="10 7"/>
+    <path d="M259 168 L246 384" stroke="#5E5952" stroke-dasharray="10 7"/>
+    <circle cx="150" cy="176" r="4" fill="#F7F2E8"/>
+    <circle cx="250" cy="176" r="4" fill="#F7F2E8"/>
+
+  </g>
+</svg>
