@@ -1,19 +1,41 @@
 # Encargo para Isaac — Motor de compatibilidad e IA
 
-> Pegale este archivo entero a tu Claude Code, o abrí el repo y decile
-> "seguí `docs/encargo-isaac.md`". El `CLAUDE.md` de la raíz se carga solo.
+Ya te dejé el esqueleto montado y **las pruebas pasan**. Lo que falta son tus
+reglas: el archivo `backend/recommendations/engine.py` tiene un marcador de
+posición tonto que hay que reemplazar entero.
 
-## Antes de empezar
+## Levantalo
 
 ```bash
 git clone https://github.com/slexx26/proyecto-hackathon.git
 cd proyecto-hackathon
-git checkout feature/frontend   # acá está el contexto y el frontend
-git checkout -b feature/ai      # tu rama, salí de acá
-git rev-parse --abbrev-ref HEAD # confirmá que dice feature/ai
+git checkout feature/frontend
+git checkout -b feature/ai
+
+cd backend
+python -m venv .venv
+.venv\Scriptsctivate       # en Windows
+pip install -r requirements.txt
+pytest                        # 6 pruebas, tienen que pasar
 ```
 
-Leé `CLAUDE.md` → `PROJECT_SPEC.md` → `docs/api-contract.md`.
+Verificado en Python 3.14: `supabase` y `openai` instalan con ruedas nativas,
+sin compilar nada.
+
+## Lo que ya está escrito
+
+```
+backend/recommendations/
+├── models.py    ProfileInput, ProductInput, Reason, Scored
+└── engine.py    score_products() — LA FIRMA ESTÁ, LAS REGLAS SON TUYAS
+backend/tests/
+└── test_engine.py   4 pruebas que tienen que seguir pasando
+```
+
+Esas cuatro pruebas son las propiedades que el producto promete: que el mismo
+perfil da siempre el mismo score, que lo que cubre puntúa más que lo que no,
+que un perfil vacío no revienta, y que las necesidades no cubiertas también se
+devuelven. Cambiá las reglas todo lo que quieras; esas pruebas se quedan.
 
 ## La regla que define tu trabajo
 

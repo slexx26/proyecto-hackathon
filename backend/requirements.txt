@@ -1,0 +1,15 @@
+# Versiones verificadas en Python 3.14.0 (Windows). Instalan con ruedas
+# nativas cp314: no hace falta compilador.
+
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+pydantic==2.13.4
+pydantic[email]
+pydantic-settings==2.15.0
+
+supabase==2.31.0
+openai==3.3.1
+
+# Pruebas. starlette pide httpx2, no httpx.
+pytest==9.1.1
+httpx2==2.12.0
