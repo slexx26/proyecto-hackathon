@@ -10,7 +10,7 @@ frontend ya las consume.
 
 ## 1. Levantalo (5 minutos)
 
-```bash
+```powershell
 git clone https://github.com/slexx26/proyecto-hackathon.git
 cd proyecto-hackathon
 git checkout feature/frontend
@@ -18,20 +18,46 @@ git checkout -b feature/backend
 
 cd backend
 python -m venv .venv
-.venv\Scripts\activate          # en Windows
-pip install -r requirements.txt
-copy .env.example .env          # cp en Mac/Linux
-uvicorn main:app --reload
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m pytest
+```
+
+### Ojo con PowerShell (terminal de VS Code)
+
+**No uses `.venv\Scripts\activate`.** En Windows suele fallar con
+*"running scripts is disabled on this system"*, porque la política de
+ejecución bloquea el script. Por eso arriba se llama directo a
+`.venv\Scripts\python.exe`: hace exactamente lo mismo y no depende de la
+política. Es como lo probé yo.
+
+Si preferís activarlo igual, primero:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -Bypass
+.venv\Scripts\Activate.ps1
+```
+
+Eso vale solo para esa ventana, no cambia nada del sistema.
+
+**Y no encadenes con `&&`.** PowerShell 5.1 (el que trae Windows por defecto)
+no lo soporta y te da error de sintaxis. Poné un comando por línea, o usá `;`.
+
+Para copiar el archivo de entorno, en PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Después levantá el servidor:
+
+```powershell
+.venv\Scripts\python.exe -m uvicorn main:app --reload
 ```
 
 Comprobá que responden:
 
 - <http://localhost:8000/api/v1/health> → `{"status":"ok","version":"0.1.0"}`
 - <http://localhost:8000/docs> → la documentación interactiva
-
-```bash
-pytest      # 2 pruebas, tienen que pasar
-```
 
 ## 2. Qué hay ya escrito
 
@@ -161,10 +187,9 @@ coordina por fuera de la plataforma.
 
 ## 8. Antes de pasármelo
 
-```bash
-pytest
-uvicorn main:app --reload
-curl http://localhost:8000/api/v1/health
+```powershell
+.venv\Scripts\python.exe -m pytest
+.venv\Scripts\python.exe -m uvicorn main:app --reload
 ```
 
 Revisá el diff antes de commitear. Que **no** entren al índice: `.venv`,
@@ -172,13 +197,13 @@ Revisá el diff antes de commitear. Que **no** entren al índice: `.venv`,
 
 Buscá que no se te haya colado ninguna clave:
 
-```bash
-git diff --cached | grep -E "sk-|eyJ"
+```powershell
+git diff --cached | Select-String "sk-|eyJ"
 ```
 
 ## 9. Cómo me lo pasás
 
-```bash
+```powershell
 git add .
 git commit -m "feat(backend): describir el cambio"
 git push -u origin feature/backend

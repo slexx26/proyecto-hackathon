@@ -6,7 +6,7 @@ posición tonto que hay que reemplazar entero.
 
 ## Levantalo
 
-```bash
+```powershell
 git clone https://github.com/slexx26/proyecto-hackathon.git
 cd proyecto-hackathon
 git checkout feature/frontend
@@ -14,10 +14,37 @@ git checkout -b feature/ai
 
 cd backend
 python -m venv .venv
-.venv\Scripts\activate       # en Windows
-pip install -r requirements.txt
-pytest                        # 6 pruebas, tienen que pasar
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m pytest
 ```
+
+### Ojo con PowerShell (terminal de VS Code)
+
+**No uses `.venv\Scripts\activate`.** En Windows suele fallar con
+*"running scripts is disabled on this system"*, porque la política de
+ejecución bloquea el script. Por eso arriba se llama directo a
+`.venv\Scripts\python.exe`: hace exactamente lo mismo y no depende de la
+política. Es como lo probé yo.
+
+Si preferís activarlo igual, primero:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -Bypass
+.venv\Scripts\Activate.ps1
+```
+
+Eso vale solo para esa ventana, no cambia nada del sistema.
+
+**Y no encadenes con `&&`.** PowerShell 5.1 (el que trae Windows por defecto)
+no lo soporta y te da error de sintaxis. Poné un comando por línea, o usá `;`.
+
+Para copiar el archivo de entorno, en PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Tienen que pasar 6 pruebas.
 
 Verificado en Python 3.14: `supabase` y `openai` instalan con ruedas nativas,
 sin compilar nada.
@@ -175,9 +202,8 @@ borrarse sin romper nada.
 
 ## Antes de pasármelo
 
-```bash
-cd backend
-pytest                 # tus pruebas del motor tienen que pasar
+```powershell
+.venv\Scripts\python.exe -m pytest
 ```
 
 Que no se cuele ninguna clave: `git diff` antes de commitear, y buscá `sk-`
@@ -185,7 +211,7 @@ en el diff.
 
 ## Cómo me lo pasás
 
-```bash
+```powershell
 git add .
 git commit -m "feat(ai): describir el cambio"
 git push -u origin feature/ai
