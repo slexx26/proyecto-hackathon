@@ -1,47 +1,187 @@
 /*
  * ADAPTA — Sistema de diseño (sección 21)
- * Tailwind v4: los tokens se declaran aquí con @theme, no hay tailwind.config.js.
- * Regla: ningún componente inventa colores sueltos; todo sale de estos tokens.
+ *
+ * Tailwind v4: los tokens se declaran aquí con @theme, no hay
+ * tailwind.config.js. Regla: ningún componente inventa colores sueltos.
+ *
+ * DOS CAPAS, A PROPÓSITO:
+ *
+ *   1. Rampas crudas (--color-brand-500, --color-clay-400…). Solo las usan
+ *      las ilustraciones y los degradados, donde hace falta elegir un tono
+ *      concreto.
+ *   2. Tokens semánticos (--color-surface, --color-action, --color-fit-high…).
+ *      Los usa TODA la interfaz.
+ *
+ * El motivo es el modo oscuro: al cambiar de tema se redefine la capa
+ * semántica y la aplicación entera cambia sin tocar un solo componente. Si un
+ * botón dijera `bg-brand-700`, en oscuro quedaría texto blanco sobre turquesa
+ * claro. Diciendo `bg-action` / `text-on-action`, no puede pasar.
  */
 
 @theme {
-  /* Marca. Teal profundo = confianza y cuidado; ámbar = acción y calidez. */
-  --color-brand-50: oklch(0.97 0.02 195);
-  --color-brand-100: oklch(0.93 0.04 195);
-  --color-brand-200: oklch(0.87 0.07 195);
-  --color-brand-300: oklch(0.78 0.1 195);
-  --color-brand-400: oklch(0.68 0.12 195);
-  --color-brand-500: oklch(0.58 0.13 195);
-  --color-brand-600: oklch(0.48 0.12 197);
-  --color-brand-700: oklch(0.39 0.1 199);
-  --color-brand-800: oklch(0.31 0.08 201);
-  --color-brand-900: oklch(0.24 0.06 203);
+  /* ---------------------------------------------------------------------
+   * Rampas crudas
+   * ------------------------------------------------------------------- */
 
-  --color-accent-300: oklch(0.85 0.13 75);
-  --color-accent-400: oklch(0.79 0.16 68);
-  --color-accent-500: oklch(0.72 0.18 62);
-  --color-accent-600: oklch(0.62 0.16 55);
+  /* Turquesa profundo: confianza y cuidado sin caer en el azul clínico. */
+  --color-brand-50: oklch(0.972 0.018 192);
+  --color-brand-100: oklch(0.938 0.036 192);
+  --color-brand-200: oklch(0.885 0.062 191);
+  --color-brand-300: oklch(0.808 0.088 190);
+  --color-brand-400: oklch(0.712 0.104 190);
+  --color-brand-500: oklch(0.612 0.108 191);
+  --color-brand-600: oklch(0.512 0.098 193);
+  --color-brand-700: oklch(0.418 0.082 195);
+  --color-brand-800: oklch(0.328 0.064 197);
+  --color-brand-900: oklch(0.258 0.048 199);
+  --color-brand-950: oklch(0.192 0.036 201);
 
-  /* Superficies neutras con matiz frío, para que el teal no se vea sucio. */
+  /* Barro cálido: el acento. Es ropa, no un equipo médico. */
+  --color-clay-100: oklch(0.955 0.036 66);
+  --color-clay-200: oklch(0.905 0.070 63);
+  --color-clay-300: oklch(0.850 0.106 60);
+  --color-clay-400: oklch(0.790 0.140 55);
+  --color-clay-500: oklch(0.712 0.152 47);
+  --color-clay-600: oklch(0.618 0.146 42);
+  --color-clay-700: oklch(0.502 0.122 40);
+
+  /* ---------------------------------------------------------------------
+   * Capa semántica — modo claro. El bloque de modo oscuro está en index.css.
+   * ------------------------------------------------------------------- */
+
+  /* Superficies. Neutro CÁLIDO a propósito: el gris frío hace que un
+     producto de moda parezca una ficha de hospital. */
+  --color-canvas: oklch(0.986 0.007 84);
   --color-surface: oklch(1 0 0);
-  --color-surface-muted: oklch(0.975 0.005 210);
-  --color-surface-sunken: oklch(0.95 0.008 210);
-  --color-line: oklch(0.9 0.01 210);
-  --color-ink: oklch(0.24 0.02 220);
-  --color-ink-muted: oklch(0.5 0.02 220);
+  --color-surface-muted: oklch(0.966 0.011 84);
+  --color-surface-sunken: oklch(0.936 0.015 82);
+  /* DOS bordes, y no son intercambiables:
+     - `line` es la línea decorativa: separadores y cantos de tarjeta. La
+       tarjeta ya se distingue por fondo y sombra, así que puede ser tenue.
+     - `line-strong` es el borde de los controles. Un campo o un botón se
+       identifican POR su borde, así que WCAG 1.4.11 pide 3:1 contra lo que
+       tienen al lado. De ahí que sea bastante más oscuro de lo que pediría
+       el gusto: aquí manda la norma. */
+  --color-line: oklch(0.897 0.012 84);
+  --color-line-strong: oklch(0.606 0.016 82);
 
-  /* Semánticos de compatibilidad: usados por el ScoreBadge. */
-  --color-fit-high: oklch(0.55 0.14 155);
-  --color-fit-mid: oklch(0.68 0.15 85);
-  --color-fit-low: oklch(0.58 0.17 25);
+  /* Texto. `ink` sobre `surface` da 14:1; `ink-muted`, 6.4:1. */
+  --color-ink: oklch(0.238 0.024 208);
+  --color-ink-muted: oklch(0.492 0.020 208);
 
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
-    Roboto, sans-serif;
+  /* Marca aplicada a superficie: fondos de chip, bordes y texto de marca. */
+  --color-brand-soft: oklch(0.958 0.026 192);
+  --color-brand-soft-strong: oklch(0.912 0.048 191);
+  --color-brand-line: oklch(0.858 0.058 191);
+  --color-brand-ink: oklch(0.378 0.076 196);
 
-  --radius-card: 1rem;
+  /* Acción primaria. `on-action` siempre contrasta con `action`. */
+  --color-action: oklch(0.418 0.082 195);
+  --color-action-hover: oklch(0.328 0.064 197);
+  --color-on-action: oklch(0.995 0.004 190);
 
-  --shadow-card: 0 1px 2px oklch(0.24 0.02 220 / 0.06),
-    0 8px 24px oklch(0.24 0.02 220 / 0.08);
-  --shadow-lift: 0 2px 4px oklch(0.24 0.02 220 / 0.08),
-    0 16px 40px oklch(0.24 0.02 220 / 0.12);
+  /* Acento cálido, para lo que invita sin ser la acción principal. */
+  --color-accent: oklch(0.712 0.152 47);
+  --color-accent-soft: oklch(0.958 0.032 66);
+  --color-accent-line: oklch(0.888 0.076 62);
+  --color-accent-ink: oklch(0.462 0.116 41);
+
+  /* Superficie invertida: los bloques oscuros de la landing. */
+  --color-inverse: oklch(0.258 0.048 199);
+  --color-inverse-soft: oklch(0.322 0.056 198);
+  --color-on-inverse: oklch(0.972 0.012 190);
+  --color-on-inverse-muted: oklch(0.828 0.036 191);
+
+  /* Compatibilidad. Tres usos por tramo: relleno, fondo suave y texto.
+     El `-ink` existe para que el texto pase 4.5:1 sobre el `-soft`. */
+  --color-fit-high: oklch(0.598 0.132 158);
+  --color-fit-high-soft: oklch(0.952 0.036 158);
+  --color-fit-high-ink: oklch(0.438 0.098 158);
+
+  --color-fit-mid: oklch(0.742 0.142 78);
+  --color-fit-mid-soft: oklch(0.962 0.042 82);
+  --color-fit-mid-ink: oklch(0.478 0.098 68);
+
+  --color-fit-low: oklch(0.612 0.176 27);
+  --color-fit-low-soft: oklch(0.958 0.028 30);
+  --color-fit-low-ink: oklch(0.492 0.162 28);
+
+  /* ---------------------------------------------------------------------
+   * Tipografía
+   *
+   * Atkinson Hyperlegible Next la dibujó el Braille Institute para personas
+   * con baja visión: cada carácter es inconfundible (I/l/1, 0/O, b/d). En un
+   * producto sobre accesibilidad, la fuente del cuerpo es una decisión de
+   * producto, no de estilo.
+   *
+   * Bricolage Grotesque pone la voz en los titulares. El nombre no es
+   * casualidad: bricolaje es exactamente lo que ADAPTA propone hacer con la
+   * ropa que ya existe.
+   * ------------------------------------------------------------------- */
+  --font-sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible',
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Atkinson Hyperlegible Next',
+    ui-sans-serif, system-ui, sans-serif;
+
+  /* ---------------------------------------------------------------------
+   * Forma, profundidad y movimiento
+   * ------------------------------------------------------------------- */
+  --radius-field: 0.875rem;
+  --radius-card: 1.25rem;
+  --radius-panel: 1.75rem;
+
+  /* Sombras teñidas del color del fondo: el gris neutro sobre papel cálido
+     se ve sucio. */
+  --shadow-card: 0 1px 2px oklch(0.30 0.03 200 / 0.05),
+    0 6px 18px oklch(0.30 0.03 200 / 0.06);
+  --shadow-lift: 0 2px 4px oklch(0.30 0.03 200 / 0.06),
+    0 14px 34px oklch(0.30 0.03 200 / 0.10);
+  --shadow-pop: 0 4px 8px oklch(0.30 0.03 200 / 0.08),
+    0 28px 60px oklch(0.30 0.03 200 / 0.16);
+
+  /* Curvas propias: las de CSS son demasiado flojas y las transiciones
+     quedan blandas. Nada de `ease-in` en la interfaz: arranca lento justo
+     en el momento en que la persona está mirando. */
+  --ease-out-strong: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-strong: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-overshoot: cubic-bezier(0.34, 1.32, 0.64, 1);
+
+  --animate-rise: rise 0.5s var(--ease-out-strong) both;
+  --animate-fade: fade 0.4s var(--ease-out-strong) both;
+  --animate-pop: pop 0.32s var(--ease-overshoot) both;
+  --animate-sheen: sheen 1.6s ease-in-out infinite;
+}
+
+/* Las entradas arrancan desde su estado final en el CSS estático y solo el
+   fotograma `from` está oculto: si las animaciones no corren, el contenido
+   se ve igual. Nunca dejar contenido dependiendo de que una animación
+   termine. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes sheen {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
 }

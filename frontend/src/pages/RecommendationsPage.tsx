@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, type CSSProperties } from 'react'
 import { fetchRecommendations } from '@/services/api/recommendations'
 import { useAsync } from '@/hooks/useAsync'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { useFitProfile } from '@/store/fitProfileContext'
 import { needLabels } from '@/utils/labels'
 import { ButtonLink } from '@/components/ui/Button'
+import { Icon } from '@/components/ui/Icon'
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states'
 import { RecommendationCard } from '@/components/recommendations/RecommendationCard'
 
@@ -40,14 +41,22 @@ export function RecommendationsPage() {
     return onlyGoodFits ? all.filter((item) => item.score >= 60) : all
   }, [data, onlyGoodFits])
 
+  const hidden = (data?.recommendations.length ?? 0) - visible.length
+
   // Sin perfil no hay nada que pedir: mandamos a Find My Fit.
   if (!profile) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
         <EmptyState
+          spot="profile"
           title="Todavía no tenemos tu perfil"
-          description="Necesitamos saber cómo te vestís para poder calcular la compatibilidad de cada prenda."
-          action={<ButtonLink to="/find-my-fit">Completar Find My Fit</ButtonLink>}
+          description="Necesitamos saber cómo te vestís para poder calcular la compatibilidad de cada producto. Son cuatro pasos y no pedimos datos médicos."
+          action={
+            <ButtonLink to="/find-my-fit" size="lg">
+              Completar Find My Fit
+              <Icon name="arrow-right" className="h-5 w-5" />
+            </ButtonLink>
+          }
         />
       </div>
     )
@@ -55,40 +64,47 @@ export function RecommendationsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <header>
-        <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      <header className="animate-rise">
+        <h1 className="text-hero font-display font-extrabold text-ink">
           Tus recomendaciones
         </h1>
-        <p className="mt-3 max-w-prose text-lg text-ink-muted">
+        <p className="mt-5 max-w-2xl text-lg text-ink-muted">
           Ordenadas por compatibilidad con tu perfil. El puntaje lo calcula
           nuestro motor con reglas fijas; la IA solo lo explica.
         </p>
 
-        <ul className="mt-5 flex flex-wrap gap-2">
-          {profile.needs.map((need) => (
-            <li
-              key={need}
-              className="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-800"
-            >
-              {needLabels[need]}
-            </li>
-          ))}
-        </ul>
+        <div className="mt-8 rounded-panel bg-surface-muted p-5 ring-1 ring-line">
+          <h2 className="text-sm font-bold uppercase tracking-[0.08em] text-ink-muted">
+            Perfil que estamos usando
+          </h2>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {profile.needs.map((need, index) => (
+              <li
+                key={need}
+                style={{ '--i': index } as CSSProperties}
+                className="animate-pop stagger rounded-full bg-brand-soft px-3 py-1.5 text-sm font-semibold text-brand-ink ring-1 ring-brand-line"
+              >
+                {needLabels[need]}
+              </li>
+            ))}
+          </ul>
 
-        <div className="mt-6 flex flex-wrap items-center gap-4">
-          <ButtonLink to="/find-my-fit" variant="secondary">
-            Ajustar mi perfil
-          </ButtonLink>
+          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-line pt-4">
+            <ButtonLink to="/find-my-fit" variant="secondary">
+              Ajustar mi perfil
+            </ButtonLink>
 
-          <label className="flex items-center gap-2.5 text-sm font-medium text-ink">
-            <input
-              type="checkbox"
-              checked={onlyGoodFits}
-              onChange={(event) => setOnlyGoodFits(event.target.checked)}
-              className="h-5 w-5 accent-brand-700"
-            />
-            Mostrar solo las que encajan bien
-          </label>
+            <label className="flex min-h-11 cursor-pointer items-center gap-2.5 text-sm font-semibold text-ink">
+              <input
+                type="checkbox"
+                checked={onlyGoodFits}
+                onChange={(event) => setOnlyGoodFits(event.target.checked)}
+                className="h-5 w-5 cursor-pointer"
+              />
+              Mostrar solo las que encajan bien
+              <span className="text-ink-muted">(60 o más)</span>
+            </label>
+          </div>
         </div>
       </header>
 
@@ -109,8 +125,8 @@ export function RecommendationsPage() {
             title="Ninguna prenda supera el umbral"
             description={
               onlyGoodFits
-                ? 'Probá quitando el filtro: hay prendas con compatibilidad parcial que se pueden adaptar.'
-                : 'No encontramos prendas para este perfil. Probá marcando menos categorías preferidas.'
+                ? 'Probá quitando el filtro: hay productos con compatibilidad parcial que se pueden adaptar en un taller.'
+                : 'No encontramos productos para este perfil. Probá marcando menos categorías preferidas.'
             }
             action={<ButtonLink to="/find-my-fit">Ajustar mi perfil</ButtonLink>}
           />
@@ -118,14 +134,31 @@ export function RecommendationsPage() {
 
         {status === 'success' && visible.length > 0 ? (
           <>
-            <p aria-live="polite" className="mb-5 text-sm text-ink-muted">
-              {visible.length}{' '}
-              {visible.length === 1 ? 'prenda encontrada' : 'prendas encontradas'}
+            {/* Zona de resultados: los cambios de recuento se anuncian. */}
+            <p
+              aria-live="polite"
+              className="mb-5 flex flex-wrap items-center gap-x-2 text-sm text-ink-muted"
+            >
+              <span className="font-semibold text-ink">
+                {visible.length}{' '}
+                {visible.length === 1
+                  ? 'producto encontrado'
+                  : 'productos encontrados'}
+              </span>
+              {hidden > 0 ? (
+                <span>
+                  · {hidden} {hidden === 1 ? 'oculto' : 'ocultos'} por el filtro
+                </span>
+              ) : null}
             </p>
-            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {visible.map((recommendation) => (
+
+            <ul className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+              {visible.map((recommendation, index) => (
                 <li key={recommendation.product.id}>
-                  <RecommendationCard recommendation={recommendation} />
+                  <RecommendationCard
+                    recommendation={recommendation}
+                    index={index}
+                  />
                 </li>
               ))}
             </ul>

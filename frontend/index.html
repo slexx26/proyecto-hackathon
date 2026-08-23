@@ -9,6 +9,40 @@
       name="description"
       content="ADAPTA cruza tu forma real de vestirte con las características de cada prenda, te dice qué tan bien encaja y por qué, y te propone cómo adaptarla."
     />
+    <meta name="theme-color" content="#fbf8f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151b1f" media="(prefers-color-scheme: dark)" />
+
+    <!--
+      Tipografía. Atkinson Hyperlegible Next la dibujó el Braille Institute
+      para lectura con baja visión; en un producto sobre accesibilidad, la
+      fuente del cuerpo es una decisión de producto. Bricolage Grotesque pone
+      la voz en los titulares.
+
+      `display=swap` evita el texto invisible mientras carga, y el stack de
+      respaldo en theme.css mantiene la página legible si Fonts no responde.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,300..800;1,300..800&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap"
+    />
+
+    <!--
+      Tema antes del primer pintado. Si esto viviera en React, la persona
+      vería un destello blanco antes de que se aplique el modo oscuro: es
+      justo lo que el modo oscuro intenta evitar.
+    -->
+    <script>
+      try {
+        var saved = localStorage.getItem('adapta.theme')
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.dataset.theme = saved
+        }
+      } catch (e) {
+        /* Almacenamiento bloqueado: se queda con la preferencia del sistema. */
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -10,6 +10,8 @@ import { useAsync } from '@/hooks/useAsync'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { categoryLabels, needLabels } from '@/utils/labels'
 import { ButtonLink } from '@/components/ui/Button'
+import { Icon } from '@/components/ui/Icon'
+import { SelectField, TextField } from '@/components/forms/fields'
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states'
 import { ProductCard } from '@/components/products/ProductCard'
 
@@ -44,19 +46,37 @@ export function MarketplacePage() {
 
   const hasFilters = Boolean(search || category || need)
 
+  /** Fichas de filtro activo: se ve qué está aplicado y se quita de a uno. */
+  const activeChips = [
+    search
+      ? { key: 'search', label: `“${search}”`, clear: () => setSearch('') }
+      : null,
+    category
+      ? {
+          key: 'category',
+          label: categoryLabels[category],
+          clear: () => setCategory(''),
+        }
+      : null,
+    need
+      ? { key: 'need', label: needLabels[need], clear: () => setNeed('') }
+      : null,
+  ].filter((chip) => chip !== null)
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <header>
-        <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      <header className="animate-rise">
+        <h1 className="text-hero font-display font-extrabold text-ink">
           Catálogo
         </h1>
-        <p className="mt-3 max-w-prose text-lg text-ink-muted">
+        <p className="mt-5 max-w-2xl text-lg text-ink-muted">
           Todo lo que ofrecen los negocios inscritos: ropa, calzado, prótesis,
           órtesis, movilidad y productos de apoyo, con sus características de
-          accesibilidad a la vista. Si querés verlas ordenadas por lo que te sirve a vos,{' '}
+          accesibilidad a la vista. Si querés verlo ordenado por lo que te
+          sirve a vos,{' '}
           <Link
             to="/find-my-fit"
-            className="font-semibold text-brand-700 underline underline-offset-4"
+            className="font-semibold text-brand-ink underline decoration-brand-line decoration-2 underline-offset-4 hover:decoration-action"
           >
             completá Find My Fit
           </Link>
@@ -64,65 +84,71 @@ export function MarketplacePage() {
         </p>
       </header>
 
-      {/* Filtros. `search` como `role=search` para lectores de pantalla. */}
+      {/* Filtros. `role=search` para que los lectores de pantalla puedan
+          saltar directamente aquí. */}
       <div
         role="search"
-        className="mt-8 grid gap-4 rounded-card bg-surface-muted p-5 sm:grid-cols-3"
+        className="mt-8 rounded-panel bg-surface-muted p-5 ring-1 ring-line"
       >
-        <div>
-          <label htmlFor="buscar" className="text-sm font-medium text-ink">
-            Buscar
-          </label>
-          <input
-            id="buscar"
+        <div className="grid gap-4 sm:grid-cols-3">
+          <TextField
+            label="Buscar"
             type="search"
+            icon="search"
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            className="mt-1.5 h-11 w-full rounded-xl bg-surface px-4 text-ink ring-1 ring-line"
+            onChange={setSearch}
+            placeholder="Camisa, silla, cierre…"
+          />
+          <SelectField
+            label="Categoría"
+            value={category}
+            onChange={setCategory}
+            anyLabel="Todas"
+            options={(Object.keys(categoryLabels) as ProductCategory[]).map(
+              (value) => ({ value, label: categoryLabels[value] }),
+            )}
+          />
+          <SelectField
+            label="Necesidad que cubre"
+            value={need}
+            onChange={setNeed}
+            anyLabel="Cualquiera"
+            options={(Object.keys(needLabels) as AdaptationNeed[]).map(
+              (value) => ({ value, label: needLabels[value] }),
+            )}
           />
         </div>
 
-        <div>
-          <label htmlFor="categoria" className="text-sm font-medium text-ink">
-            Categoría
-          </label>
-          <select
-            id="categoria"
-            value={category}
-            onChange={(event) =>
-              setCategory(event.target.value as ProductCategory | '')
-            }
-            className="mt-1.5 h-11 w-full rounded-xl bg-surface px-3 text-ink ring-1 ring-line"
-          >
-            <option value="">Todas</option>
-            {(Object.keys(categoryLabels) as ProductCategory[]).map((value) => (
-              <option key={value} value={value}>
-                {categoryLabels[value]}
-              </option>
+        {activeChips.length > 0 ? (
+          <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-line pt-4">
+            <span className="text-sm font-semibold text-ink-muted">
+              Filtros activos:
+            </span>
+            {activeChips.map((chip) => (
+              <button
+                key={chip.key}
+                type="button"
+                onClick={chip.clear}
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-surface px-3.5 text-sm font-semibold text-ink ring-1 ring-line-strong transition-colors hover:bg-fit-low-soft hover:text-fit-low-ink hover:ring-fit-low"
+              >
+                {chip.label}
+                <Icon name="close" className="h-3.5 w-3.5" />
+                <span className="sr-only">Quitar este filtro</span>
+              </button>
             ))}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="necesidad" className="text-sm font-medium text-ink">
-            Necesidad que cubre
-          </label>
-          <select
-            id="necesidad"
-            value={need}
-            onChange={(event) =>
-              setNeed(event.target.value as AdaptationNeed | '')
-            }
-            className="mt-1.5 h-11 w-full rounded-xl bg-surface px-3 text-ink ring-1 ring-line"
-          >
-            <option value="">Cualquiera</option>
-            {(Object.keys(needLabels) as AdaptationNeed[]).map((value) => (
-              <option key={value} value={value}>
-                {needLabels[value]}
-              </option>
-            ))}
-          </select>
-        </div>
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('')
+                setCategory('')
+                setNeed('')
+              }}
+              className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-brand-ink underline underline-offset-4"
+            >
+              Limpiar todo
+            </button>
+          </div>
+        ) : null}
       </div>
 
       <div className="mt-10">
@@ -139,7 +165,7 @@ export function MarketplacePage() {
             title="Sin resultados"
             description={
               hasFilters
-                ? 'Ninguna prenda coincide con esos filtros. Probá quitando alguno.'
+                ? 'Ningún producto coincide con esos filtros. Probá quitando alguno.'
                 : 'El catálogo está vacío por ahora.'
             }
             action={<ButtonLink to="/find-my-fit">Ir a Find My Fit</ButtonLink>}
@@ -149,12 +175,16 @@ export function MarketplacePage() {
         {status === 'success' && data && data.length > 0 ? (
           <>
             <p aria-live="polite" className="mb-5 text-sm text-ink-muted">
-              {data.length} {data.length === 1 ? 'prenda' : 'prendas'}
+              <span className="font-semibold text-ink">{data.length}</span>{' '}
+              {data.length === 1 ? 'producto' : 'productos'}
             </p>
+            {/* Encabezado solo para lector de pantalla: nombra la región de
+                resultados y evita saltar de h1 a los h3 de las tarjetas. */}
+            <h2 className="sr-only">Productos encontrados</h2>
             <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {data.map((product) => (
+              {data.map((product, index) => (
                 <li key={product.id}>
-                  <ProductCard product={product} />
+                  <ProductCard product={product} index={index} />
                 </li>
               ))}
             </ul>

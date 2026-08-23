@@ -9,7 +9,7 @@ export function RootLayout() {
   useScrollToTop()
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="flex min-h-dvh flex-col bg-canvas">
       <SkipLink />
       <SiteHeader />
 

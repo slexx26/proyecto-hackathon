@@ -2,6 +2,116 @@
 @import './styles/theme.css';
 
 /*
+ * MODO OSCURO
+ *
+ * Se redefine solo la capa semántica; ni un componente sabe que existe. Tres
+ * bloques y en este orden:
+ *   1. el sistema pide oscuro y la persona no eligió claro,
+ *   2. la persona eligió oscuro,
+ *   3. (implícito) la persona eligió claro → gana @theme.
+ *
+ * Van fuera de @layer a propósito: el CSS sin capa gana al CSS con capa, y
+ * las variables de @theme viven en `@layer theme`.
+ *
+ * No es un adorno. Fotofobia, migraña y varias condiciones de baja visión
+ * hacen que una pantalla blanca a pantalla completa sea dolorosa de leer.
+ */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-canvas: oklch(0.196 0.014 214);
+    --color-surface: oklch(0.244 0.016 212);
+    --color-surface-muted: oklch(0.286 0.018 210);
+    --color-surface-sunken: oklch(0.334 0.018 210);
+    --color-line: oklch(0.372 0.020 210);
+    --color-line-strong: oklch(0.606 0.022 208);
+    --color-ink: oklch(0.962 0.008 200);
+    --color-ink-muted: oklch(0.772 0.014 202);
+
+    --color-brand-soft: oklch(0.312 0.046 198);
+    --color-brand-soft-strong: oklch(0.372 0.058 196);
+    --color-brand-line: oklch(0.438 0.062 195);
+    --color-brand-ink: oklch(0.828 0.082 190);
+
+    --color-action: oklch(0.752 0.104 190);
+    --color-action-hover: oklch(0.842 0.084 190);
+    --color-on-action: oklch(0.186 0.032 202);
+
+    --color-accent: oklch(0.798 0.138 55);
+    --color-accent-soft: oklch(0.322 0.052 52);
+    --color-accent-line: oklch(0.418 0.070 50);
+    --color-accent-ink: oklch(0.858 0.096 62);
+
+    --color-inverse: oklch(0.312 0.038 200);
+    --color-inverse-soft: oklch(0.372 0.044 199);
+    --color-on-inverse: oklch(0.968 0.010 190);
+    --color-on-inverse-muted: oklch(0.828 0.030 191);
+
+    --color-fit-high: oklch(0.742 0.126 158);
+    --color-fit-high-soft: oklch(0.318 0.052 158);
+    --color-fit-high-ink: oklch(0.842 0.108 158);
+
+    --color-fit-mid: oklch(0.812 0.130 84);
+    --color-fit-mid-soft: oklch(0.336 0.050 78);
+    --color-fit-mid-ink: oklch(0.872 0.106 86);
+
+    --color-fit-low: oklch(0.708 0.158 28);
+    --color-fit-low-soft: oklch(0.330 0.062 28);
+    --color-fit-low-ink: oklch(0.828 0.104 32);
+
+    --shadow-card: 0 1px 2px oklch(0 0 0 / 0.32), 0 6px 18px oklch(0 0 0 / 0.28);
+    --shadow-lift: 0 2px 4px oklch(0 0 0 / 0.34), 0 14px 34px oklch(0 0 0 / 0.38);
+    --shadow-pop: 0 4px 8px oklch(0 0 0 / 0.36), 0 28px 60px oklch(0 0 0 / 0.46);
+  }
+}
+
+:root[data-theme='dark'] {
+  --color-canvas: oklch(0.196 0.014 214);
+  --color-surface: oklch(0.244 0.016 212);
+  --color-surface-muted: oklch(0.286 0.018 210);
+  --color-surface-sunken: oklch(0.334 0.018 210);
+  --color-line: oklch(0.372 0.020 210);
+  --color-line-strong: oklch(0.606 0.022 208);
+  --color-ink: oklch(0.962 0.008 200);
+  --color-ink-muted: oklch(0.772 0.014 202);
+
+  --color-brand-soft: oklch(0.312 0.046 198);
+  --color-brand-soft-strong: oklch(0.372 0.058 196);
+  --color-brand-line: oklch(0.438 0.062 195);
+  --color-brand-ink: oklch(0.828 0.082 190);
+
+  --color-action: oklch(0.752 0.104 190);
+  --color-action-hover: oklch(0.842 0.084 190);
+  --color-on-action: oklch(0.186 0.032 202);
+
+  --color-accent: oklch(0.798 0.138 55);
+  --color-accent-soft: oklch(0.322 0.052 52);
+  --color-accent-line: oklch(0.418 0.070 50);
+  --color-accent-ink: oklch(0.858 0.096 62);
+
+  --color-inverse: oklch(0.312 0.038 200);
+  --color-inverse-soft: oklch(0.372 0.044 199);
+  --color-on-inverse: oklch(0.968 0.010 190);
+  --color-on-inverse-muted: oklch(0.828 0.030 191);
+
+  --color-fit-high: oklch(0.742 0.126 158);
+  --color-fit-high-soft: oklch(0.318 0.052 158);
+  --color-fit-high-ink: oklch(0.842 0.108 158);
+
+  --color-fit-mid: oklch(0.812 0.130 84);
+  --color-fit-mid-soft: oklch(0.336 0.050 78);
+  --color-fit-mid-ink: oklch(0.872 0.106 86);
+
+  --color-fit-low: oklch(0.708 0.158 28);
+  --color-fit-low-soft: oklch(0.330 0.062 28);
+  --color-fit-low-ink: oklch(0.828 0.104 32);
+
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.32), 0 6px 18px oklch(0 0 0 / 0.28);
+  --shadow-lift: 0 2px 4px oklch(0 0 0 / 0.34), 0 14px 34px oklch(0 0 0 / 0.38);
+  --shadow-pop: 0 4px 8px oklch(0 0 0 / 0.36), 0 28px 60px oklch(0 0 0 / 0.46);
+}
+
+/*
  * Base global. Sección 23 (Accesibilidad): foco visible siempre, sin
  * `outline: none` en ningún sitio, y respeto a prefers-reduced-motion.
  */
@@ -10,20 +120,40 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme='light']) {
+      color-scheme: dark;
+    }
+  }
+
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  html[data-theme='light'] {
+    color-scheme: light;
   }
 
   body {
-    background-color: var(--color-surface);
+    background-color: var(--color-canvas);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-synthesis-weight: none;
     line-height: 1.6;
     text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
 
   h1,
   h2,
   h3 {
-    line-height: 1.2;
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
     text-wrap: balance;
   }
 
@@ -31,11 +161,29 @@
     text-wrap: pretty;
   }
 
-  /* Un solo anillo de foco para toda la app: mismo grosor, mismo color. */
+  /* Los números de precio y puntaje no deben bailar al cambiar de valor. */
+  :where(output, [data-numeric]) {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Un solo anillo de foco para toda la app: mismo grosor, mismo color, y
+     un halo del color del fondo para que se vea sobre cualquier superficie. */
   :focus-visible {
-    outline: 3px solid var(--color-brand-600);
+    outline: 3px solid var(--color-action);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 5px;
+  }
+
+  /* Los campos nativos toman el color de marca en su marca de selección. */
+  input,
+  textarea,
+  select {
+    accent-color: var(--color-action);
+  }
+
+  ::selection {
+    background-color: var(--color-brand-soft-strong);
+    color: var(--color-ink);
   }
 
   [hidden] {
@@ -69,5 +217,49 @@
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+  }
+
+  /* Escala fluida de titulares. Una sola fuente de verdad para el tamaño
+     grande, en vez de repetir `text-4xl sm:text-5xl lg:text-6xl`. */
+  .text-hero {
+    font-size: clamp(2.5rem, 1.4rem + 4.6vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+
+  .text-section {
+    font-size: clamp(1.75rem, 1.35rem + 1.7vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.024em;
+  }
+
+  /* Cascada de entrada. El retardo lo pone quien renderiza con --i; el tope
+     evita que el último elemento de una lista larga tarde medio minuto. */
+  .stagger {
+    animation-delay: calc(min(var(--i, 0), 11) * 55ms);
+  }
+
+  /* Deja que el elemento se levante al pasar el cursor SOLO donde hay
+     cursor fino: en táctil, `hover` se dispara al tocar y se queda pegado. */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-lift {
+      transition:
+        transform 0.22s var(--ease-out-strong),
+        box-shadow 0.22s var(--ease-out-strong);
+    }
+
+    .hover-lift:hover {
+      transform: translate3d(0, -3px, 0);
+      box-shadow: var(--shadow-lift);
+    }
+  }
+
+  /* Rejilla de fondo: da textura sin cargar una imagen. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
   }
 }

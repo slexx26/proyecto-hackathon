@@ -13,6 +13,7 @@ import {
   needLabels,
 } from '@/utils/labels'
 import { ButtonLink } from '@/components/ui/Button'
+import { Icon } from '@/components/ui/Icon'
 import { ErrorState, LoadingState } from '@/components/ui/states'
 import { ProductImage } from '@/components/products/ProductImage'
 import { ReasonList } from '@/components/recommendations/ReasonList'
@@ -74,12 +75,12 @@ export function ProductDetailPage() {
     [recommendations.data, productId],
   )
 
-  useDocumentTitle(product.data?.name ?? 'Prenda')
+  useDocumentTitle(product.data?.name ?? 'Producto')
 
   if (product.status === 'loading') {
     return (
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <LoadingState label="Cargando la prenda…" count={2} />
+        <LoadingState label="Cargando el producto…" count={2} />
       </div>
     )
   }
@@ -87,7 +88,7 @@ export function ProductDetailPage() {
   if (product.status === 'error' || !product.data) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-        <ErrorState message={product.error ?? 'No encontramos esta prenda.'} />
+        <ErrorState message={product.error ?? 'No encontramos este producto.'} />
         <div className="mt-6 text-center">
           <ButtonLink to="/marketplace" variant="secondary">
             Volver al catálogo
@@ -99,35 +100,57 @@ export function ProductDetailPage() {
 
   const item = product.data
 
+  const specs = [
+    { term: 'Categoría', value: categoryLabels[item.category] },
+    { term: 'Cierre', value: closureLabels[item.closureType] },
+    { term: 'Materiales', value: item.materials.join(', ') },
+    { term: 'Tallas', value: item.sizes.join(' · ') },
+  ]
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <nav aria-label="Migas de pan" className="text-sm text-ink-muted">
-        <Link to="/marketplace" className="underline underline-offset-4">
+        <Link
+          to="/marketplace"
+          className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-ink"
+        >
           Catálogo
         </Link>
-        <span aria-hidden="true"> / </span>
-        <span>{item.name}</span>
+        <span aria-hidden="true" className="px-1.5">
+          /
+        </span>
+        <span className="text-ink">{item.name}</span>
       </nav>
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-2">
-        <ProductImage
-          image={item.images[0]}
-          className="aspect-4/3 rounded-card"
-        />
+      <div className="mt-4 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+        <div className="group animate-rise overflow-hidden rounded-panel shadow-card ring-1 ring-line lg:sticky lg:top-24">
+          <ProductImage
+            image={item.images[0]}
+            category={item.category}
+            className="aspect-4/3"
+          />
+        </div>
 
-        <div>
-          <p className="text-sm font-medium text-ink-muted">{item.brand}</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+        <div className="animate-rise">
+          <p className="text-sm font-semibold uppercase tracking-[0.06em] text-ink-muted">
+            {item.brand}
+          </p>
+          {/* Escala de sección, no de portada: los nombres de producto son
+              largos y a escala de portada ocupaban tres líneas. */}
+          <h1 className="text-section mt-2 font-display font-extrabold text-ink">
             {item.name}
           </h1>
 
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <span className="text-2xl font-semibold text-ink">
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <span
+              data-numeric
+              className="font-display text-3xl font-extrabold text-ink"
+            >
               {formatPrice(item.price, item.currency)}
             </span>
             {match ? <ScoreBadge score={match.score} size="lg" /> : null}
             {!item.inStock ? (
-              <span className="rounded-full bg-surface-sunken px-3 py-1 text-sm text-ink-muted">
+              <span className="rounded-full bg-surface-sunken px-3 py-1.5 text-sm font-semibold text-ink-muted">
                 Sin existencias
               </span>
             ) : null}
@@ -137,69 +160,64 @@ export function ProductDetailPage() {
 
           {provider.data ? (
             <div className="mt-6">
-              <WhereToGetIt provider={provider.data} />
+              <WhereToGetIt provider={provider.data} level={2} />
             </div>
           ) : null}
 
-          <dl className="mt-6 space-y-3 text-sm">
-            <div className="flex gap-2">
-              <dt className="font-semibold text-ink">Categoría:</dt>
-              <dd className="text-ink-muted">
-                {categoryLabels[item.category]}
-              </dd>
-            </div>
-            <div className="flex gap-2">
-              <dt className="font-semibold text-ink">Cierre:</dt>
-              <dd className="text-ink-muted">
-                {closureLabels[item.closureType]}
-              </dd>
-            </div>
-            <div className="flex gap-2">
-              <dt className="font-semibold text-ink">Materiales:</dt>
-              <dd className="text-ink-muted">{item.materials.join(', ')}</dd>
-            </div>
-            <div className="flex gap-2">
-              <dt className="font-semibold text-ink">Tallas:</dt>
-              <dd className="text-ink-muted">{item.sizes.join(' · ')}</dd>
-            </div>
+          <dl className="mt-6 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+            {specs.map((spec) => (
+              <div key={spec.term} className="border-t border-line pt-3">
+                <dt className="text-xs font-bold uppercase tracking-[0.06em] text-ink-muted">
+                  {spec.term}
+                </dt>
+                <dd className="text-ink">{spec.value}</dd>
+              </div>
+            ))}
           </dl>
         </div>
       </div>
 
       {/* Características accesibles */}
-      <section className="mt-14">
-        <h2 className="text-2xl font-bold text-ink">
-          Qué resuelve esta prenda
+      <section className="mt-16">
+        <h2 className="text-section font-display font-extrabold text-ink">
+          Qué resuelve
         </h2>
         {item.adaptationNeeds.length > 0 ? (
-          <ul className="mt-4 flex flex-wrap gap-2">
+          <ul className="mt-5 flex flex-wrap gap-2.5">
             {item.adaptationNeeds.map((need) => (
               <li
                 key={need}
-                className="rounded-full bg-brand-50 px-4 py-2 text-sm font-medium text-brand-800"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-soft px-4 py-2.5 font-semibold text-brand-ink ring-1 ring-brand-line"
               >
+                <Icon name="check" className="h-4 w-4" />
                 {needLabels[need]}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="mt-3 text-ink-muted">
-            Es una prenda convencional: no trae adaptaciones de fábrica. Mirá
+          <p className="mt-4 max-w-prose text-ink-muted">
+            Es un producto convencional: no trae adaptaciones de fábrica. Mirá
             más abajo qué se le puede modificar.
           </p>
         )}
       </section>
 
-      {/* Limitaciones. Nunca se ocultan. */}
+      {/* Limitaciones. Nunca se ocultan ni se escriben más pequeñas. */}
       {item.limitations.length > 0 ? (
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold text-ink">Lo que no resuelve</h2>
-          <ul className="mt-4 space-y-2">
+        <section className="mt-12">
+          <h2 className="text-section font-display font-extrabold text-ink">
+            Lo que no resuelve
+          </h2>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
             {item.limitations.map((limitation) => (
               <li
                 key={limitation}
-                className="rounded-xl bg-fit-low/8 px-4 py-3 text-ink"
+                className="flex items-start gap-2.5 rounded-card bg-fit-low-soft px-4 py-3.5 text-ink"
               >
+                <Icon
+                  name="alert"
+                  className="mt-0.5 h-5 w-5 shrink-0 text-fit-low-ink"
+                />
                 {limitation}
               </li>
             ))}
@@ -208,54 +226,75 @@ export function ProductDetailPage() {
       ) : null}
 
       {/* Compatibilidad con el perfil */}
-      <section className="mt-10">
-        <h2 className="text-2xl font-bold text-ink">Tu compatibilidad</h2>
+      <section className="mt-12">
+        <h2 className="text-section font-display font-extrabold text-ink">
+          Tu compatibilidad
+        </h2>
 
-        {!profile ? (
-          <div className="mt-4 rounded-card bg-surface-muted px-5 py-6">
-            <p className="text-ink-muted">
-              Completá Find My Fit y te decimos qué tan bien encaja esta prenda
-              con tu forma de vestirte, y qué se le podría adaptar.
+        {/* Zona de resultado: cambia cuando llega el cálculo, así que se
+            anuncia. */}
+        <div aria-live="polite">
+          {!profile ? (
+            <div className="mt-5 flex flex-col gap-4 rounded-panel bg-surface-muted px-5 py-6 sm:flex-row sm:items-center sm:justify-between">
+              <p className="max-w-prose text-ink-muted">
+                Completá Find My Fit y te decimos qué tan bien encaja este
+                producto con tu forma de vestirte, y qué se le podría adaptar.
+              </p>
+              <ButtonLink to="/find-my-fit" className="shrink-0">
+                Completar Find My Fit
+              </ButtonLink>
+            </div>
+          ) : null}
+
+          {profile && recommendations.status === 'loading' ? (
+            <p className="mt-5 text-ink-muted" role="status">
+              Calculando compatibilidad…
             </p>
-            <div className="mt-4">
-              <ButtonLink to="/find-my-fit">Completar Find My Fit</ButtonLink>
+          ) : null}
+
+          {profile && recommendations.status === 'error' ? (
+            <p className="mt-5 text-ink-muted" role="alert">
+              No pudimos calcular la compatibilidad ahora mismo. Los datos del
+              producto que ves arriba sí están completos.
+            </p>
+          ) : null}
+
+          {match ? (
+            <div className="mt-5 grid gap-5 lg:grid-cols-2">
+              <div className="rounded-panel bg-accent-soft/70 p-5 ring-1 ring-accent-line/60">
+                <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-accent-ink">
+                  <Icon name="spark" className="h-4 w-4" />
+                  Lo que dice la IA
+                </h3>
+                <p className="mt-3 text-ink">
+                  {match.explanation ??
+                    'La explicación en lenguaje natural no está disponible ahora mismo. La evidencia de al lado sostiene el puntaje por sí sola.'}
+                </p>
+              </div>
+
+              <div className="rounded-panel bg-surface p-5 ring-1 ring-line">
+                <h3 className="text-xs font-bold uppercase tracking-[0.08em] text-ink-muted">
+                  Evidencia del motor
+                </h3>
+                <div className="mt-3">
+                  <ReasonList reasons={match.reasons} />
+                </div>
+              </div>
             </div>
-          </div>
-        ) : null}
-
-        {profile && recommendations.status === 'loading' ? (
-          <p className="mt-4 text-ink-muted" role="status">
-            Calculando compatibilidad…
-          </p>
-        ) : null}
-
-        {profile && recommendations.status === 'error' ? (
-          <p className="mt-4 text-ink-muted" role="alert">
-            No pudimos calcular la compatibilidad ahora mismo. Los datos de la
-            prenda que ves arriba sí están completos.
-          </p>
-        ) : null}
-
-        {match ? (
-          <div className="mt-4 rounded-card bg-surface-muted px-5 py-6">
-            {match.explanation ? (
-              <p className="text-ink">{match.explanation}</p>
-            ) : null}
-            <div className="mt-4">
-              <ReasonList reasons={match.reasons} />
-            </div>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </section>
 
       {/* Adaptaciones */}
-      <section className="mt-10">
-        <h2 className="text-2xl font-bold text-ink">Adaptaciones posibles</h2>
-        <p className="mt-2 max-w-prose text-ink-muted">
-          Modificaciones que un taller de costura puede hacerle a esta prenda.
-          Te mostramos siempre qué gana y qué no resuelve.
+      <section className="mt-12">
+        <h2 className="text-section font-display font-extrabold text-ink">
+          Adaptaciones posibles
+        </h2>
+        <p className="mt-3 max-w-prose text-ink-muted">
+          Modificaciones que un taller de costura puede hacerle a este
+          producto. Te mostramos siempre qué gana y qué no resuelve.
         </p>
-        <div className="mt-5">
+        <div className="mt-6">
           <AdaptationPanel
             suggestions={match?.adaptations ?? []}
             productName={item.name}

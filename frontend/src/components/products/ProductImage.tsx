@@ -1,37 +1,42 @@
 import { useState } from 'react'
-import type { ProductImage as ProductImageData } from '@/types/product'
+import type { ProductCategory, ProductImage as ProductImageData } from '@/types/product'
+import { CategoryIllustration } from '@/components/illustrations/CategoryIllustration'
 import { cn } from '@/utils/cn'
 
 /**
- * Imagen de producto con reserva.
+ * Imagen de producto con reserva ilustrada.
  *
- * El catálogo de demo no trae fotografías: usar fotos de personas o de marcas
- * reales sería falsear el origen de los datos (sección 26). Mientras no haya
- * imágenes propias, se pinta un marcador tipográfico. El `alt` de la prenda se
- * sigue respetando, así que la pantalla se lee igual con o sin foto.
+ * El catálogo de demostración no trae fotografías, y no debería traerlas:
+ * usar fotos de personas o de marcas reales sería falsear el origen de los
+ * datos (sección 26). Antes se pintaba un rectángulo con la palabra "ADAPTA",
+ * que a doce tarjetas seguidas no distingue una silla de ruedas de un
+ * pantalón.
+ *
+ * Ahora se dibuja la categoría, en vector y dentro del bundle. El `alt` de la
+ * prenda se sigue respetando, así que la pantalla se lee igual con o sin
+ * dibujo.
  */
 
 interface ProductImageProps {
   image: ProductImageData | undefined
+  category: ProductCategory
   className?: string
 }
 
-export function ProductImage({ image, className }: ProductImageProps) {
+export function ProductImage({ image, category, className }: ProductImageProps) {
   const [failed, setFailed] = useState(false)
 
   if (!image || failed) {
     return (
       <div
         role="img"
-        aria-label={image?.alt ?? 'Imagen de la prenda no disponible'}
-        className={cn(
-          'flex items-center justify-center bg-gradient-to-br from-brand-100 to-brand-200',
-          className,
-        )}
+        aria-label={image?.alt ?? 'Ilustración de la categoría del producto'}
+        className={cn('overflow-hidden bg-brand-soft', className)}
       >
-        <span aria-hidden="true" className="text-3xl font-semibold text-brand-700/60">
-          ADAPTA
-        </span>
+        <CategoryIllustration
+          category={category}
+          className="transition-transform duration-500 ease-(--ease-out-strong) group-hover:scale-105"
+        />
       </div>
     )
   }

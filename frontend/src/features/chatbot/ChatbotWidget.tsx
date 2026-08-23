@@ -4,6 +4,7 @@ import type { ChatMessage } from '@/types/chat'
 import { ApiError } from '@/types/api'
 import { sendChatMessage } from '@/services/api/chatbot'
 import { Button } from '@/components/ui/Button'
+import { Icon } from '@/components/ui/Icon'
 
 /**
  * Sección 17 (P1). Asistente de apoyo, deliberadamente pequeño: aclara dudas
@@ -88,8 +89,9 @@ export function ChatbotWidget() {
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
         aria-controls="panel-chat"
-        className="fixed bottom-5 right-5 z-40 inline-flex min-h-13 items-center gap-2 rounded-full bg-brand-800 px-6 font-semibold text-white shadow-lift hover:bg-brand-900"
+        className="fixed bottom-5 right-5 z-40 inline-flex min-h-13 items-center gap-2 rounded-full bg-inverse px-5 font-semibold text-on-inverse shadow-pop transition-[transform,background-color] duration-200 ease-(--ease-out-strong) hover:bg-inverse-soft active:scale-95"
       >
+        <Icon name={open ? 'close' : 'chat'} className="h-5 w-5" />
         {open ? 'Cerrar ayuda' : 'Preguntar'}
       </button>
 
@@ -98,8 +100,19 @@ export function ChatbotWidget() {
           id="panel-chat"
           role="dialog"
           aria-label="Asistente de ADAPTA"
-          className="fixed bottom-24 right-5 z-40 flex max-h-[70vh] w-[min(24rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-card bg-surface shadow-lift ring-1 ring-line"
+          className="animate-pop fixed bottom-24 right-5 z-40 flex max-h-[70dvh] w-[min(24rem,calc(100vw-2.5rem))] origin-bottom-right flex-col overflow-hidden rounded-panel bg-surface shadow-pop ring-1 ring-line"
         >
+          <div className="flex items-center gap-2.5 border-b border-line bg-surface-muted px-4 py-3">
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-brand-soft text-brand-ink">
+              <Icon name="spark" className="h-4.5 w-4.5" />
+            </span>
+            <div>
+              <p className="font-display text-sm font-bold text-ink">
+                Asistente de ADAPTA
+              </p>
+              <p className="text-xs text-ink-muted">Cierres, posturas y adaptaciones</p>
+            </div>
+          </div>
           <div
             ref={logRef}
             role="log"
@@ -111,8 +124,8 @@ export function ChatbotWidget() {
                 key={message.id}
                 className={
                   message.role === 'user'
-                    ? 'ml-auto max-w-[85%] rounded-2xl bg-brand-700 px-4 py-2.5 text-sm text-white'
-                    : 'max-w-[85%] rounded-2xl bg-surface-muted px-4 py-2.5 text-sm text-ink'
+                    ? 'ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-action px-4 py-2.5 text-sm text-on-action'
+                    : 'max-w-[85%] rounded-2xl rounded-bl-md bg-surface-muted px-4 py-2.5 text-sm text-ink ring-1 ring-line'
                 }
               >
                 <span className="sr-only">
@@ -123,7 +136,13 @@ export function ChatbotWidget() {
             ))}
 
             {sending ? (
-              <p className="text-sm italic text-ink-muted">Escribiendo…</p>
+              <p className="flex items-center gap-1.5 text-sm text-ink-muted">
+                <span
+                  aria-hidden="true"
+                  className="animate-sheen h-2 w-2 rounded-full bg-ink-muted"
+                />
+                Escribiendo…
+              </p>
             ) : null}
 
             {error ? (
@@ -146,10 +165,11 @@ export function ChatbotWidget() {
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
               placeholder="¿Los imanes son seguros?"
-              className="h-11 flex-1 rounded-full bg-surface-muted px-4 text-sm text-ink ring-1 ring-line"
+              className="h-11 min-w-0 flex-1 rounded-full bg-surface-muted px-4 text-sm text-ink ring-1 ring-line-strong transition-shadow hover:ring-ink-muted"
             />
             <Button type="submit" disabled={sending || draft.trim() === ''}>
-              Enviar
+              <span className="sr-only sm:not-sr-only">Enviar</span>
+              <Icon name="arrow-right" className="h-5 w-5 sm:hidden" />
             </Button>
           </form>
 

@@ -1,4 +1,5 @@
 import type { MatchReason } from '@/types/recommendation'
+import { Icon, type IconName } from '@/components/ui/Icon'
 import { cn } from '@/utils/cn'
 
 /**
@@ -6,14 +7,31 @@ import { cn } from '@/utils/cn'
  *
  * Se muestra siempre, incluso cuando la explicación de IA falta: es la parte
  * que la persona puede verificar, y no depende de OpenAI.
+ *
+ * Cada fila lleva icono con forma propia (no solo color) y una palabra de
+ * estado para lector de pantalla.
  */
 
-const marks: Record<MatchReason['status'], { symbol: string; className: string; text: string }> =
-  {
-    match: { symbol: '✓', className: 'text-fit-high', text: 'Cubierto' },
-    partial: { symbol: '≈', className: 'text-fit-mid', text: 'Cubierto en parte' },
-    gap: { symbol: '!', className: 'text-fit-low', text: 'No cubierto' },
-  }
+const marks: Record<
+  MatchReason['status'],
+  { icon: IconName; chip: string; text: string }
+> = {
+  match: {
+    icon: 'check',
+    chip: 'bg-fit-high-soft text-fit-high-ink',
+    text: 'Cubierto',
+  },
+  partial: {
+    icon: 'partial',
+    chip: 'bg-fit-mid-soft text-fit-mid-ink',
+    text: 'Cubierto en parte',
+  },
+  gap: {
+    icon: 'alert',
+    chip: 'bg-fit-low-soft text-fit-low-ink',
+    text: 'No cubierto',
+  },
+}
 
 export function ReasonList({ reasons }: { reasons: MatchReason[] }) {
   if (reasons.length === 0) return null
@@ -23,19 +41,23 @@ export function ReasonList({ reasons }: { reasons: MatchReason[] }) {
       {reasons.map((reason, index) => {
         const mark = marks[reason.status]
         return (
-          <li key={`${reason.need}-${index}`} className="flex gap-2.5 text-sm">
+          <li key={`${reason.need}-${index}`} className="flex items-start gap-2.5">
             <span
               aria-hidden="true"
-              className={cn('font-bold leading-6', mark.className)}
+              className={cn(
+                'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full',
+                mark.chip,
+              )}
             >
-              {mark.symbol}
+              <Icon name={mark.icon} className="h-3.5 w-3.5" />
             </span>
             <span
-              className={
-                reason.status === 'gap' ? 'text-ink-muted' : 'text-ink'
-              }
+              className={cn(
+                'text-sm',
+                reason.status === 'gap' ? 'text-ink-muted' : 'text-ink',
+              )}
             >
-              {/* Texto para lector de pantalla: el símbolo no basta. */}
+              {/* El icono no basta: el estado también va en texto. */}
               <span className="sr-only">{mark.text}: </span>
               {reason.label}
             </span>
