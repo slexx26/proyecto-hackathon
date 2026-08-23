@@ -15,7 +15,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import get_settings
-from routers import health, products, providers, recommendations
+from routers import chat, health, products, providers, recommendations
 
 settings = get_settings()
 
@@ -45,6 +45,4 @@ app.include_router(health.router, prefix=API_PREFIX)
 app.include_router(products.router, prefix=API_PREFIX)
 app.include_router(providers.router, prefix=API_PREFIX)
 app.include_router(recommendations.router, prefix=API_PREFIX)
-
-# TODO (José): chat.
-# Las formas exactas están en `docs/api-contract.md`.
+app.include_router(chat.router, prefix=API_PREFIX)

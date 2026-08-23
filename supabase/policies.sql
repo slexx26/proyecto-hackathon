@@ -1,3 +1,4 @@
+
 -- ADAPTA — políticas de acceso (RLS)
 --
 -- Sin esto, la clave `anon` no puede leer nada: Supabase activa Row Level
@@ -8,7 +9,8 @@
 -- tiene que hacer sin que nadie le haya dicho todavía qué permitir.
 --
 -- Aplicar en el SQL Editor DESPUÉS de `schema.sql` y `seed.sql`. Se puede
--- volver a correr sin romperse.
+-- volver a correr sin romperse. Ya se corrió una vez (confirmado: 8
+-- providers, 14 products, 44 relaciones), correrlo de nuevo no hace daño.
 
 alter table providers enable row level security;
 alter table products enable row level security;

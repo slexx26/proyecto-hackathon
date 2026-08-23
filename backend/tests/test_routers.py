@@ -12,6 +12,7 @@ from unittest.mock import MagicMock
 
 from fastapi.testclient import TestClient
 
+from config import Settings, get_settings
 from main import app
 from services.supabase import get_supabase
 
@@ -106,6 +107,11 @@ class FakeSupabase:
 def _client(app_client=None, **tables):
     fake = FakeSupabase(tables)
     app.dependency_overrides[get_supabase] = lambda: fake
+    # Sin esto, en una máquina con OPENAI_API_KEY real en .env las pruebas
+    # llamarían a OpenAI de verdad: lento, con costo, y dependiente de red.
+    # La ruta con OpenAI real ya se probó a mano (ver docs/encargo-isaac.md);
+    # acá interesa la lógica del router, no la API externa.
+    app.dependency_overrides[get_settings] = lambda: Settings(openai_api_key="")
     return TestClient(app)
 
 
